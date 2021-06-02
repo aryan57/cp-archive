@@ -6,3 +6,6 @@ or,
 
 make sure to give the permission to execute for the script
 ![Screenshot from 2021-06-02 18-09-48](https://user-images.githubusercontent.com/55305876/120481540-d4277600-c3cd-11eb-87c1-8e7a78b4db95.png)
+
+
+Side Note: you can use a slight modification of cph vs-code extension at https://github.com/aryan57/cph to automatically create the code files in a specified folder and set a cron job to automatically upload that folder to a github via ssh
