@@ -68,11 +68,10 @@ void solve_LOG()
 
     int mx=0;
     string ans(m,'0');
-    int mxiter=30;
-    
-    while (mxiter--)
+
+    F(z,0,min(n-1,30ll))
     {
-        int ind=getRand(0,n-1);
+        int ind=indexes[z];
 
         vector<int> exact_cnt((int)pow(2,15),0);
 
