@@ -6,7 +6,7 @@
 */
 /*
     author : aryan57
-    created : 03-June-2021 14:43:04 IST
+    created : 04-June-2021 01:54:34 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,100 +36,12 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-mt19937 rng((unsigned int) chrono::steady_clock::now().time_since_epoch().count());
-
-// random integer in [l,r]
-int getRand(int l, int r)
-{
-    /*
-        // you can also use this to get random permutation of indexes
-        vector<int> order(n);
-        iota(order.begin(), order.end(), 0);
-        shuffle(order.begin(), order.end(), rng);
-    */
-    uniform_int_distribution<int> uid(l, r);
-    return uid(rng);
-}
-
 void solve_LOG()
 {
-    int n,m,p;
-    cin>>n>>m>>p;
-
-    vector <string> v(n);
-    F(i,0,n-1)
-    {
-        cin>>v[i];
-    }
-
-    vector<int> indexes(n);
-    iota(all(indexes),0);
-    shuffle(all(indexes),rng);
-
-    int mx=0;
-    string ans(m,'0');
-
-    F(z,0,min(n-1,30ll))
-    {
-        int ind=indexes[z];
-
-        vector<int> exact_cnt((int)pow(2,15),0);
-
-        F(i,0,n-1)
-        {
-            int sum=0;
-            int pww=1;
-            RF(j,m-1,0)
-            {
-                if(v[ind][j]=='0')continue;
-                if(v[i][j]=='1')
-                {
-                    sum+=pww;
-                }
-                pww*=2;
-            }
-            exact_cnt[sum]++;
-        }
-
-        vector<int> super_set_cnt((int)pow(2,15),0);
-
-        for(int mask=0;mask<(int)pow(2,15);mask++)
-        {
-            for(int submask=mask;submask>0;submask=(submask-1)&mask)
-            {
-                super_set_cnt[submask]+=exact_cnt[mask];
-            }
-        }
-
-        F(i,0,(int)pow(2,15)-1)
-        {
-            if(super_set_cnt[i]>=(n+1)/2)
-            {
-                if(mx<__builtin_popcountll(i))
-                {
-                    mx=__builtin_popcountll(i);
-                    int bit=0;
-                    RF(j,m-1,0)
-                    {
-                        if(v[ind][j]=='0')
-                        {
-                            ans[j]='0';
-                        }
-                        else
-                        {
-                            if((i>>bit)&1)ans[j]='1';
-                            else ans[j]='0';
-                            bit++;
-                        }
-                    }
-                }
-            }
-        }
-
-    }
-
-    cout<<ans;
-
+    int x;
+    cin>>x;
+    cout<<x;
+    cout<<"\n";
 }
 
 signed main()
@@ -160,4 +72,3 @@ signed main()
     }
     return 0;
 }
-//	parsed : 03-June-2021 14:42:38 IST
