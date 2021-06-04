@@ -6,7 +6,7 @@
 */
 /*
     author : aryan57
-    created : 04-June-2021 21:32:14 IST
+    created : 05-June-2021 02:38:53 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -30,158 +30,83 @@ template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr
 #define F(i, a, b) for (int i = a; i <= b; i++)
 #define RF(i, a, b) for (int i = a; i >= b; i--)
 
-const int mxn = 3e5;
+const int mxn = 6e5;
 const long long INF = 2e18;
 const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
-string s;
-int k,n;
-vector <int> val(mxn+1);
-vector <int> adj[mxn+1];
-vector <int> par(mxn+1);
 
+vector <int> val(mxn,1);
+string s;
+int k;
+int n;
 int dfs(int u)
 {
-    if(sz(adj[u])==1)
+    if(u>n)return 1;
+
+    int l=dfs(2*u);
+    int r=dfs(2*u+1);
+
+    if(s[u]=='1')
     {
-        int ans=1;
-        if(s[u]=='?')ans=2;
-        val[u]=ans;
-        return ans;
+        val[u]=l;
     }
-    int ans=0;
-    int l=dfs(adj[u][0]);
-    int r=dfs(adj[u][1]);
-    if(s[u]=='0')ans=l;
-    if(s[u]=='1')ans=r;
-    if(s[u]=='?')ans=l+r;
-    val[u]=ans;
-    return ans;
+    if(s[u]=='0')
+    {
+        val[u]=r;
+    }
+    if(s[u]=='?')
+    {
+        val[u]=l+r;
+    }
+
+    return val[u];
 }
 
-void solve_LOG()
+void solve_LOL()
 {
-    
     cin>>k;
     cin>>s;
     n=sz(s);
+    F(i,0,n)val[i]=0;
+    reverse(all(s));
     s='#'+s;
-    
 
-    vector <int> cur;
-    F(i,1,(int)pow(2,k-1))
-    {
-        cur.push_back(i);
-    }
-    int p=(int)pow(2,k-1)+1;
-    
-    RF(h,k,1)
-    {
-        vector <int> temp;
-        for(int i=0;i<=sz(cur)-2;i+=2)
-        {
-            adj[cur[i]].push_back(p);
-            adj[p].push_back(cur[i]);
-            adj[cur[i+1]].push_back(p);
-            adj[p].push_back(cur[i+1]);
-            par[cur[i]]=p;
-            par[cur[i+1]]=p;
-            temp.push_back(p);
-            p++;
-        }
-        cur.clear();
-        cur=temp;
-    }
+    dfs(1);
 
-    par[n]=-1;
-
-    dfs(n);
-
-    // F(i,1,n)
-    // {
-    //     dbg(i);
-    //     dbg(adj[i]);
-    // }
-    // dbg(par);
 
     int q;
     cin>>q;
-
-    int f=val[n];
-
-    while(q--)
+    while (q--)
     {
         int i;
         char c;
         cin>>i;
         cin>>c;
+        s[n-i+1]=c;
+        int cur=n-i+1;
 
-        // if(c=='?')
-        // {
-            
-            
-
-        // }
-        // if(c=='1')
-        // {
-
-        // }
-        // if(c=='0')
-        // {
-
-        // }
-
-        s[i]=c;
-
-        
-        int cur=i;
-        while (cur!=-1)
+        while (cur)
         {
-            if(s[cur]=='?')
-            {
-                if(sz(adj[cur])==1)
-                {
-                    val[cur]=2;
-                }
-                else
-                {
-                    val[cur]=val[adj[cur][0]]+val[adj[cur][1]];
-                }
-            }
             if(s[cur]=='1')
             {
-                if(sz(adj[cur])==1)
-                {
-                    val[cur]=1;
-                }
-                else
-                {
-                    val[cur]=val[adj[cur][1]];
-                }
-
+                val[cur]=val[2*cur];
             }
             if(s[cur]=='0')
             {
-                if(sz(adj[cur])==1)
-                {
-                    val[cur]=1;
-                }
-                else
-                {
-                    val[cur]=val[adj[cur][0]];
-                }
-
+                val[cur]=val[2*cur+1];
             }
-            
-            cur=par[cur];
+            if(s[cur]=='?')
+            {
+                val[cur]=val[2*cur]+val[2*cur+1];
+            }
+            cur/=2;
         }
-
-        cout<<val[n];
+        cout<<val[1];
         cout<<"\n";
     }
-
     
+
 }
 
 signed main()
@@ -208,8 +133,7 @@ signed main()
     for (int i=1;i<=_t;i++)
     {
         // cout<<"Case #"<<i<<": ";
-        solve_LOG();
+        solve_LOL();
     }
     return 0;
 }
-//	parsed : 04-June-2021 21:32:11 IST
