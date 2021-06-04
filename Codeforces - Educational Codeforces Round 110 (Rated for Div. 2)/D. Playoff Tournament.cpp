@@ -105,6 +105,82 @@ void solve_LOG()
     // }
     // dbg(par);
 
+    int q;
+    cin>>q;
+
+    int f=val[n];
+
+    while(q--)
+    {
+        int i;
+        char c;
+        cin>>i;
+        cin>>c;
+
+        // if(c=='?')
+        // {
+            
+            
+
+        // }
+        // if(c=='1')
+        // {
+
+        // }
+        // if(c=='0')
+        // {
+
+        // }
+
+        s[i]=c;
+
+        
+        int cur=i;
+        while (cur!=-1)
+        {
+            if(s[cur]=='?')
+            {
+                if(sz(adj[cur])==1)
+                {
+                    val[cur]=2;
+                }
+                else
+                {
+                    val[cur]=val[adj[cur][0]]+val[adj[cur][1]];
+                }
+            }
+            if(s[cur]=='1')
+            {
+                if(sz(adj[cur])==1)
+                {
+                    val[cur]=1;
+                }
+                else
+                {
+                    val[cur]=val[adj[cur][1]];
+                }
+
+            }
+            if(s[cur]=='0')
+            {
+                if(sz(adj[cur])==1)
+                {
+                    val[cur]=1;
+                }
+                else
+                {
+                    val[cur]=val[adj[cur][0]];
+                }
+
+            }
+            
+            cur=par[cur];
+        }
+
+        cout<<val[n];
+        cout<<"\n";
+    }
+
     
 }
 
