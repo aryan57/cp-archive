@@ -309,8 +309,8 @@ void remove(int ind)
     }
     else
     {
-        mxt.set(ind, max(mxt.get(ind), *adj[ind].begin()));
-        mnt.set(ind, min(mnt.get(ind), adj[ind].back()));
+        mxt.set(ind, *adj[ind].begin());
+        mnt.set(ind, adj[ind].back());
     }
 }
 
@@ -357,6 +357,12 @@ void solve_LOL()
     }
 
     // dbg(a);
+    // F(i,0,n)dbg(adj[i]);
+
+    // dbg(adj[1]);
+    // dbg(adj[2]);
+    // dbg(mnt.get(1),mnt.get(2),mnt.get(3));
+    //     dbg(mxt.get(1),mxt.get(2),mxt.get(3));
 
     int x=a[0];
     remove(x);
@@ -367,7 +373,10 @@ void solve_LOL()
         int maxp=-INF;
         if(x+1<=n)maxp=mxt.prod(x+1,n);
 
-        dbg(i,x,minp,maxp);
+        // dbg(i,x,minp,maxp);
+        // dbg(adj[1],adj[2],adj[3]);
+        // dbg(mnt.get(1),mnt.get(2),mnt.get(3));
+        // dbg(mxt.get(1),mxt.get(2),mxt.get(3));
 
         if(maxp==-INF)
         {
@@ -380,7 +389,7 @@ void solve_LOL()
         }
         else if(minp==INF)
         {
-            if(a[n]==x && sz(adj[x])>1)
+            if(a[n-1]==x && sz(adj[x])>1)
             {
                 cout<<"YES\n";
                 cout<<i<<" "<<n-i-1<<" "<<1<<"\n";
@@ -389,16 +398,16 @@ void solve_LOL()
         }
         else
         {
-            if(i==6)
+            if(i==1)
             {
                 dbg(minp,maxp,x);
             }
-
-            if(maxp+1>minp)
+            if(maxp<minp && sz(adj[x])>1 && max(adj[x].back(),maxp)<min(minp,*adj[x].begin()))
             {
                 // assert(a[maxp+1]==x);
                 cout<<"YES\n";
-                cout<<i<<" "<<maxp+1-i+1<<" "<<n-2-maxp<<"\n";
+                
+                cout<<i<<" "<<max(adj[x].back(),maxp)-i+1<<" "<<n-1-maxp<<"\n";
                 return;
             }
         }
