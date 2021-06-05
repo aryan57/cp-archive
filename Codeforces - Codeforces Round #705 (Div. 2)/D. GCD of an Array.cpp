@@ -87,68 +87,39 @@ int binpow(int a, int b=M-2, int m=M)
     return res;
 }
 
+int ans=1;
+int n,q;
+vector<unordered_map<int,int>>  v(mxn_sieve+1);
+void fun(int z,int i)
+{
+    int mn=INF;
+    for(int i=1;i<=n;i++)mn=min(mn,v[z][i]);
+    ans*=binpow(z,mn);
+    ans%=M;
+
+    vector <int> temp;
+    for(int i=1;i<=n;i++)
+    {
+        v[z][i]-=mn;
+        if(v[z][i]==0)temp.push_back(i);
+    }
+
+    for(int pos : temp)v[z].erase(pos);
+}
+
 void solve_LOG()
 {
-    int n,q;
+    
     cin>>n>>q;
-    int ans=0;
 
-    vector<unordered_map<int,int>>  v(mxn_sieve+1);
-
-    F(i,1,n)
-    {
-        int x;
-        cin>>x;
-        ans=gcd(ans,x);
-
-        while (x!=1)
-        {
-            int z=spf[x];
-            int cnt=0;
-            while (x%z==0)
-            {
-                x/=z;
-                cnt++;
-            }
-            v[z][i]+=cnt;
-        }
-        
-    }
-
-    F(i,2,mxn_sieve)
-    {
-        if(spf[i]!=i)continue;
-        int cnt=0;
-        int x=ans;
-        while (x%i==0)
-        {
-            x/=i;
-            cnt++;
-        }
-
-        if(cnt==0)continue;
-        vector <int> temp;
-        for(auto p : v[i])
-        {
-            assert(v[i][p.X]>=cnt);
-            v[i][p.X]-=cnt;
-            if(v[i][p.X]==0)temp.push_back(p.X);
-        }
-
-        for(int pos : temp)
-        {
-            v[i].erase(pos);
-        }
-        
-    }
-
-    // dbg(ans);
-    // dbg(v[2]);
-
-    while (q--)
+    F(t,1,n+q)
     {
         int i,x;
-        cin>>i>>x;
+        if(t<=n)
+        {
+            i=t;
+            cin>>x;
+        }else cin>>i>>x;
 
         while (x!=1)
         {
@@ -160,33 +131,10 @@ void solve_LOG()
                 cnt++;
             }
             v[z][i]+=cnt;
-            // dbg(q,i,z,v[z]);
-            if(sz(v[z])==n)
-            {
-                int mn=INF;
-                for(int i=1;i<=n;i++)
-                {
-                    mn=min(mn,v[z][i]);
-                }
-                assert(mn!=0 && mn!=INF);
-                ans*=binpow(z,mn);
-                ans%=M;
-                vector <int> temp;
-                for(int i=1;i<=n;i++)
-                {
-                    v[z][i]-=mn;
-                    if(v[z][i]==0)temp.push_back(i);
-                }
-
-                for(int pos : temp)
-                {
-                    v[z].erase(pos);
-                }
-            }
+            if(sz(v[z])==n)fun(z,i);
         }
 
-        cout<<ans;
-        cout<<"\n";
+        if(t>n)cout<<ans<<"\n";
     }
     
     
