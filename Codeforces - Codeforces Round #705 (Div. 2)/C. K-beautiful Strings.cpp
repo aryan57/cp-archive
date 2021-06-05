@@ -51,9 +51,9 @@ void solve_LOL()
 
     string ans="";
     int cnt[26]={};
-    set<int> c;
-    s='#'+s;
-    F(i,1,n)
+    string zz="";
+    vector<int> kmods(26);
+    F(i,0,n-1)
     {
 
         F(z,s[i]-'a'+1,25)
@@ -68,23 +68,34 @@ void solve_LOL()
                 int rem=tempcnt[j]%k;
                 if(rem>0)tempcnt[j]+=k-rem;
                 tot+=tempcnt[j];
-                assert(tempcnt[j]%k==0);
             }
 
             if(tot>n)continue;
 
             tempcnt[0]+=n-tot;
 
-            ans=s.substr(1,i-1);
+            ans=zz;
             ans+='a'+z;
+            tempcnt[z]--;
 
             F(j,0,25)
             {
-                ans+=string(tempcnt[j],'a'+j);
+                ans+=string(tempcnt[j]-cnt[j],'a'+j);
             }
+            break;
 
         }
         cnt[s[i]-'a']++;
+        zz+=s[i];
+        if(cnt[s[i]-'a']%k==0)kmods[s[i]-'a']=0;
+        else kmods[s[i]-'a']=1;
+    }
+
+    if(accumulate(all(kmods),0)==0)
+    {
+        cout<<s;
+        cout<<"\n";
+        return;
     }
 
     if(ans.empty())

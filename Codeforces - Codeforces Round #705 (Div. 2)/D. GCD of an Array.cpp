@@ -97,14 +97,12 @@ void fun(int z,int i)
     ans*=binpow(z,mn);
     ans%=M;
 
-    vector <int> temp;
     for(int i=1;i<=n;i++)
     {
         v[z][i]-=mn;
-        if(v[z][i]==0)temp.push_back(i);
+        if(v[z][i]==0)v[z].erase(i);
     }
 
-    for(int pos : temp)v[z].erase(pos);
 }
 
 void solve_LOG()
