@@ -10,7 +10,10 @@
 */
 #include <bits/stdc++.h>
 using namespace std;
+
 // INCLUDE AT TOP (no #define int long long)
+// If you want to convert into ordered_multiset change less<int> to less_equal<int>
+// But then lower_bound will act as upper_bound
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
 using namespace __gnu_pbds;
