@@ -46,30 +46,22 @@ vector<Color> color(mxn,White);
 bool contains_cycle(int v)
 {
     color[v] = Grey;
-
     for (int u : adj[v])
     {
-        if (color[u] == White)
-        {
-            if (contains_cycle(u))return true;
-
-        } else if (color[u] == Grey)
-        {
-            return true;
-        }
+        if (color[u] == Grey)return true;
+        if (color[u] == White && contains_cycle(u))return true;
     }
     color[v] = Black;
     return false;
 }
 
-// returns true if the directed graph is a DAG(Directed Acyclic Graph) in O(N+M)
+// returns true if the directed graph
+// is a DAG(Directed Acyclic Graph) in O(N+M)
 bool is_DAG(int N)
 {
     for (int v = 0; v < N; v++)
-    {
         if (color[v] == White && contains_cycle(v))return false;
-    }
-
+    
     return true;
 }
 
