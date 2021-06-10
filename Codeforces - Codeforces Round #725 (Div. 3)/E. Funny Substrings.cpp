@@ -6,7 +6,7 @@
 */
 /*
     author : aryan57
-    created : 10-June-2021 23:17:48 IST
+    created : 11-June-2021 00:28:13 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -21,7 +21,7 @@ template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr
 #define dbg(...)
 #endif
 
-// #define int long long
+#define int long long
 #define X first
 #define Y second
 #define pb push_back
@@ -35,92 +35,84 @@ const long long INF = 2e18;
 const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
-vector <string>  lines;
-int ind=0;
+
+int count (string z)
+{
+    int cnt=0;
+    F(i,0,sz(z)-4)
+    {
+        if(z.substr(i,4)=="haha")cnt++;
+    }
+
+    return cnt;
+}
+
+class str{
+    public:
+    string s;
+    int cnt=0;
+
+
+    string pre()
+    {
+        if(sz(s)<3)return s;
+        return s.substr(0,3);
+    }
+    string suf()
+    {
+        if(sz(s)<3)return s;
+        return s.substr(sz(s)-3,3);
+    }
+};
+
+str merge(str a,str b)
+{
+    str c;
+    c.s=a.s+b.s;
+    c.cnt=a.cnt+b.cnt+count(a.suf()+b.pre());
+
+    if(sz(c.s)>6)
+    {
+        c.s=c.pre()+"$"+c.suf();
+    }
+
+    return c;
+}
+
 void solve_LOL()
 {
     int n;
-    n=stoi(lines[ind++]);
+    cin>>n;
 
-    unordered_map<string,string> mp;
-    string z="";
 
-    for(int j=0;j<n;j++)
+    unordered_map<string,str> mp;
+    int ans=0;
+    F(j,0,n-1)
     {
-        
-
-        string s=lines[ind++];
-
-        int pos=0;
-        for(int i=0;i<s.size();i++)
+        string v1,op;
+        cin>>v1>>op;
+        str a;
+        if(op==":=")
         {
-            if(s[i]=='=')
-            {
-                pos=i;
-                break;
-            }
-        }
-
-        // dbg(j,pos,mp);
-        if(s[pos-1]==':')
-        {
+            string val;
+            cin>>val;
+            a.s=val;
+            a.cnt=count(val);
             
-            int l=0;
-            int r=pos-3;
-
-            mp[s.substr(l,r-l+1)]=s.substr(pos+2,sz(s)-pos-2);
-
-            if(j==n-1)z=s.substr(pos+2,sz(s)-pos-2);
-        }
-        else
+        }else
         {
-            int plus=0;
-            for(int i=pos+2;i<s.size();i++)
-            {
-                if(s[i]=='+')
-                {
-                    plus=i;
-                    break;
-                }
-            }
-            int l[3]={};
-            int r[3]={};
-
-            l[0]=0;
-            r[0]=pos-2;
-
-            l[1]=pos+2;
-            r[1]=plus-2;
-
-            l[2]=plus+2;
-            r[2]=sz(s)-1;
-
-            string ss[3];
-
-            F(i,0,2)
-            {
-                ss[i]=s.substr(l[i],r[i]-l[i]+1);
-            }
-
-            mp[ss[0]]=mp[ss[1]]+mp[ss[2]];
-
-            if(j==n-1)z=mp[ss[0]];
-            
+            string v2,plus,v3;
+            cin>>v2>>plus>>v3;
+            a=merge(mp[v2],mp[v3]);
         }
-
+        // dbg(j,v1,a.s,a.cnt);
+        mp[v1]=a;
+        ans=a.cnt;
     }
 
-    // dbg(sz(z));
-
-    int cnt=0;
-
-    for(int i=0;i<=sz(z)-4;i++)
-    {
-        if(z[i]==z[i+2] && z[i]=='h' && z[i+1]==z[i+3] && z[i+1]=='a')cnt++;
-    }
-
-    cout<<cnt;
+    cout<<ans;
     cout<<"\n";
+
 }
 
 signed main()
@@ -141,18 +133,9 @@ signed main()
 #ifdef ARYAN_FACT
     fact_init();
 #endif
-
-    string line;
-    while (std::getline(std::cin, line))
-    {
-        lines.push_back(line);
-    }
-
-    // dbg(lines);
     // cout<<fixed<<setprecision(10);
     int _t=1;
-    // cin>>_t;
-    _t=stoi(lines[ind++]);
+    cin>>_t;
     for (int i=1;i<=_t;i++)
     {
         // cout<<"Case #"<<i<<": ";
@@ -160,4 +143,3 @@ signed main()
     }
     return 0;
 }
-//	parsed : 10-June-2021 23:17:42 IST
