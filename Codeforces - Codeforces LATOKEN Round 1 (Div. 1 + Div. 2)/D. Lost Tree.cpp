@@ -51,6 +51,7 @@ void solve_LOG()
     {
         int x;
         cin>>x;
+        if(x==0)continue;
         if(x%2)o.push_back(i);
         else e.push_back(i);
 
@@ -80,6 +81,7 @@ void solve_LOG()
         }
     }
 
+    cout<<"!"<<endl;
     for(auto p : edges)cout<<p.X<<" "<<p.Y<<endl;
 
 }
