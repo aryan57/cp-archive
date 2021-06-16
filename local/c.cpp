@@ -6,7 +6,7 @@
 */
 /*
     author : aryan57
-    created : 02-June-2021 18:30:06 IST
+    created : 16-June-2021 13:25:58 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -38,7 +38,57 @@ const long double pie = acos(-1);
 
 void solve_LOG()
 {
-    
+    int n;
+    cin>>n;
+
+    map<int,int> mp;
+
+    vector <int> a(n);
+
+    F(i,0,n-1)
+    {
+        cin>>a[i];
+        mp[a[i]]++;
+    }
+
+    vector<pair<int,int> > vec;
+
+    for(auto p : mp)
+    {
+        vec.push_back(p);
+    }
+
+    int m=sz(vec);
+
+    vector <int> suf(m);
+
+    suf[m-1]=vec[m-1].Y;
+
+    RF(i,m-2,0)
+    {
+        suf[i]=suf[i+1]+vec[i].Y;
+    }
+
+    int k;
+    cin>>k;
+
+    while(k--)
+    {
+        int h;
+        cin>>h;
+        pair <int,int> pp={h,INF};
+        int pos=upper_bound(all(vec),pp)-vec.begin();
+        int cnt=0;
+        if(pos<m)
+        {
+            cnt+=suf[pos];
+        }
+
+        cout<<cnt;
+        cout<<"\n";
+
+
+    }
 }
 
 signed main()
