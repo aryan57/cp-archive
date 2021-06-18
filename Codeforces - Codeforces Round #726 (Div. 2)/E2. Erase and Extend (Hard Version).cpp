@@ -6,7 +6,7 @@
 */
 /*
     author : aryan57
-    created : 18-June-2021 21:37:09 IST
+    created : 19-June-2021 02:24:21 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,6 +36,17 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
+vector<int> z_function(string &s) {
+    int n=s.length();
+    vector<int> z(n);
+    for (int i=1,l=0,r=0;i<n;++i) {
+        if (i<=r)z[i]=min(r-i+1,z[i-l]);
+        while (i+z[i]<n && s[z[i]]==s[i+z[i]])z[i]++;
+        if(i+z[i]-1>r)l=i,r=i+z[i]-1;
+    }
+    return z;
+}
+
 void solve_LOG()
 {
     int n,k;
@@ -44,45 +55,61 @@ void solve_LOG()
     string s;
     cin>>s;
 
-    vector <int>  pos[26];
+    vector <int> z=z_function(s);
 
-    F(i,0,n-1)
+    int m=1;
+
+    F(i,2,n)
     {
-        pos[s[i]-'a'].push_back(i);
-    }
+        // dbg(i,m);
+        int p=-1;
 
-    int last=n;
-
-    F(c,s[0]-'a'+1,25)
-    {
-        int x=lower_bound(all(pos[c]),0)-pos[c].begin();
-        if(x!=sz(pos[c]))
+        if(i%m==0)p=m;
+        else p=i%m;
+        if(s[i-1]<s[p-1])
         {
-            // dbg(c,x,pos[c][x]);
-            last=min(last,pos[c][x]);
+            m=i;
+            continue;
+        }
+        if(s[i-1]>s[p-1])
+        {
+            break;
+        }
+        p++;
+        if(p>m)p-=m;
+
+        int pos=p+z[p-1];
+
+        if(pos<=m)
+        {
+            if(s[1+z[p-1]-1]<s[pos-1])
+            {
+                m=i;
+            }
+        }else
+        {
+            p=m-p+2;
+            if(p>m)p-=m;
+            pos=p+z[p-1];
+            if(pos<=m)
+            {
+                if(s[1+z[p-1]-1]<s[pos-1])
+                {
+                    m=i;
+                }
+            }else
+            {
+                m=i;
+            }
         }
     }
 
-    last--;
+    string ans=s.substr(0,m);
 
-    while (last>0 && s[last]==s[0])
-    {
-        last--;
-    }
+    while(sz(ans)<k)ans+=ans;
 
-    dbg(last,s[last]);
-    
+    cout<<ans.substr(0,k);
 
-
-    string pre=s.substr(0,last+1);
-    string zz="";
-    while (sz(zz)<k)
-    {
-        zz+=pre;
-    }
-
-    cout<<zz.substr(0,k);
-    
 }
 
 signed main()
@@ -113,4 +140,4 @@ signed main()
     }
     return 0;
 }
-//	parsed : 18-June-2021 21:22:55 IST
+//	parsed : 19-June-2021 02:24:13 IST

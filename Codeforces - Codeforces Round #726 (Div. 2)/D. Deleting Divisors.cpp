@@ -6,7 +6,7 @@
 */
 /*
     author : aryan57
-    created : 18-June-2021 20:45:21 IST
+    created : 19-June-2021 02:56:47 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,102 +36,35 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-#define ARYAN_SIEVE  
-const int mxn_sieve = 1e5;
-
-int spf[mxn_sieve + 1]; // spf -> smallest prime factor
-// if spf[x]==x ,then x is prime
-void sieve()
-{
-    spf[1] = 1;
-    for (int i = 2; i <= mxn_sieve; i++)
-        spf[i] = i;
-
-    for (int i = 4; i <= mxn_sieve; i += 2)
-        spf[i] = 2;
-
-    for (int i = 3; i * i <= mxn_sieve; i++)
-    {
-        if (spf[i] == i)
-        {
-            for (int j = i * i; j <= mxn_sieve; j += i)
-                if (spf[j] == j)
-                    spf[j] = i;
-        }
-    }
-}
-bool found=false;
-void fun(int n,int par)
-{
-    if(n==1 || spf[n]==n)
-    {
-        dbg(par,n);
-        if(par==0)found=true;
-        return;
-    }
-
-    if(found)return;
-
-    for(int i=2;i*i<=n;i++)
-    {
-        if(n%i==0)
-        {
-            fun(n-i,par^1);
-
-            if(i*i!=n)fun(n-n/i,par^1);
-        }
-    }
-}
-
 void solve_LOL()
 {
     int n;
     cin>>n;
 
-    if(n==1)
-    {
-        cout<<"Bob\n";
-        return;
-    }
-    int par=0;
-    int zz=0;
+    bool ok=true;
 
-    while (true && zz++<20)
+    if(n%2)ok=false;
+    else
     {
-        dbg(n,par);
-        int orgpar=par;
-
-        int cnt=0;
-        while(n%2==0)
+        if(n&(n-1))ok=true;
+        else
         {
-            n/=2;
-            cnt++;
-        }
-        if(cnt%2)par=par;
-        else if(cnt>1)par=1^par;
-        if(n==1)
-        {
-            break;
-        }
-        bool prime=true;
-        for(int j=3;j*j<=n;j+=2)
-        {
-            if(n%j==0)
+            int cnt=0;
+            while (n%2==0)
             {
-                n-=j;
-                par^=1;
-                prime=false;
-                break;
+                cnt++;
+                n/=2;
             }
-        }
 
-        if(cnt>1)prime=false;
-        if(prime)break;
+            assert(n==1);
+
+            if(cnt%2==0)ok=true;
+            else ok=false;
+            
+        }
     }
 
-    if(!par)cout<<"Bob\n";
-    else cout<<"Alice\n";
-    
+    cout<< (ok ? "Alice\n" : "Bob\n");
 }
 
 signed main()
@@ -162,4 +95,4 @@ signed main()
     }
     return 0;
 }
-//	parsed : 18-June-2021 20:45:14 IST
+//	parsed : 19-June-2021 02:56:43 IST

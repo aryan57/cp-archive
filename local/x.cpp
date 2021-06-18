@@ -6,7 +6,7 @@
 */
 /*
     author : aryan57
-    created : 18-June-2021 21:50:34 IST
+    created : 19-June-2021 00:16:37 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,23 +36,63 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-void solve_LOG()
+#define ARYAN_SIEVE  
+const int mxn_sieve = 1e6+100;
+vector <int> primes;
+int spf[mxn_sieve + 1]; // spf -> smallest prime factor
+// if spf[x]==x ,then x is prime
+void sieve()
 {
-    srand(time(0));
+    spf[1] = 1;
+    for (int i = 2; i <= mxn_sieve; i++)
+        spf[i] = i;
 
-    int n,k;
-    n=rand()%501+1;
-    k=rand()%501+1;
+    for (int i = 4; i <= mxn_sieve; i += 2)
+        spf[i] = 2;
 
-    string s="";
 
-    F(i,0,n-1)
+    for (int i = 3; i * i <= mxn_sieve; i++)
     {
-        s+='a'+rand()%26;
+        if (spf[i] == i)
+        {
+            for (int j = i * i; j <= mxn_sieve; j += i)
+                if (spf[j] == j)
+                    spf[j] = i;
+        }
     }
 
-    cout<<n<<" "<<k<<"\n";
-    cout<<s;
+    F(i,2,mxn_sieve)
+    if (spf[i] == i)primes.push_back(i);
+}
+
+void solve_LOL()
+{
+    int l,r;
+    cin>>l>>r;
+
+    auto itr=upper_bound(all(primes),r);
+
+    if(itr==primes.begin())
+    {
+        cout<<"-1\n";
+        return;
+    }
+
+    itr--;
+
+    auto itl=lower_bound(all(primes),l);
+
+    if(itl==primes.end())
+    {
+        cout<<"-1\n";
+        return;
+    }
+
+    int ans=*itr-*itl;
+    if(ans<0)ans=-1;
+
+    cout<<ans;
+    cout<<"\n";
 }
 
 signed main()
@@ -75,11 +115,11 @@ signed main()
 #endif
     // cout<<fixed<<setprecision(10);
     int _t=1;
-    // cin>>_t;
+    cin>>_t;
     for (int i=1;i<=_t;i++)
     {
         // cout<<"Case #"<<i<<": ";
-        solve_LOG();
+        solve_LOL();
     }
     return 0;
 }
