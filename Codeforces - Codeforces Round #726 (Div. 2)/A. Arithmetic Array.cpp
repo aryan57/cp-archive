@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : x.cpp
-	srcPath : /home/aryan/Documents/cp/x.cpp
-	url : /home/aryan/Documents/cp/x.cpp
+	group : Codeforces - Codeforces Round #726 (Div. 2)
+	name : A. Arithmetic Array.cpp
+	srcPath : /home/aryan/Documents/cp/A_Arithmetic_Array.cpp
+	url : https://codeforces.com/contest/1537/problem/0
 */
 /*
     author : aryan57
-    created : 18-June-2021 21:50:34 IST
+    created : 18-June-2021 20:08:14 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,23 +36,37 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-void solve_LOG()
+void solve_LOL()
 {
-    srand(time(0));
+    int n;
+    cin>>n;
 
-    int n,k;
-    n=rand()%501+1;
-    k=rand()%501+1;
-
-    string s="";
+    vector <int> a(n);
+    int s=0;
 
     F(i,0,n-1)
     {
-        s+='a'+rand()%26;
+        cin>>a[i];
+        s+=a[i];
     }
 
-    cout<<n<<" "<<k<<"\n";
-    cout<<s;
+    if(s-n==0)
+    {
+        cout<<0;
+        cout<<"\n";
+        return;
+    }
+    if(s-n<0)
+    {
+        cout<<1;
+        cout<<"\n";
+        return;
+    }
+
+        cout<<s-n;
+        cout<<"\n";
+        return;
+
 }
 
 signed main()
@@ -75,11 +89,12 @@ signed main()
 #endif
     // cout<<fixed<<setprecision(10);
     int _t=1;
-    // cin>>_t;
+    cin>>_t;
     for (int i=1;i<=_t;i++)
     {
         // cout<<"Case #"<<i<<": ";
-        solve_LOG();
+        solve_LOL();
     }
     return 0;
 }
+//	parsed : 18-June-2021 20:07:59 IST

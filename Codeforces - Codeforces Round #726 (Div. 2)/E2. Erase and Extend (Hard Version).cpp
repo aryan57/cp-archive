@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : x.cpp
-	srcPath : /home/aryan/Documents/cp/x.cpp
-	url : /home/aryan/Documents/cp/x.cpp
+	group : Codeforces - Codeforces Round #726 (Div. 2)
+	name : E2. Erase and Extend (Hard Version).cpp
+	srcPath : /home/aryan/Documents/cp/E2_Erase_and_Extend_Hard_Version_.cpp
+	url : https://codeforces.com/contest/1537/problem/E2
 */
 /*
     author : aryan57
-    created : 18-June-2021 21:50:34 IST
+    created : 18-June-2021 21:37:09 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -38,21 +38,51 @@ const long double pie = acos(-1);
 
 void solve_LOG()
 {
-    srand(time(0));
-
     int n,k;
-    n=rand()%501+1;
-    k=rand()%501+1;
+    cin>>n>>k;
 
-    string s="";
+    string s;
+    cin>>s;
+
+    vector <int>  pos[26];
 
     F(i,0,n-1)
     {
-        s+='a'+rand()%26;
+        pos[s[i]-'a'].push_back(i);
     }
 
-    cout<<n<<" "<<k<<"\n";
-    cout<<s;
+    int last=n;
+
+    F(c,s[0]-'a'+1,25)
+    {
+        int x=lower_bound(all(pos[c]),0)-pos[c].begin();
+        if(x!=sz(pos[c]))
+        {
+            // dbg(c,x,pos[c][x]);
+            last=min(last,pos[c][x]);
+        }
+    }
+
+    last--;
+
+    while (last>0 && s[last]==s[0])
+    {
+        last--;
+    }
+
+    dbg(last,s[last]);
+    
+
+
+    string pre=s.substr(0,last+1);
+    string zz="";
+    while (sz(zz)<k)
+    {
+        zz+=pre;
+    }
+
+    cout<<zz.substr(0,k);
+    
 }
 
 signed main()
@@ -83,3 +113,4 @@ signed main()
     }
     return 0;
 }
+//	parsed : 18-June-2021 21:22:55 IST

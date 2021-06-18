@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : x.cpp
-	srcPath : /home/aryan/Documents/cp/x.cpp
-	url : /home/aryan/Documents/cp/x.cpp
+	group : Codeforces - Codeforces Round #726 (Div. 2)
+	name : B. Bad Boy.cpp
+	srcPath : /home/aryan/Documents/cp/B_Bad_Boy.cpp
+	url : https://codeforces.com/contest/1537/problem/B
 */
 /*
     author : aryan57
-    created : 18-June-2021 21:50:34 IST
+    created : 18-June-2021 20:18:14 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,23 +36,12 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-void solve_LOG()
+void solve_LOL()
 {
-    srand(time(0));
+    int n,m,x,y;
+    cin>>n>>m>>x>>y;
 
-    int n,k;
-    n=rand()%501+1;
-    k=rand()%501+1;
-
-    string s="";
-
-    F(i,0,n-1)
-    {
-        s+='a'+rand()%26;
-    }
-
-    cout<<n<<" "<<k<<"\n";
-    cout<<s;
+    cout<<1<<" "<<1<<" "<<n<<" "<<m<<"\n";
 }
 
 signed main()
@@ -75,11 +64,12 @@ signed main()
 #endif
     // cout<<fixed<<setprecision(10);
     int _t=1;
-    // cin>>_t;
+    cin>>_t;
     for (int i=1;i<=_t;i++)
     {
         // cout<<"Case #"<<i<<": ";
-        solve_LOG();
+        solve_LOL();
     }
     return 0;
 }
+//	parsed : 18-June-2021 20:18:04 IST

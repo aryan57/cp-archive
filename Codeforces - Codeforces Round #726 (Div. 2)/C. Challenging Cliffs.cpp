@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : x.cpp
-	srcPath : /home/aryan/Documents/cp/x.cpp
-	url : /home/aryan/Documents/cp/x.cpp
+	group : Codeforces - Codeforces Round #726 (Div. 2)
+	name : C. Challenging Cliffs.cpp
+	srcPath : /home/aryan/Documents/cp/C_Challenging_Cliffs.cpp
+	url : https://codeforces.com/contest/1537/problem/C
 */
 /*
     author : aryan57
-    created : 18-June-2021 21:50:34 IST
+    created : 18-June-2021 20:23:55 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,23 +36,53 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-void solve_LOG()
+void solve_LOL()
 {
-    srand(time(0));
+    int n;
+    cin>>n;
 
-    int n,k;
-    n=rand()%501+1;
-    k=rand()%501+1;
-
-    string s="";
-
+    vector <int> a(n);
     F(i,0,n-1)
     {
-        s+='a'+rand()%26;
+        cin>>a[i];
     }
 
-    cout<<n<<" "<<k<<"\n";
-    cout<<s;
+    sort(all(a));
+
+    int mn=INF;
+
+    F(i,1,n-1)
+    {
+        mn=min(mn,a[i]-a[i-1]);
+    }
+
+    if(mn==a[n-1]-a[0])
+    {
+        for(int x : a)
+        {
+            cout<<x<<" ";
+        }
+
+        cout<<"\n";
+        return;
+    }
+
+    F(i,1,n-1)
+    {
+        if(a[i]-a[i-1]==mn)
+        {
+            F(j,i,n-1)
+            {
+                cout<<a[j]<<" ";
+            }
+            F(j,0,i-1)
+            {
+                cout<<a[j]<<" ";
+            }
+            cout<<"\n";
+            return;
+        }
+    }
 }
 
 signed main()
@@ -75,11 +105,12 @@ signed main()
 #endif
     // cout<<fixed<<setprecision(10);
     int _t=1;
-    // cin>>_t;
+    cin>>_t;
     for (int i=1;i<=_t;i++)
     {
         // cout<<"Case #"<<i<<": ";
-        solve_LOG();
+        solve_LOL();
     }
     return 0;
 }
+//	parsed : 18-June-2021 20:23:39 IST

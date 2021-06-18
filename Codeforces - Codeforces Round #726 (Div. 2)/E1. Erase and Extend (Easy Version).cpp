@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : x.cpp
-	srcPath : /home/aryan/Documents/cp/x.cpp
-	url : /home/aryan/Documents/cp/x.cpp
+	group : Codeforces - Codeforces Round #726 (Div. 2)
+	name : E1. Erase and Extend (Easy Version).cpp
+	srcPath : /home/aryan/Documents/cp/E1_Erase_and_Extend_Easy_Version_.cpp
+	url : https://codeforces.com/contest/1537/problem/E1
 */
 /*
     author : aryan57
-    created : 18-June-2021 21:50:34 IST
+    created : 18-June-2021 21:16:59 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -38,21 +38,28 @@ const long double pie = acos(-1);
 
 void solve_LOG()
 {
-    srand(time(0));
-
     int n,k;
-    n=rand()%501+1;
-    k=rand()%501+1;
+    cin>>n>>k;
 
-    string s="";
-
+    string s;
+    cin>>s;
+    string mn(k,'z');
+    string pre="";
     F(i,0,n-1)
     {
-        s+='a'+rand()%26;
+        pre+=s[i];
+
+        string zz="";
+        while(sz(zz)<k)
+        {
+            zz+=pre;
+        }
+
+        zz=zz.substr(0,k);
+        mn=min(mn,zz);
     }
 
-    cout<<n<<" "<<k<<"\n";
-    cout<<s;
+    cout<<mn;
 }
 
 signed main()
@@ -83,3 +90,4 @@ signed main()
     }
     return 0;
 }
+//	parsed : 18-June-2021 21:16:09 IST
