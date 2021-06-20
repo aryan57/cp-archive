@@ -74,40 +74,52 @@ void solve_LOL()
     }
     if(n==3)
     {
-        if(sz(s)==1)
+
+        vector <int> v;
+        v.push_back(0);
+        F(i,1,3)
         {
-            if(a[0]==0)
+            v.push_back(a[i-1]);
+        }
+
+        if(v[2]==0)
+        {
+            if(v[1])
             {
-                cout<<"-1\n";
+                cout<<"1\n";
+                cout<<"1 2 3\n";
                 return;
             }
-            cout<<1;
-            cout<<"\n";
-            cout<<1<<" "<<3<<" "<<2;
-            cout<<"\n";
+            if(v[3])
+            {
+                cout<<"1\n";
+                cout<<"3 2 1\n";
+                return;
+            }
+
+            cout<<"-1\n";
             return;
-
         }
-
-        if(a[0]==0 && a[1]==0 && a[2]!=0)
+        else
         {
-            cout<<1;
-            cout<<"\n";
-            cout<<2<<" "<<3<<" "<<1;
-            cout<<"\n";
-            return;
-        }
-        if(a[2]==0 && a[1]==0 && a[0]!=0)
-        {
-            cout<<1;
-            cout<<"\n";
-            cout<<2<<" "<<1<<" "<<3;
-            cout<<"\n";
+            if(v[1]==v[3])
+            {
+                if(v[1])
+                {
+                    cout<<"1\n";
+                    cout<<"1 3 2\n";
+                    return;
+                }
+                else
+                {
+                    cout<<"0\n";
+                    return;
+                }
+            }
+            cout<<"-1\n";
             return;
         }
 
-        cout<<"-1\n";
-        return;
     }
 
     if(sz(s)==n)
