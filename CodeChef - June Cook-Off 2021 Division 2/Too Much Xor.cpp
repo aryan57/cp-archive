@@ -122,157 +122,102 @@ void solve_LOL()
 
     }
 
-    if(sz(s)==n)
+    vector <str> ans;
+    if(sz(s)==1)
     {
-        cout<<"-1\n";
+        if(a[0]==0)
+        {
+            cout<<"-1\n";
+            return;
+        }
+
+        str z;
+        z.a=1;
+        z.b=3;
+        for(int i=2;i<=n;i+=2)
+        {
+            z.c=i;
+            ans.push_back(z);
+        }
+
+        cout<<sz(ans);
+        cout<<"\n";
+        for(auto z : ans)
+        {
+            cout<<z.a<<" "<<z.b<<" "<<z.c<<"\n";
+        }
         return;
     }
 
     unordered_map<int,int> last;
     int p=-1;
     int q=-1;
-    F(i,0,n-1)
+
+    for(int i=3;i<=n;i++)
     {
-        if(last[a[i]]!=0)
+        if(i%2)
         {
-            p=last[a[i]]-1;
-            q=i;
-            break;
-        }
-
-        last[a[i]]=i+1;
-    }
-
-
-    assert(p!=-1 && q!=-1 && a[p]==a[q]);
-
-    int reserve=-1;
-    F(j,0,n-1)
-    {
-        if(a[j])
-        {
-            reserve=j;
-            break;
-        }
-    }
-
-    if(reserve==-1)
-    {
-        cout<<"-1\n";
-        return;
-    }
-    
-
-    vector <str> ans;
-    F(i,0,n-1)
-    {
-        if(i==p || i==q || i==reserve)continue;
-
-        str z;
-        z.a=p;
-        z.b=q;
-        z.c=i;
-
-        ans.push_back(z);
-
-        a[i]=0;
-
-        
-    }
-
-    if(a[p]!=0)
-    {
-        int zp=-1;
-        int zq=-1;
-
-        F(i,0,n-1)
-        {
-            if(i==p || i==q)continue;
-
-            if(a[i]==0)
+            if(a[i-1]!=a[1-1])
             {
-                if(zp==-1)zp=i;
-                else 
-                {
-                    zq=i;
-                    break;
-                }
+                p=1;
+                q=i;
+                break;
             }
         }
-
-        if(zp==-1 || zq==-1)
+        else
         {
-            cout<<"-1\n";
-            return;
-        }
+            if(a[i-1]!=a[2-1])
+            {
+                p=2;
+                q=i;
+                break;
+            }
 
-        if(p!=reserve)
+        }
+    }
+
+
+    assert(p!=-1 && q!=-1 && a[p-1]!=a[q-1]);
+
+    
+    F(i,1,n)
+    {
+        if(i%2!=p%2)
         {
             str z;
-            z.a=zp;
-            z.b=zq;
-            z.c=p;
-
-            a[p]=0;
-
+            z.a=p;
+            z.b=q;
+            z.c=i;
             ans.push_back(z);
-
         }
-        if(q!=reserve)
+    }
+
+    F(i,1,n)
+    {
+        if(i%2==p%2)
         {
             str z;
-            z.a=zp;
-            z.b=zq;
-            z.c=q;
-
-            a[q]=0;
-
+            if(p==1)
+            {
+                z.a=2;
+                z.b=4;
+            }
+            else
+            {
+                z.a=1;
+                z.b=3;
+            }
+            z.c=i;
             ans.push_back(z);
-
         }
     }
 
-    int cnt0=0;
-    int pos=-1;
-    F(i,0,n-1)
-    {
-        if(!a[i])
-        {
-            cnt0++;
-            if(reserve%2!=i%2)pos=i;
-        }
-    }
-
-    if(cnt0!=n-1 || a[reserve]==0 || pos==-1 || a[pos]!=0)
-    {
-        cout<<"-1\n";
-        return;
-    }
-
-    for(int j=reserve+2;j<n;j+=2)
-    {
-        str z;
-        z.a=reserve;
-        z.b=pos;
-        z.c=j;
-
-        ans.push_back(z);
-    }
-    for(int j=reserve-2;j>=0;j-=2)
-    {
-        str z;
-        z.a=reserve;
-        z.b=pos;
-        z.c=j;
-
-        ans.push_back(z);
-    }
 
     cout<<sz(ans);
     cout<<"\n";
     for(auto z : ans)
     {
-        cout<<z.a+1<<" "<<z.b+1<<" "<<z.c+1<<"\n";
+        cout<<z.a<<" "<<z.b<<" "<<z.c<<"\n";
     }
     
 
