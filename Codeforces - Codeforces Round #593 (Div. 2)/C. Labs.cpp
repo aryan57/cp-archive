@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : c.cpp
-	srcPath : /home/aryan/Documents/cp/c.cpp
-	url : /home/aryan/Documents/cp/c.cpp
+	group : Codeforces - Codeforces Round #593 (Div. 2)
+	name : C. Labs.cpp
+	srcPath : /home/aryan/Documents/cp/C_Labs.cpp
+	url : https://codeforces.com/contest/1236/problem/C
 */
 /*
     author : aryan57
-    created : 22-June-2021 20:50:41 IST
+    created : 24-June-2021 15:05:14 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -38,17 +38,34 @@ const long double pie = acos(-1);
 
 void solve_LOG()
 {
-    int n=42;
-    vector <int> v(n);
-    F(i,0,n-1)cin>>v[i];
-    sort(all(v));
-    cout<<"[";
-    F(i,0,n-1)
+    int n;
+    cin>>n;
+
+    int g[n][n];
+
+    int cnt=0;
+    int i=0;
+    int j=0;
+    int plus=1;
+    while(cnt!=n*n)
     {
-        if(i)cout<<", ";
-        cout<<v[i];
+        g[i][j]=++cnt;
+        
+        i+=plus;
+        if(plus==1 && i==n)
+        {
+            i=n-1;
+            plus=-1;
+            j++;
+        }else if(plus==-1 && i==-1)
+        {
+            i=0;
+            plus=1;
+            j++;
+        }
     }
-    cout<<"]";
+
+    F(i,0,n-1){F(j,0,n-1)cout<<g[i][j]<<" ";cout<<"\n";}
 }
 
 signed main()
@@ -79,3 +96,4 @@ signed main()
     }
     return 0;
 }
+//	parsed : 24-June-2021 14:30:24 IST

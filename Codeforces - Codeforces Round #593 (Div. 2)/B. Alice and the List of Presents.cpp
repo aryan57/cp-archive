@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : c.cpp
-	srcPath : /home/aryan/Documents/cp/c.cpp
-	url : /home/aryan/Documents/cp/c.cpp
+	group : Codeforces - Codeforces Round #593 (Div. 2)
+	name : B. Alice and the List of Presents.cpp
+	srcPath : /home/aryan/Documents/cp/B_Alice_and_the_List_of_Presents.cpp
+	url : https://codeforces.com/contest/1236/problem/B
 */
 /*
     author : aryan57
-    created : 22-June-2021 20:50:41 IST
+    created : 24-June-2021 14:47:12 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,19 +36,37 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
+/*
+    modInverse(a) = binpow(a, phi(n)-1, n)
+    If n is prime, phi(n) = n-1
+    phi(n) = number of no.s from 1 to n co-prime with n
+*/
+int binpow(int a, int b=M-2, int m=M)
+{
+    assert(a>=0 && b>=0);
+    a%=m;
+    int res=1;
+    while (b)
+    {
+        if(b%2)res=res*a%m;
+        a=a*a%m;
+        b/=2;
+    }
+    return res;
+}
+
 void solve_LOG()
 {
-    int n=42;
-    vector <int> v(n);
-    F(i,0,n-1)cin>>v[i];
-    sort(all(v));
-    cout<<"[";
-    F(i,0,n-1)
-    {
-        if(i)cout<<", ";
-        cout<<v[i];
-    }
-    cout<<"]";
+    int n,m;
+    cin>>n>>m;
+
+    int t=binpow(2,m);
+    t--;
+    t%=M;
+    t+=M;
+    t%=M;
+
+    cout<<binpow(t,n);
 }
 
 signed main()
@@ -79,3 +97,4 @@ signed main()
     }
     return 0;
 }
+//	parsed : 24-June-2021 14:29:41 IST

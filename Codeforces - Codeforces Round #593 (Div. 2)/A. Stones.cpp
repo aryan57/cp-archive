@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : c.cpp
-	srcPath : /home/aryan/Documents/cp/c.cpp
-	url : /home/aryan/Documents/cp/c.cpp
+	group : Codeforces - Codeforces Round #593 (Div. 2)
+	name : A. Stones.cpp
+	srcPath : /home/aryan/Documents/cp/A_Stones.cpp
+	url : https://codeforces.com/contest/1236/problem/A
 */
 /*
     author : aryan57
-    created : 22-June-2021 20:50:41 IST
+    created : 24-June-2021 14:26:08 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,19 +36,31 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-void solve_LOG()
+void solve_LOL()
 {
-    int n=42;
-    vector <int> v(n);
-    F(i,0,n-1)cin>>v[i];
-    sort(all(v));
-    cout<<"[";
-    F(i,0,n-1)
+    int a,b,c;
+    cin>>a>>b>>c;
+
+    int cnt=0;
+
+    F(x,0,100)
     {
-        if(i)cout<<", ";
-        cout<<v[i];
+        F(y,0,100)
+        {
+            if(2*x+y>b || x>a || 2*y>c)continue;
+            int t=0;
+            t+=2*x+y;
+            t+=x;
+            t+=2*y;
+
+            // if(t>=9)dbg(x,y,t);
+
+            cnt=max(cnt,t);
+        }
     }
-    cout<<"]";
+
+    cout<<cnt;
+    cout<<"\n";
 }
 
 signed main()
@@ -71,11 +83,12 @@ signed main()
 #endif
     // cout<<fixed<<setprecision(10);
     int _t=1;
-    // cin>>_t;
+    cin>>_t;
     for (int i=1;i<=_t;i++)
     {
         // cout<<"Case #"<<i<<": ";
-        solve_LOG();
+        solve_LOL();
     }
     return 0;
 }
+//	parsed : 24-June-2021 14:24:08 IST
