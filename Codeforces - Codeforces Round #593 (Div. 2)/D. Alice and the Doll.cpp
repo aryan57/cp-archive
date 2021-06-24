@@ -36,43 +36,59 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-vector<int> plus_x={0,1,0,-1};
-vector<int> plus_y={-1,0,1,0};
-
-vector<int> star_x={1,1,-1,-1};
-vector<int> star_y={-1,1,1,-1};
-
-vector<int> square_x={0,1,1,1,0,-1,-1,-1};
-vector<int> square_y={-1,-1,0,1,1,1,0,-1};
-
-bool is_inside(int x,int y,int n,int m)
-{
-    return (x>=1 && x<=n && y>=1 && y<=m);
-}
-
 void solve_LOG()
 {
     int n,m;
     cin>>n>>m;
 
-    vector< vector<bool> > vis(n+1,vector <bool> (m+1,false));
-    vector< vector<bool> > block(n+1,vector <bool> (m+1,false));
+    vector<pair<int,int> > block;
+
+    // int g[n][m]={};
     
 
     int k;
     cin>>k;
     int tot=n*m;
 
-    F(i,0,k-1)
+    F(i,1,k)
     {
         int x,y;
         cin>>x>>y;
-        block[x][y]=true;
+        // g[x-1][y-1]=1;
+        block.push_back({x,y});
         tot--;
     }
 
-    F(i,0,n)block[i][0]=true;
-    F(j,0,m)block[0][j]=true;
+    // F(i,0,n-1)
+    // {
+    //     F(j,0,m-1)
+    //     {
+    //         cout<<(g[i][j]?'#':'*');
+    //     }cout<<"\n";
+    // }
+
+    F(j,0,m+1)
+    {
+        block.push_back({0,j});
+        block.push_back({n+1,j});
+    }
+    F(i,1,n)
+    {
+        block.push_back({i,0});
+        block.push_back({i,m+1});
+    }
+
+    vector <int> row[n+2];
+    vector <int> col[m+2];
+
+    for(auto p : block)
+    {
+        row[p.X].push_back(p.Y);
+        col[p.Y].push_back(p.X);
+    }
+
+    F(i,0,n+1)sort(all(row[i]));
+    F(j,0,m+1)sort(all(col[j]));
 
     int x=1;
     int y=1;
@@ -80,30 +96,97 @@ void solve_LOG()
     vector <int> hx={0,1,0,-1};
     vector <int> hy={1,0,-1,0};
     int d=0;
-
-    while(true)
+    pair <int,int> rr={0,n+1};
+    pair <int,int> cc={0,m+1};
+    tot--;
+    while(tot>=0)
     {
-        tot--;
-        vis[x][y]=true;
-        // dbg(x,y);
+        // dbg(x,y,tot);
+        // dbg(rr,cc);
+
         bool ok=false;
+
         F(k,0,3)
         {
-            int r=x+hx[(d+k)%4];
-            int c=y+hy[(d+k)%4];
-            
-            if(is_inside(r,c,n,m) && !vis[r][c] && !block[r][c])
+            int new_d=(d+k)%4;
+            if((new_d-d)%2==0 && new_d!=d)continue;
+
+            int r=-1;
+            int c=-1;
+
+            if(hy[new_d]==1)
             {
+                auto it=upper_bound(all(row[x]),y);
+                r=x;
+                c=(*it)-1;
+                c=min(c,cc.Y-1);
+                if(c<=y)continue;
+            }
+            else if(hy[new_d]==-1)
+            {
+                auto it=upper_bound(all(row[x]),y);
+                it--;
+                r=x;
+                c=(*it)+1;
+                c=max(c,cc.X+1);
+                if(c>=y)continue;
+                
+            }
+            else if(hx[new_d]==1)
+            {
+                auto it=upper_bound(all(col[y]),x);
+                r=(*it)-1;
+                c=y;
+                r=min(r,rr.Y-1);
+                if(r<=x)continue;
+            }
+            else if(hx[new_d]==-1)
+            {
+                auto it=upper_bound(all(col[y]),x);
+                it--;
+                r=(*it)+1;
+                c=y;
+                r=max(r,rr.X+1);
+                if(r>=x)continue;
+            }
+
+            
+            
+                tot-=abs(x-r)+abs(y-c);
                 x=r;
                 y=c;
-                d=(d+k)%4;
                 ok=true;
+                d=new_d;
+
+                if(hy[new_d]==1)
+                {
+                    rr.X=r;
+                }
+                else if(hy[new_d]==-1)
+                {
+                    rr.Y=r;
+                    
+                }
+                else if(hx[new_d]==1)
+                {
+                    cc.Y=c;
+                }
+                else if(hx[new_d]==-1)
+                {
+                    cc.X=c;
+                }
                 break;
-            }
+            
         }
 
-        if(!ok)break;
+        // dbg(x,y);
+        // dbg(rr,cc);
+
+        if(!ok)
+            break;
     }
+
+    assert(tot>=0);
 
     cout<<(tot==0?"Yes":"No");
 }
