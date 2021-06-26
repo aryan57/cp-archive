@@ -1,11 +1,7 @@
-steps to set up a cron job can be found at https://www.cyberciti.biz/faq/how-do-i-add-jobs-to-cron-under-linux-or-unix-oses/
-
-or,
-- $ `crontab -e`
-- append `*/15 * * * * /home/aryan/.cp-archive/script.sh >/dev/null 2>&1` for running the script every 15 minutes
-
-make sure to give the permission to execute for the script
-![Screenshot from 2021-06-02 18-09-48](https://user-images.githubusercontent.com/55305876/120481540-d4277600-c3cd-11eb-87c1-8e7a78b4db95.png)
-
-
-Side Note: you can use a slight modification of cph vs-code extension at https://github.com/aryan57/cph to automatically create the code files in a specified folder and set a cron job to automatically upload that folder to a github via ssh
+- This is my Competitive Programming Archive.
+- I use a modified version of [CPH VS Code Extension](https://github.com/agrawal-d/cph) available at https://github.com/aryan57/cph
+- You can directly download the VSIX file of the modified extension from [here](https://github.com/aryan57/cp-archive/blob/master/competitive-programming-helper-custom-0.0.1.vsix)
+- The [settings.json](https://github.com/aryan57/cp-archive/blob/master/.vscode/settings.json) contains a minor setting which hides the unnecessary folders (.cph and .vscode) from the vs code file explorer
+- There are two simple scripts, for uploading the codes from a desired folder to github :
+  - Windows: [script.bat](https://github.com/aryan57/cp-archive/blob/master/script.bat)
+  - Linux: [script.sh](https://github.com/aryan57/cp-archive/blob/master/script.sh)
