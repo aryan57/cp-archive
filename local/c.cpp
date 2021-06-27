@@ -1,12 +1,12 @@
 /*
 	group : local
 	name : c.cpp
-	srcPath : /home/aryan/Documents/cp/c.cpp
-	url : /home/aryan/Documents/cp/c.cpp
+	srcPath : /mnt/c/Users/aryan/Desktop/cp/c.cpp
+	url : /mnt/c/Users/aryan/Desktop/cp/c.cpp
 */
 /*
     author : aryan57
-    created : 22-June-2021 20:50:41 IST
+    created : 28-June-2021 02:13:39 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -38,17 +38,44 @@ const long double pie = acos(-1);
 
 void solve_LOG()
 {
-    int n=42;
-    vector <int> v(n);
-    F(i,0,n-1)cin>>v[i];
-    sort(all(v));
-    cout<<"[";
+    
+
+    // array<array<array<int,10>,10>,10> dp;
+    
+    // int n = dp.size();
+    // int m = dp[0].size();
+    // int o = dp[0][0].size();
+
+    // F(i,0,n-1)
+    // {
+    //     F(j,0,m-1)
+    //     {
+    //         F(k,0,o-1)
+    //         {
+    //             cout<<dp[i][j][k]<<" ";
+    //         }
+    //     }
+    // }
+
+    int n=10;
+    int m=10;
+    int o=10;
+
+    int g[n][m][o];
+
+    fill_n(&g[0][0][0],n*m*o,INF);
+
     F(i,0,n-1)
     {
-        if(i)cout<<", ";
-        cout<<v[i];
+        F(j,0,m-1)
+        {
+            F(k,0,o-1)
+            {
+                cout<<g[i][j][k]<<" ";
+            }
+        }
     }
-    cout<<"]";
+
 }
 
 signed main()
