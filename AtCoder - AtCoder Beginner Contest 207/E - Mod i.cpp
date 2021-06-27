@@ -6,7 +6,7 @@
 */
 /*
     author : aryan57
-    created : 26-June-2021 18:55:12 IST
+    created : 27-June-2021 17:04:11 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -44,47 +44,40 @@ void solve_LOG()
     vector <int> v(n+1);
     vector <int> pre(n+1);
 
-    vector <int> r[n+1][n];
-
     F(i,1,n)
     {
         cin>>v[i];
         pre[i]+=pre[i-1]+v[i];
-
-        F(j,1,n)
-        {
-            r[j][pre[i]%j].push_back(i);
-        }
     }
-
+    vector< vector<int> > dp_sum(n+1,vector <int> (n));
     vector< vector<int> > dp(n+1,vector <int> (n+1));
-    F(j,1,n)
+    dp[1][1]=1;
+    int ans=0;
+    F(i,1,n)
     {
-        F(i,1,n)
+        F(j,1,n)
         {
             if(j==1)
             {
                 dp[i][j]=1;
-                continue;
+            }
+            else
+            {
+                dp[i][j]=dp_sum[j-1][pre[i]%j];
             }
 
-            int rem=pre[i]%j;
-
-            for(int pos : r[j][rem])
+            if(i==n)
             {
-                if(pos>=i)break;
-
-                dp[i][j]+=dp[pos][j-1];
-                dp[i][j]%=M;
+                ans+=dp[i][j];
+                ans%=M;
             }
         }
-    }
 
-    int ans=0;
-    F(j,1,n)
-    {
-        ans+=dp[n][j];
-        ans%=M;
+        F(j,1,n-1)
+        {
+            dp_sum[j][pre[i]%(j+1)]+=dp[i][j];
+            dp_sum[j][pre[i]%(j+1)]%=M;
+        }
     }
 
     cout<<ans;
@@ -118,3 +111,4 @@ signed main()
     }
     return 0;
 }
+//	parsed : 27-June-2021 17:03:51 IST
