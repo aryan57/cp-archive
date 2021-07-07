@@ -37,79 +37,90 @@ const int32_t M = 1000000007;
 const long double pie = acos(-1);
 
 long double ans;
+long double c,m,p,v;
 
-void f(long double c,long double m,long double p,long double v,int l,long double pro)
+void f(int l)
 {
-    // dbg(p,pro);
-
-    ans+=p*pro*l;
-
-    if(c>0)
+    
+    F(num,0,(int)pow(2,l)-1)
     {
-        long double z=v;
-        long double mm=m;
-        long double cc=c-v;
-        long double pp=p;
-
-        if(c-v>1e-8)
-        {
-
-        }
-        else
-        {
-            cc=-1;
-            z=c;
-        }
-
-        if(mm>0)
-        {
-            mm+=z/2.0;
-            pp+=z/2.0;
-        }
-        else
-        {
-            pp+=z;
-        }
-
-        f(cc,mm,pp,v,l+1,pro*c);
-    }
-    if(m>0)
-    {
-        long double z=v;
-        long double mm=m-v;
         long double cc=c;
+        long double mm=m;
         long double pp=p;
+        bool ok = true;
+        long double t=1.0;
 
-        if(m-v>1e-8)
+        F(bit,0,l-1)
         {
+            // if(l==2)dbg(bit,pp);
 
-        }
-        else
-        {
-            mm=-1;
-            z=m;
+            if((num>>bit)&1)
+            {
+                if(cc< 1e-8 )
+                {
+                    ok=false;
+                    break;
+                }
+
+                t*=cc;
+                long double zz= min(cc,v);
+                cc-=zz;
+
+                if(mm> 1e-8)
+                {
+                    mm+=zz/2;
+                    pp+=zz/2;
+
+                }
+                else
+                {
+                    pp+=zz;
+                }
+                
+            }
+            else
+            {
+
+                if(mm< 1e-8 )
+                {
+                    ok=false;
+                    break;
+                }
+                t*=mm;
+                long double zz= min(mm,v);
+                mm-=zz;
+                if(cc> 1e-8)
+                {
+                    cc+=zz/2;
+                    pp+=zz/2;
+
+                }
+                else
+                {
+                    pp+=zz;
+                }
+            }
         }
 
-        if(cc>0)
-        {
-            cc+=z/2.0;
-            pp+=z/2.0;
-        }
-        else
-        {
-            pp+=z;
-        }
+        // if(l==2)dbg(ok,pp);
 
-        f(cc,mm,pp,v,l+1,pro*m);
+        if(ok)
+        {
+            // dbg(l+1,pp,t);
+            ans+=(l+1)*(pp)*t;
+        }
     }
 }
+
 void solve_LOL()
 {
     
-    long double c,m,p,v;
     cin>>c>>m>>p>>v;
-    ans=0.0;
-    f(c,m,p,v,1,1.0);
+    ans=p;
+    F(i,1,20)
+    {
+        f(i);
+    }
 
     cout<<ans;
     cout<<"\n";
@@ -133,7 +144,7 @@ signed main()
 #ifdef ARYAN_FACT
     fact_init();
 #endif
-    cout<<fixed<<setprecision(20);
+    cout<<fixed<<setprecision(10);
     int _t=1;
     cin>>_t;
     for (int i=1;i<=_t;i++)
