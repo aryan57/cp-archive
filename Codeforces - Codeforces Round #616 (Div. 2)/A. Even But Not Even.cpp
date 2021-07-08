@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : c.cpp
-	srcPath : /home/aryan/Documents/cp/c.cpp
-	url : /home/aryan/Documents/cp/c.cpp
+	group : Codeforces - Codeforces Round #616 (Div. 2)
+	name : A. Even But Not Even.cpp
+	srcPath : /home/aryan/Documents/cp/A_Even_But_Not_Even.cpp
+	url : https://codeforces.com/contest/1291/problem/A
 */
 /*
     author : aryan57
-    created : 08-July-2021 12:31:43 IST
+    created : 08-July-2021 11:33:55 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,17 +36,27 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-void solve_LOG()
+void solve_LOL()
 {
-    int n=100;
-    int m=50;
-    int k=20;
+    int n;
+    cin>>n;
+    string s;
+    cin>>s;
 
-    cout<<1;
-    cout<<"\n";
-    cout<<n<<" "<<m<<" "<<k;
-    cout<<"\n";
-    F(i,1,n)cout<<1<<" ";
+    F(i,0,sz(s)-1)
+    {
+        F(j,i+1,sz(s)-1)
+        {
+            if((s[i]-'0')%2 && (s[j]-'0')%2)
+            {
+                cout<<s.substr(i,j-i+1);
+                cout<<"\n";
+                return;
+            }
+        }
+    }
+
+    cout<<"-1\n";
 }
 
 signed main()
@@ -69,11 +79,12 @@ signed main()
 #endif
     // cout<<fixed<<setprecision(10);
     int _t=1;
-    // cin>>_t;
+    cin>>_t;
     for (int i=1;i<=_t;i++)
     {
         // cout<<"Case #"<<i<<": ";
-        solve_LOG();
+        solve_LOL();
     }
     return 0;
 }
+//	parsed : 08-July-2021 11:31:06 IST

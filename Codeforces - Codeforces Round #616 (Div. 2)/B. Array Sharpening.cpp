@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : c.cpp
-	srcPath : /home/aryan/Documents/cp/c.cpp
-	url : /home/aryan/Documents/cp/c.cpp
+	group : Codeforces - Codeforces Round #616 (Div. 2)
+	name : B. Array Sharpening.cpp
+	srcPath : /home/aryan/Documents/cp/B_Array_Sharpening.cpp
+	url : https://codeforces.com/contest/1291/problem/B
 */
 /*
     author : aryan57
-    created : 08-July-2021 12:31:43 IST
+    created : 08-July-2021 11:40:11 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,17 +36,41 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-void solve_LOG()
+void solve_LOL()
 {
-    int n=100;
-    int m=50;
-    int k=20;
+    int n;
+    cin>>n;
 
-    cout<<1;
-    cout<<"\n";
-    cout<<n<<" "<<m<<" "<<k;
-    cout<<"\n";
-    F(i,1,n)cout<<1<<" ";
+    vector <int> v(n);
+    for(int &x : v)cin>>x;
+
+    vector <bool> left(n,true);
+    vector <bool> right(n,true);
+
+    left[0]=true;
+    F(i,1,n-1)
+    {
+        left[i]=left[i-1];
+        if(v[i]<i)left[i]=false;
+    }
+
+    right[n-1]=true;
+    RF(i,n-2,0)
+    {
+        right[i]=right[i+1];
+        if(v[i]<n-1-i)right[i]=false;
+    }
+
+    F(i,0,n-1)
+    {
+        if(left[i] && right[i])
+        {
+            cout<<"Yes\n";
+            return;
+        }
+    }
+
+    cout<<"No\n";
 }
 
 signed main()
@@ -69,11 +93,12 @@ signed main()
 #endif
     // cout<<fixed<<setprecision(10);
     int _t=1;
-    // cin>>_t;
+    cin>>_t;
     for (int i=1;i<=_t;i++)
     {
         // cout<<"Case #"<<i<<": ";
-        solve_LOG();
+        solve_LOL();
     }
     return 0;
 }
+//	parsed : 08-July-2021 11:35:59 IST
