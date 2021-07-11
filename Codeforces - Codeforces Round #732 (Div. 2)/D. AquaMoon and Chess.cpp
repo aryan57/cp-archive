@@ -94,7 +94,6 @@ void solve_LOL()
     int cur=1;
     int prev=s[1]-'0';
 
-    int tot=0;
     int zero=0;
     int one=0;
 
@@ -104,12 +103,10 @@ void solve_LOL()
         {
             if(prev==0)
             {
-                tot+=cur;
                 zero+=cur;
             }
             else
             {
-                tot+=cur/2;
                 one+=cur/2;
             }
 
@@ -121,7 +118,7 @@ void solve_LOL()
         }
     }
 
-    cout<<ncr(tot,one);
+    cout<<ncr(zero+one,one);
     cout<<"\n";
 }
 
