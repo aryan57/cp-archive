@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : c.cpp
-	srcPath : /home/aryan/Documents/cp/c.cpp
-	url : /home/aryan/Documents/cp/c.cpp
+	group : Google Coding Competitions - Round D 2021 - Kick Start 2021
+	name : Arithmetic Square.cpp
+	srcPath : /home/aryan/Documents/cp/Arithmetic_Square.cpp
+	url : https://codingcompetitions.withgoogle.com/kickstart/round/00000000004361e3/000000000082b813
 */
 /*
     author : aryan57
-    created : 11-July-2021 10:24:34 IST
+    created : 11-July-2021 10:34:06 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -38,7 +38,35 @@ const long double pie = acos(-1);
 
 void solve_GOOGLE()
 {
-    cout<<7;
+    vector< vector<int> > v(4,vector <int> (4));
+
+    F(j,1,3)cin>>v[1][j];
+    cin>>v[2][1]>>v[2][3];
+    F(j,1,3)cin>>v[3][j];
+
+    vector <int> t;
+    t.push_back((v[1][2]+v[3][2])/2);
+    t.push_back((v[2][1]+v[2][3])/2);
+    t.push_back((v[1][3]+v[3][1])/2);
+    t.push_back((v[1][1]+v[3][3])/2);
+
+    int ans=0;
+
+    for(int x : t)
+    {
+        int cnt=0;
+        v[2][2]=x;
+
+        F(i,1,3)if(2*v[i][2]==v[i][1]+v[i][3])cnt++;
+        F(j,1,3)if(2*v[2][j]==v[1][j]+v[3][j])cnt++;
+
+        if(2*v[2][2]==v[1][1]+v[3][3])cnt++;
+        if(2*v[2][2]==v[1][3]+v[3][1])cnt++;
+
+        ans=max(ans,cnt);
+    }
+
+    cout<<ans;
     cout<<"\n";
 }
 
@@ -70,3 +98,4 @@ signed main()
     }
     return 0;
 }
+//	parsed : 11-July-2021 10:30:17 IST

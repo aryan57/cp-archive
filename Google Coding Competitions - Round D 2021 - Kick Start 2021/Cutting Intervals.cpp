@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : c.cpp
-	srcPath : /home/aryan/Documents/cp/c.cpp
-	url : /home/aryan/Documents/cp/c.cpp
+	group : Google Coding Competitions - Round D 2021 - Kick Start 2021
+	name : Cutting Intervals.cpp
+	srcPath : /home/aryan/Documents/cp/Cutting_Intervals.cpp
+	url : https://codingcompetitions.withgoogle.com/kickstart/round/00000000004361e3/000000000082b933
 */
 /*
     author : aryan57
-    created : 11-July-2021 10:24:34 IST
+    created : 11-July-2021 13:27:30 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -38,7 +38,59 @@ const long double pie = acos(-1);
 
 void solve_GOOGLE()
 {
-    cout<<7;
+    int n,c;
+    cin>>n>>c;
+
+    map<int,int> mp;
+
+    F(i,0,n-1)
+    {
+        int l,r;
+        cin>>l>>r;
+        if(l!=r)
+        {
+            mp[l+1]++;
+            mp[r]--;
+
+        }
+    }
+
+    // dbg(mp);
+
+    pair <int,int> prev;
+    bool first=false;
+
+    vector<pair<int,int> > temp;
+
+    for(auto &p: mp)
+    {
+        if(!first)
+        {
+            prev=p;
+            first=true;
+            continue;
+        }
+
+        // dbg(p,prev);
+
+        p.Y+=prev.Y;
+        temp.push_back({prev.Y,p.X-prev.X});
+        prev=p;
+    }
+    sort(all(temp),greater<pair <int,int> > ());
+    // dbg(temp);
+
+    int ans=n;
+
+    for(auto p : temp)
+    {
+        int cut=min(c,p.Y);
+        // if(cut==0)break;
+        c-=cut;
+        ans+=(cut)*(p.X);
+    }
+
+    cout<<ans;
     cout<<"\n";
 }
 
