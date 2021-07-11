@@ -11,24 +11,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-template <typename A, typename B>
-ostream &operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
-template <typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type>
-ostream &operator<<(ostream &os, const T_container &v)
-{
-    os << '{';
-    string sep;
-    for (const T &x : v)
-        os << sep << x, sep = ", ";
-    return os << '}';
-}
+template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
+template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
 void dbg_out() { cerr << endl; }
-template <typename Head, typename... Tail>
-void dbg_out(Head H, Tail... T)
-{
-    cerr << ' ' << H;
-    dbg_out(T...);
-}
+template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
 #ifndef ONLINE_JUDGE
 #define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
 #else
@@ -119,53 +105,41 @@ const long double pie = acos(-1);
 
 */
 
-template <class S, S (*op)(S, S), S (*e)()>
-struct segtree
-{
-public:
+template <class S, S (*op)(S, S), S (*e)()> struct segtree {
+  public:
     segtree() : segtree(0) {}
     explicit segtree(int n) : segtree(std::vector<S>(n, e())) {}
-    explicit segtree(const std::vector<S> &v) : _n((int)(v.size()))
-    {
+    explicit segtree(const std::vector<S>& v) : _n((int)(v.size())) {
         log = segtree::ceil_pow2(_n);
         size = 1 << log;
         d = std::vector<S>(2 * size, e());
-        for (int i = 0; i < _n; i++)
-            d[size + i] = v[i];
-        for (int i = size - 1; i >= 1; i--)
-        {
+        for (int i = 0; i < _n; i++) d[size + i] = v[i];
+        for (int i = size - 1; i >= 1; i--) {
             update(i);
         }
     }
 
-    void set(int p, S x)
-    {
+    void set(int p, S x) {
         assert(0 <= p && p < _n);
         p += size;
         d[p] = x;
-        for (int i = 1; i <= log; i++)
-            update(p >> i);
+        for (int i = 1; i <= log; i++) update(p >> i);
     }
 
-    S get(int p) const
-    {
+    S get(int p) const {
         assert(0 <= p && p < _n);
         return d[p + size];
     }
 
-    S prod(int l, int r) const
-    {
+    S prod(int l, int r) const {
         assert(0 <= l && l <= r && r <= _n);
         S sml = e(), smr = e();
         l += size;
         r += size;
 
-        while (l < r)
-        {
-            if (l & 1)
-                sml = op(sml, d[l++]);
-            if (r & 1)
-                smr = op(d[--r], smr);
+        while (l < r) {
+            if (l & 1) sml = op(sml, d[l++]);
+            if (r & 1) smr = op(d[--r], smr);
             l >>= 1;
             r >>= 1;
         }
@@ -174,32 +148,21 @@ public:
 
     S all_prod() const { return d[1]; }
 
-    template <bool (*f)(S)>
-    int max_right(int l) const
-    {
-        return max_right(l, [](S x)
-                         { return f(x); });
+    template <bool (*f)(S)> int max_right(int l) const {
+        return max_right(l, [](S x) { return f(x); });
     }
-    template <class F>
-    int max_right(int l, F f) const
-    {
+    template <class F> int max_right(int l, F f) const {
         assert(0 <= l && l <= _n);
         assert(f(e()));
-        if (l == _n)
-            return _n;
+        if (l == _n) return _n;
         l += size;
         S sm = e();
-        do
-        {
-            while (l % 2 == 0)
-                l >>= 1;
-            if (!f(op(sm, d[l])))
-            {
-                while (l < size)
-                {
+        do {
+            while (l % 2 == 0) l >>= 1;
+            if (!f(op(sm, d[l]))) {
+                while (l < size) {
                     l = (2 * l);
-                    if (f(op(sm, d[l])))
-                    {
+                    if (f(op(sm, d[l]))) {
                         sm = op(sm, d[l]);
                         l++;
                     }
@@ -212,33 +175,22 @@ public:
         return _n;
     }
 
-    template <bool (*f)(S)>
-    int min_left(int r) const
-    {
-        return min_left(r, [](S x)
-                        { return f(x); });
+    template <bool (*f)(S)> int min_left(int r) const {
+        return min_left(r, [](S x) { return f(x); });
     }
-    template <class F>
-    int min_left(int r, F f) const
-    {
+    template <class F> int min_left(int r, F f) const {
         assert(0 <= r && r <= _n);
         assert(f(e()));
-        if (r == 0)
-            return 0;
+        if (r == 0) return 0;
         r += size;
         S sm = e();
-        do
-        {
+        do {
             r--;
-            while (r > 1 && (r % 2))
-                r >>= 1;
-            if (!f(op(d[r], sm)))
-            {
-                while (r < size)
-                {
+            while (r > 1 && (r % 2)) r >>= 1;
+            if (!f(op(d[r], sm))) {
+                while (r < size) {
                     r = (2 * r + 1);
-                    if (f(op(d[r], sm)))
-                    {
+                    if (f(op(d[r], sm))) {
                         sm = op(d[r], sm);
                         r--;
                     }
@@ -250,7 +202,7 @@ public:
         return 0;
     }
 
-private:
+  private:
     int _n, size, log;
     std::vector<S> d;
 
@@ -258,18 +210,17 @@ private:
 
     // @param n `0 <= n`
     // @return minimum non-negative `x` s.t. `n <= 2**x`
-    int ceil_pow2(int n)
-    {
+    int ceil_pow2(int n) {
         int x = 0;
-        while ((1U << x) < (unsigned int)(n))
-            x++;
+        while ((1U << x) < (unsigned int)(n)) x++;
         return x;
     }
+
 };
 
-int binary_operation(int a, int b)
+int binary_operation(int a,int b)
 {
-    return a + b;
+    return a+b;
 }
 
 int identity_element()
@@ -277,56 +228,45 @@ int identity_element()
     return 0;
 }
 
-int f(int a, int p)
+int f(int a,int p,int s)
 {
-    if(a==0)return 0;
-    int cnt = 0;
+    int x1=(int)pow(a,s);
+    int x2=(int)pow(a%p,s);
 
-    while (a % p == 0)
+    int num=x1-x2;
+    assert(num>=0);
+
+    if(num==0)return 0;
+
+    int cnt=0;
+
+    while (num%p==0)
     {
-        a /= p;
+        num/=p;
         cnt++;
     }
 
     return cnt;
+    
 }
+
 
 void solve_GOOGLE()
 {
-    int n, q, p;
-    cin >> n >> q >> p;
+    int n,q,p;
+    cin>>n>>q>>p;
 
-    vector<segtree<int, binary_operation, identity_element>> tree(2, segtree<int, binary_operation, identity_element>(n + 1));
+    vector<segtree<int,binary_operation,identity_element>> tree(4,segtree<int,binary_operation,identity_element>(n+1));
 
-    segtree<int, binary_operation, identity_element> tree2(n + 1);
-
-    F(i, 1, n)
+    F(i,1,n)
     {
         int x;
-        cin >> x;
+        cin>>x;
 
-        if (x <= p)
+        F(s,1,4)
         {
-            tree[0].set(i, 0);
-            tree[1].set(i, 0);
+            tree[s-1].set(i,f(x,p,s));
         }
-        else
-        {
-            tree[0].set(i, f(x, p));
-            tree[1].set(i, f(x % p, p));
-        }
-
-        int z1=tree[0].get(i);
-        int z2=tree[1].get(i);
-
-        int mn=min(z1,z2);
-
-        if(mn==0 && (z1 || z2))
-        {
-            mn=max(z1,z2);
-        }
-
-        tree2.set(i, mn);
     }
 
     // dbg(f(62,2,3));
@@ -335,43 +275,26 @@ void solve_GOOGLE()
     while (q--)
     {
         int op;
-        cin >> op;
-        if (op == 1)
+        cin>>op;
+        if(op==1)
         {
-            int i, x;
-            cin >> i >> x;
-
-            if (x <= p)
+            int pos,val;
+            cin>>pos>>val;
+            F(s,1,4)
             {
-                tree[0].set(i, 0);
-                tree[1].set(i, 0);
+                tree[s-1].set(pos,f(val,p,s));
             }
-            else
-            {
-                tree[0].set(i, f(x, p));
-                tree[1].set(i, f(x % p, p));
-            }
-
-            int z1=tree[0].get(i);
-            int z2=tree[1].get(i);
-
-            int mn=min(z1,z2);
-
-            if(mn==0 && (z1 || z2))
-            {
-                mn=max(z1,z2);
-            }
-
-            tree2.set(i, mn);
         }
         else
         {
-            int s, l, r;
-            cin >> s >> l >> r;
-            cout << s*(r-l+1) + tree2.prod(l, r + 1) << " ";
+            int s,l,r;
+            cin>>s>>l>>r;
+            assert(s<=4);
+            cout<<tree[s-1].prod(l,r+1)<<" ";
         }
     }
-    cout << "\n";
+    cout<<"\n";
+    
 }
 
 signed main()
@@ -393,11 +316,11 @@ signed main()
     fact_init();
 #endif
     // cout<<fixed<<setprecision(10);
-    int _t = 1;
-    cin >> _t;
-    for (int i = 1; i <= _t; i++)
+    int _t=1;
+    cin>>_t;
+    for (int i=1;i<=_t;i++)
     {
-        cout << "Case #" << i << ": ";
+        cout<<"Case #"<<i<<": ";
         solve_GOOGLE();
     }
     return 0;
