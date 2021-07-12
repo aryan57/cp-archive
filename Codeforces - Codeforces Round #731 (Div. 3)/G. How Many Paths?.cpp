@@ -47,9 +47,11 @@ vector <int> adj[mxn+1];
 vector <Color> color(mxn+1);
 vector <bool> is_more_than_1(mxn+1);
 vector <bool> is_part_of_a_cycle(mxn+1);
+vector <int> ans(mxn+1);
 
 void dfs(int u)
 {
+    ans[u]=1;
     color[u]=grey;
     for(int to : adj[u])
     {
@@ -81,6 +83,7 @@ void solve_LOL()
         color[i]=white;
         is_more_than_1[i]=false;
         is_part_of_a_cycle[i]=false;
+        ans[i]=0;
     }
 
     F(i,1,m)
@@ -91,34 +94,8 @@ void solve_LOL()
     }
 
     dfs(1);
-
-    vector <int> ans(n+1,0);
-
-    {
-        queue<int> q;
-        vector<bool> visited(n+1);
-        
-        q.push(1);
-        visited[1] = true;
-        ans[1]=1;
-        while (!q.empty()) {
-        
-            int parent_node = q.front();
-            q.pop();
-        
-            for (int child_node : adj[parent_node]) {
-        
-                if (!visited[child_node])
-                {
-                    visited[child_node] = true;
-                    ans[child_node] = 1;
-                    q.push(child_node);
-                }
-            }
-        }
-
-        // now all nodes which can be visited will be 1 and rest will be 0
-    }
+    // now all nodes which can be visited will be 1 and rest will be 0
+    
 
     {
         vector<bool> visited(n+1);
