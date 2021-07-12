@@ -5,8 +5,9 @@
 	url : https://codeforces.com/contest/1547/problem/G
 */
 /*
+    // credits : @nikhiltudaha
     author : aryan57
-    created : 10-July-2021 21:33:39 IST
+    created : 12-July-2021 17:14:09 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -21,7 +22,7 @@ template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr
 #define dbg(...)
 #endif
 
-// #define int long long
+#define int long long
 #define X first
 #define Y second
 #define pb push_back
@@ -36,113 +37,50 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-int n;
-vector<int> adj[mxn+1];
-vector<int> parents[mxn+1];
-vector<char> color(mxn,0);
-vector<int> parent(mxn,-1);
-int cycle_start, cycle_end;
-vector <int> ans(mxn+1);
+enum Color{
+    white,  // not processed
+    grey,  // in process
+    black  // processed
+};
 
-bool dfs(int v) {
-    color[v] = 1;
-    for (int u : adj[v]) {
-        if(ans[u]==-1)continue;
-        if (color[u] == 0) {
-            parent[u] = v;
-            if (dfs(u))
-                return true;
-        } else if (color[u] == 1) {
-            cycle_end = v;
-            cycle_start = u;
-            return true;
+vector <int> adj[mxn+1];
+vector <Color> color(mxn+1);
+vector <bool> is_more_than_1(mxn+1);
+vector <bool> is_part_of_a_cycle(mxn+1);
+
+void dfs(int u)
+{
+    color[u]=grey;
+    for(int to : adj[u])
+    {
+        if(color[to]==white)
+        {
+            dfs(to);
+        }
+        else if(color[to]==grey)
+        {
+            is_part_of_a_cycle[to]=true;
+            is_part_of_a_cycle[u]=true;
+        }
+        else
+        {
+            is_more_than_1[to]=true;
         }
     }
-    color[v] = 2;
-    return false;
+    color[u]=black;
 }
 
-bool find_cycle() {
-    
-    
-    cycle_start = -1;
-
-    for (int v = 1; v <= n; v++)
-    {
-        if (ans[v]!=-1 && color[v] == 0 && dfs(v))break;
-    }
-
-    if (cycle_start == -1)return false;
-
-    dbg(cycle_start,cycle_end);
-    
-    vector<int> cycle;
-    cycle.push_back(cycle_start);
-    // int cnt=0;
-    for (int v = cycle_end; v != cycle_start && v!=-1; v = parent[v])
-    {
-        cycle.push_back(v);
-        // if(cnt++>10)break;
-        // dbg(v);
-
-    }
-    // cycle.push_back(cycle_start);
-    // reverse(cycle.begin(), cycle.end());
-
-    // dbg(cycle);
-
-    // for (int v : cycle)
-    // {
-    //     queue<int> q;
-    //     vector<bool> visited(n+1);
-    //     vector <int> temp;
-        
-    //     q.push(v);
-    //     visited[v] = true;
-    //     temp.push_back(v);
-        
-    //     while (!q.empty()) {
-        
-    //         int parent_node = q.front();
-    //         q.pop();
-        
-    //         for (int child_node : adj[parent_node]) {
-        
-    //             if (!visited[child_node] && ans[child_node]!=-1)
-    //             {
-    //                 visited[child_node] = true;
-    //                 temp.push_back(child_node);
-    //                 q.push(child_node);
-    //             }
-    //         }
-    //     }
-
-    //     for(int z : temp)
-    //     {
-    //         ans[z]=-1;
-    //         adj[z].clear();
-    //         parents[z].clear();
-    //     }
-    // }
-
-    return true;
-    
-}
-
-void solve_LOG()
+void solve_LOL()
 {
-    int m;
+    int n,m;
     cin>>n>>m;
 
     F(i,0,n)
     {
         adj[i].clear();
-        parents[i].clear();
-        color[i]=0;
-        parent[i]=-1;
-        ans[i]=0;
-        cycle_start=-1;
-        cycle_end=-1;
+        color[i]=white;
+        is_more_than_1[i]=false;
+        is_part_of_a_cycle[i]=false;
     }
 
     F(i,1,m)
@@ -150,10 +88,11 @@ void solve_LOG()
         int u,v;
         cin>>u>>v;
         adj[u].push_back(v);
-        parents[v].push_back(u);
     }
 
-    
+    dfs(1);
+
+    vector <int> ans(n+1,0);
 
     {
         queue<int> q;
@@ -161,7 +100,7 @@ void solve_LOG()
         
         q.push(1);
         visited[1] = true;
-        
+        ans[1]=1;
         while (!q.empty()) {
         
             int parent_node = q.front();
@@ -172,76 +111,80 @@ void solve_LOG()
                 if (!visited[child_node])
                 {
                     visited[child_node] = true;
+                    ans[child_node] = 1;
                     q.push(child_node);
                 }
             }
         }
 
+        // now all nodes which can be visited will be 1 and rest will be 0
+    }
+
+    {
+        vector<bool> visited(n+1);
+
         F(i,1,n)
         {
-            if(visited[i])
+            if(ans[i]==1 && is_part_of_a_cycle[i] && !visited[i])
             {
-                ans[i]=1;
-            }else
+                queue<int> q;
+                q.push(i);
+                visited[i] = true;
+                ans[i]=-1;
+                while (!q.empty()) {
+                
+                    int parent_node = q.front();
+                    q.pop();
+                
+                    for (int child_node : adj[parent_node]) {
+                
+                        if (!visited[child_node])
+                        {
+                            visited[child_node] = true;
+                            ans[child_node] = -1;
+                            q.push(child_node);
+                        }
+                    }
+                }
+            }
+        }
+
+        // now all nodes which can be visited will by only one path will be 1,
+        // by infinite paths will be -1
+        // by no paths will be 0
+    }
+
+    {
+        vector<bool> visited(n+1);
+
+        F(i,1,n)
+        {
+            if(ans[i]==1 && is_more_than_1[i] && !visited[i])
             {
-                adj[i].clear();
-                parents[i].clear();
+                queue<int> q;
+                q.push(i);
+                visited[i] = true;
+                ans[i]=2;
+                while (!q.empty()) {
+                
+                    int parent_node = q.front();
+                    q.pop();
+                
+                    for (int child_node : adj[parent_node]) {
+                
+                        if (!visited[child_node])
+                        {
+                            visited[child_node] = true;
+                            if(ans[child_node]==1)ans[child_node] = 2;
+                            q.push(child_node);
+                        }
+                    }
+                }
             }
         }
     }
 
-    int cnt=0;
-    while (find_cycle()){
-        // F(i,1,n)cout<<ans[i]<<" ";
-        // cout<<"\n";
-        // F(i,1,n)dbg(i,adj[i]);
-
-        // if(cnt++>0)
-        // break;
-    }
-    
-    // {
-    //     queue<int> q;
-    //     vector<bool> visited(n+1);
-    //     vector <int> temp;
-        
-    //     q.push(1);
-    //     visited[1] = true;
-    //     temp.push_back(1);
-        
-    //     while (!q.empty()) {
-        
-    //         int parent_node = q.front();
-    //         q.pop();
-        
-    //         for (int child_node : adj[parent_node]) {
-        
-    //             if (!visited[child_node])
-    //             {
-    //                 visited[child_node] = true;
-    //                 temp.push_back(child_node);
-    //                 q.push(child_node);
-    //             }
-    //         }
-    //     }
-
-    //     for(int z : temp)
-    //     {
-    //         int cnt=0;
-
-    //         for(int p : parents[z])
-    //         {
-    //             if(visited[p])cnt++;
-    //             if(cnt>1)break;
-    //         }
-    //         // assert(cnt>0);
-    //         if(cnt>1)ans[z]=2;
-    //     }
-    // }
-
     F(i,1,n)cout<<ans[i]<<" ";cout<<"\n";
-
-
 }
 
 signed main()
@@ -268,8 +211,8 @@ signed main()
     for (int i=1;i<=_t;i++)
     {
         // cout<<"Case #"<<i<<": ";
-        solve_LOG();
+        solve_LOL();
     }
     return 0;
 }
-//	parsed : 10-July-2021 20:07:54 IST
+//	parsed : 12-July-2021 17:13:51 IST
