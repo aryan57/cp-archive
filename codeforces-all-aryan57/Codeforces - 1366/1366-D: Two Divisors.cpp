@@ -1,0 +1,228 @@
+//https://codeforces.com/contest/1366/problem/D
+
+/*
+    author : Aryan Agarwal, IIT KGP
+    created : 12-06-2020 00:32:54
+*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long int ll;
+typedef unsigned long long ull;
+#define int ll
+
+const int INF=(int)2e18;
+const int MOD = 1000000007; /*more than (10)^9*/  /*7 + 1e9*/
+const int PEG = 998244353; /*less than (10)^9*/   /*1 + 7*17*(2)^23*/
+long double pie=acos(-1);
+
+typedef vector< int > vi;
+typedef vector< vi > vvi;
+typedef pair< int, int > pii;
+typedef vector< pii > vpii;
+#define X first
+#define Y second
+#define pb push_back
+#define sz(a) (ll)(a).size()
+#define all(a) (a).begin(),(a).end()
+
+#define F(i,a,b) for(ll i=a;i<=b;i++)
+#define RF(i,a,b) for(ll i=a;i>=b;i--)
+#define Fo(i,a,b,j) for(ll i=a;i<=b;i+=j)
+#define RFo(i,a,b,j) for(ll i=a;i>=b;i-=j)
+#define in(a,n) F(i,0,n-1)cin>>a[i]
+#define in1(a,n) F(i,1,n)cin>>a[i]
+#define out(a,n) F(i,0,n-1)cout<<a[i]<<" "
+#define out1(a,n) F(i,1,n)cout<<a[i]<<" "
+
+#define fast ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
+#define popcount __builtin_popcountll
+
+#define sf(x) cin>>x
+#define pf(x) cout<<x
+#define pfy cout<<"YES"
+#define pfn cout<<"NO"
+#define pfn1 cout<<"-1"  // printf negative 1
+#define pf1 cout<<"1"
+#define nl cout<<"\n"
+
+#define watch(x) cout<<#x<<" is "<<x<<"\n"
+#define dbg(...) __f(#__VA_ARGS__, __VA_ARGS__)
+template <typename Arg1>void __f(const char* name,Arg1&& arg1);
+template <typename Arg1,typename... Args>void __f(const char* names,Arg1&& arg1,Args&&... args);
+
+ll binpow(ll x,ll y,ll p);
+
+#define MAXN   10000001 
+  
+// stores smallest prime factor for every number 
+int spf[MAXN]; 
+  
+// Calculating SPF (Smallest Prime Factor) for every 
+// number till MAXN. 
+// Time Complexity : O(nloglogn) 
+void sieve() 
+{ 
+    spf[1] = 1; 
+    for (int i=2; i<MAXN; i++) 
+  
+        // marking smallest prime factor for every 
+        // number to be itself. 
+        spf[i] = i; 
+  
+    // separately marking spf for every even 
+    // number as 2 
+    for (int i=4; i<MAXN; i+=2) 
+        spf[i] = 2; 
+  
+    for (int i=3; i*i<MAXN; i++) 
+    { 
+        // checking if i is prime 
+        if (spf[i] == i) 
+        { 
+            // marking SPF for all numbers divisible by i 
+            for (int j=i*i; j<MAXN; j+=i) 
+  
+                // marking spf[j] if it is not  
+                // previously marked 
+                if (spf[j]==j) 
+                    spf[j] = i; 
+        } 
+    } 
+}
+
+ll gcd(ll a, ll b) /*__gcd doesn't work for big no.s*/
+{
+    if (b == 0)
+        return a;
+    return gcd(b, a % b);
+}
+
+signed main()
+{
+    #ifndef ONLINE_JUDGE
+    // freopen("input.txt","r",stdin);
+    #endif
+    fast;
+
+    sieve();
+
+    int n;
+    cin>>n;
+    // int a[n];
+    // in(a,n);
+
+    // out(a,n);
+
+    vpii ans(n);
+
+    int a;
+    int x;
+    // cout<<__gcd(5,7816980);nl;
+    F(j,0,n-1)
+    {
+        cin>>a;
+        x=a;
+        
+        set <int> p;
+
+        while (x != 1) 
+        { 
+            p.insert(spf[x]); 
+            x = x / spf[x]; 
+        }
+
+        if(sz(p)==1){ans[j]={-1,-1};continue;}
+
+
+         auto it=p.begin();
+
+         int d1 = *it,d2=1;
+
+        it++;
+         for(;it!=p.end();it++)
+         {
+            d2 *= *it;
+            
+         }
+
+         ans[j]={d1,d2};
+    }
+
+    F(i,0,n-1)
+    {
+        cout<<ans[i].X<<" ";
+    }nl;
+    F(i,0,n-1)
+    {
+        cout<<ans[i].Y<<" ";
+    }
+
+    return 0;
+}
+
+/* ########## TIPS ##########
+#
+#   mod_inverse(n,p) is binpow(n,p-2,p)
+#
+#   while using ceil() function,always type cast the parameters to double like ceil((1.0*a)/b)
+#
+#   for creating a 2d vector "vec" with n rows & m columns then initialise it with it 0
+#   vvi vec(n,vi(m,0))
+#   vector<vector<int> > vec( n , vector<int> (m, 0))
+#
+#   if you want to insert an integer and a pair in a set then,
+#   set <pair<int,int>,int> is wrong
+#   set< pair < pii,int> > is correct                       // according to my macros
+#   set < pair<pair<int,int> , int> > is correct            // pair of a pair & a integer
+#
+#   if you want just the sum of smallest k elements of a array
+#   use nth_element(arr,arr+n) ,
+#         use nth_element(arr,arr+n,greater <int> ()) if you want largest k elements
+#   then take sum of first k elements ,it works in O(n) ,
+#   rather than first sorting then taking sum of first k elements, which works in O(n*logn)
+#
+#   if you want to check that a given no. 'N' is power of 2
+#   use N&(N-1)==0  ,   rather than log2(N)==ceil(log2(N))
+#
+#   upper_bound is > val in a non-decreasing array
+#   lower_bound is >= val in a non-decreasing array
+#   upper_bound is < val in a non-increasing array (use greater <int> () in 4th parameter) 
+#   lower_bound is <= val in a non-increasing array (use greater <int> () in 4th parameter) 
+#   
+#   don't use stoi() , it doesn't works for large strings
+#   use stoi() to convert string to integer, (2nd & 3rd parameter are optional)
+#   1st parameter is string (address of char array)
+#   2nd parameter is starting index, 0 most of the times
+#   3rd parameter is base of integer, like 2 (for binary no.s), 10 (for decimel no.s) etc.
+#
+*/
+
+ll binpow(ll x, ll y, ll p) /* (x^y)%p in O(log y) */
+{
+    ll res = 1;
+    x = x % p;
+    while (y > 0)
+    {
+        if (y & 1)
+            res = (res * x) % p;
+        y = y >> 1;
+        x = (x * x) % p;
+    }
+    return res;
+}
+
+template <typename Arg1>
+void __f(const char *name, Arg1 &&arg1)
+{
+    std::cout << name << " : " << arg1 << endl;
+}
+
+template <typename Arg1, typename... Args>
+void __f(const char *names, Arg1 &&arg1, Args &&... args)
+{
+    const char *comma = strchr(names + 1, ',');
+    std::cout.write(names, comma - names) << " : " << arg1 << "\n";
+    __f(comma + 1, args...);
+}
