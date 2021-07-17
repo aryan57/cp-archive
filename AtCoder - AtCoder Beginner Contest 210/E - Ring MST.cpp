@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : c2.cpp
-	srcPath : /home/aryan/Documents/cp/c2.cpp
-	url : /home/aryan/Documents/cp/c2.cpp
+	group : AtCoder - AtCoder Beginner Contest 210
+	name : E - Ring MST.cpp
+	srcPath : /home/aryan/Documents/cp/E_Ring_MST.cpp
+	url : https://atcoder.jp/contests/abc210/tasks/abc210_e
 */
 /*
     author : aryan57
-    created : 15-July-2021 23:56:34 IST
+    created : 17-July-2021 18:21:30 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,46 +36,34 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-int f(int i,int j,vector <int> v)
+
+void solve_LOG2(int n,int m)
 {
-    assert(i<=j);
-    if(i==j)return v[i];
-    F(start,i,j-1)
-    {
-        v[start] ^= v[start+1];
-    }
-    return f(i,j-1,v);
-}
 
-void solve_LOG()
-{
-    int n;
-    cin>>n;
+    vector<pair<int,int> > v(m);
 
-    vector <int> v(n);
-    F(i,0,n-1)
+    F(i,0,m-1)
     {
-        cin>>v[i];
+        cin>>v[i].Y>>v[i].X;
     }
 
-    int q;
-    cin>>q;
-    while (q--)
+    sort(all(v));
+    int total_components = n;
+    int cost=0;
+    F(j,0,m-1)
     {
-        int l,r;
-        cin>>l>>r;
-        --l;--r;
-        int mx=-INF;
-        F(i,l,r)
-        {
-            F(j,i,r)
-            {
-                mx=max(mx,f(i,j,v));
-            }
-        }
-        cout<<mx<<" ";
+        if(total_components==1)break;
+        int reduced_components = __gcd(total_components,v[j].Y);
+        cost+=(total_components-reduced_components)*v[j].X;
+        total_components=reduced_components;
     }
+
+    if(total_components!=1)cost=-1;
     
+    cout<<cost;
+    return;
+    
+
 }
 
 signed main()
@@ -101,8 +89,10 @@ signed main()
     // cin>>_t;
     for (int i=1;i<=_t;i++)
     {
-        // cout<<"Case #"<<i<<": ";
-        solve_LOG();
+        int n,m;
+        cin>>n>>m;
+        solve_LOG2(n,m);
     }
     return 0;
 }
+//	parsed : 17-July-2021 18:21:06 IST

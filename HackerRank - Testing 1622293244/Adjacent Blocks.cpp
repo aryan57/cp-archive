@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : c2.cpp
-	srcPath : /home/aryan/Documents/cp/c2.cpp
-	url : /home/aryan/Documents/cp/c2.cpp
+	group : HackerRank - Testing 1622293244
+	name : Adjacent Blocks.cpp
+	srcPath : /home/aryan/Documents/cp/Adjacent_Blocks.cpp
+	url : https://www.hackerrank.com/contests/testing-1622293244/challenges/adjacent-blocks
 */
 /*
     author : aryan57
-    created : 15-July-2021 23:56:34 IST
+    created : 16-July-2021 14:46:48 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,46 +36,37 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-int f(int i,int j,vector <int> v)
+int f(vector <int> &v) 
 {
-    assert(i<=j);
-    if(i==j)return v[i];
-    F(start,i,j-1)
+    int ind=0;
+    int ans=0;
+
+    F(i,0,sz(v)-1)
     {
-        v[start] ^= v[start+1];
+        if(v[i])
+        {
+            ans+=i-ind++;
+        }
     }
-    return f(i,j-1,v);
+
+    return ans;
 }
 
 void solve_LOG()
 {
     int n;
     cin>>n;
-
     vector <int> v(n);
     F(i,0,n-1)
     {
         cin>>v[i];
     }
-
-    int q;
-    cin>>q;
-    while (q--)
-    {
-        int l,r;
-        cin>>l>>r;
-        --l;--r;
-        int mx=-INF;
-        F(i,l,r)
-        {
-            F(j,i,r)
-            {
-                mx=max(mx,f(i,j,v));
-            }
-        }
-        cout<<mx<<" ";
-    }
-    
+    int ans=f(v);
+    reverse(all(v));
+    ans=min(ans,f(v));
+    cout<<ans;
+    // 0001111
+    // 1111000
 }
 
 signed main()
@@ -106,3 +97,4 @@ signed main()
     }
     return 0;
 }
+//	parsed : 16-July-2021 14:44:30 IST

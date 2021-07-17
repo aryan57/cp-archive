@@ -6,7 +6,7 @@
 */
 /*
     author : aryan57
-    created : 12-July-2021 12:43:24 IST
+    created : 15-July-2021 20:45:41 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -123,110 +123,112 @@ template <class S, S (*op)(S, S), S (*e)()> struct segtree {
     }
 
 };
-// https://atcoder.github.io/ac-library/production/document_en/segtree.html
 
 int binary_operation(int a,int b)
 {
-    return a+b;
+    return max(a,b);
 }
 
 int identity_element()
 {
-    return 0;
+    return INT32_MIN;
 }
 
-int target;
-bool check_function(int v)
+
+
+struct node {
+    int val,mn_ind,mx_ind;
+};
+struct query {
+    int l,r,index;
+};
+
+void shrink(vector <node> &v,vector< vector<int> > &f)
 {
-    return v<=target;
+    if(v.empty())return;
+    
+    int n=v.size();
+    
+    for(int i=0;i<n;i++) {
+        int l=v[i].mn_ind;
+        int r=v[i].mx_ind;
+        assert(f[l][r]==-1);
+        f[l][r]=v[i].val;
+    }
+
+    for(int i=0;i<n-1;i++)
+    {
+        v[i].val ^= v[i+1].val;
+        v[i].mn_ind = min(v[i].mn_ind,v[i+1].mn_ind);
+        v[i].mx_ind = max(v[i].mx_ind,v[i+1].mx_ind);
+        
+    }
+
+    v.pop_back();
+    shrink(v,f);
 }
 
+bool comp(query a,query b) {
+    return a.r<b.r;
+}
 
 void solve()
 {
     int n;
     cin>>n;
+    vector <node> v(n);
 
-    vector<pair<int,int> > v(n+1);
-
-    for(int i=1;i<=n;i++)
+    for(int i=0;i<n;i++)
     {
-        cin>>v[i].first;
-        v[i].second=i;
+        cin>>v[i].val;
+        v[i].mn_ind=v[i].mx_ind=i;
     }
 
-    // we will sort the initial cost of toys and in each query change the cost of damaged toys to 0
-    // so answer for each query will be the no. of 1's in the second segment tree in the maximum length prefix having sum<=C
-    sort(v.begin()+1,v.end()); // sort from index '1' to 'n'
-
-    vector <int> new_index(n+1);
-
-    for(int i=1;i<=n;i++)
-        new_index[v[i].second]=i;
+    vector< vector<int> > f(n,vector <int> (n,-1));
+    shrink(v,f);
+    // now we know, value of function 'f' for each subarray
+    // we will solve the problem offline
+    // sort all the queries, and implment a segtree
     
-    /*
-        new_index[i] will give the new postion of an index after sorting
-
-        for example:
-        initial array: [8,6,5,7]
-        sorted array: [5,6,7,8]
-
-        new_index[1]=4
-        new_index[2]=2
-        new_index[3]=1
-        new_index[4]=3
-    */
-
-    // this tree will contain cost of toys 
-    segtree<int,binary_operation,identity_element> tree(n+1);
-
-    // this will be tree of 0s and 1s and we will count the no. not-damaged toys in a range
-    segtree<int,binary_operation,identity_element> count_tree(n+1);
-
-    for(int i=1;i<=n;i++)
-    {
-        tree.set(i,v[i].first);
-        count_tree.set(i,1);
+    int Q;
+    cin>>Q;
+    vector<query> queries(Q);
+    int ind=0;
+    for(query &q : queries){
+        cin>>q.l>>q.r;
+        q.l--;
+        q.r--;
+        q.index=ind++;
     }
 
-    int q;
-    cin>>q;
-    while (q--)
-    {
-        int c,k;
-        cin>>c>>k;
-        vector <int> rem(k+1);
-        for(int i=1;i<=k;i++)
-        {
-            cin>>rem[i];
-            tree.set(new_index[rem[i]],0);
-            count_tree.set(new_index[rem[i]],0);
+    sort(queries.begin(),queries.end(),comp); // sort acccording to 'r' values
+
+    segtree<int,binary_operation,identity_element> tree(n);
+
+    vector <int> ans(Q);
+    int start=0;
+    for(query q : queries) {
+        
+        for(int r=start;r<=q.r;r++) {
+            for(int l=0;l<=r;l++) {
+                tree.set(l,max(tree.get(l),f[l][r]));
+            }
         }
 
-        target=c;
-
-        int r=tree.max_right<check_function>(1);
-
-        cout<<count_tree.prod(1,r)<<"\n";
-
-        // changing everythin back to initial values as queries are independent
-        for(int i=1;i<=k;i++)
-        {
-            tree.set(new_index[rem[i]],v[new_index[rem[i]]].first);
-            count_tree.set(new_index[rem[i]],1);
-        }
-
+        ans[q.index] = tree.prod(q.l,q.r+1); // get maximum in range [l,r+1) or [l,r]
+        start=q.r+1;
     }
-    
+
+    for(int x : ans)cout<<x<<" ";
+    cout<<"\n";
+
 }
 
 signed main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
-    int _t=1;
-    cin>>_t;
-    while (_t--)solve();
+    solve();
     
     return 0;
 }

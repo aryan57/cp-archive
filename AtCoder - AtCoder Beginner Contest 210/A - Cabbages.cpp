@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : c2.cpp
-	srcPath : /home/aryan/Documents/cp/c2.cpp
-	url : /home/aryan/Documents/cp/c2.cpp
+	group : AtCoder - AtCoder Beginner Contest 210
+	name : A - Cabbages.cpp
+	srcPath : /home/aryan/Documents/cp/A_Cabbages.cpp
+	url : https://atcoder.jp/contests/abc210/tasks/abc210_a
 */
 /*
     author : aryan57
-    created : 15-July-2021 23:56:34 IST
+    created : 17-July-2021 17:30:46 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,46 +36,25 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-int f(int i,int j,vector <int> v)
-{
-    assert(i<=j);
-    if(i==j)return v[i];
-    F(start,i,j-1)
-    {
-        v[start] ^= v[start+1];
-    }
-    return f(i,j-1,v);
-}
-
 void solve_LOG()
 {
-    int n;
-    cin>>n;
+    int n,a,x,y;
+    cin>>n>>a>>x>>y;
 
-    vector <int> v(n);
-    F(i,0,n-1)
+    int ans=0;
+
+    F(i,1,a)
     {
-        cin>>v[i];
+        ans+=x;
+    }
+    F(i,a+1,n)
+    {
+        ans+=y;
     }
 
-    int q;
-    cin>>q;
-    while (q--)
-    {
-        int l,r;
-        cin>>l>>r;
-        --l;--r;
-        int mx=-INF;
-        F(i,l,r)
-        {
-            F(j,i,r)
-            {
-                mx=max(mx,f(i,j,v));
-            }
-        }
-        cout<<mx<<" ";
-    }
-    
+    if(n<=a)ans=n*x;
+
+    cout<<ans;
 }
 
 signed main()
@@ -106,3 +85,4 @@ signed main()
     }
     return 0;
 }
+//	parsed : 17-July-2021 17:30:11 IST

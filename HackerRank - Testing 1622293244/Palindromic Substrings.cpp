@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : c2.cpp
-	srcPath : /home/aryan/Documents/cp/c2.cpp
-	url : /home/aryan/Documents/cp/c2.cpp
+	group : HackerRank - Testing 1622293244
+	name : Palindromic Substrings.cpp
+	srcPath : /home/aryan/Documents/cp/Palindromic_Substrings.cpp
+	url : https://www.hackerrank.com/contests/testing-1622293244/challenges/palindromic-substrings-3-2
 */
 /*
     author : aryan57
-    created : 15-July-2021 23:56:34 IST
+    created : 16-July-2021 13:58:10 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,46 +36,46 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-int f(int i,int j,vector <int> v)
-{
-    assert(i<=j);
-    if(i==j)return v[i];
-    F(start,i,j-1)
-    {
-        v[start] ^= v[start+1];
-    }
-    return f(i,j-1,v);
-}
-
 void solve_LOG()
 {
-    int n;
-    cin>>n;
+    string s;
+    cin>>s;
+    unordered_map<int,int> cnt;
+    cnt[0]++;
+    int c[26]={};
+    int ans=0;
 
-    vector <int> v(n);
-    F(i,0,n-1)
+    for(char &x : s)
     {
-        cin>>v[i];
-    }
-
-    int q;
-    cin>>q;
-    while (q--)
-    {
-        int l,r;
-        cin>>l>>r;
-        --l;--r;
-        int mx=-INF;
-        F(i,l,r)
+        c[x-'a']++;
+        int num=0;
+        int pww=1;
+        F(bit,0,25)
         {
-            F(j,i,r)
+            if(c[bit]%2)num+=pww;
+            pww*=2;
+        }
+
+        ans+=cnt[num];
+
+        {
+            int pww=1;
+            F(bit,0,25)
             {
-                mx=max(mx,f(i,j,v));
+                int val=num;
+                if(c[bit]%2)val-=pww;
+                else val+=pww;
+                ans+=cnt[val];
+                pww*=2;
             }
         }
-        cout<<mx<<" ";
+
+
+        cnt[num]++;
+
     }
-    
+
+    cout<<ans;
 }
 
 signed main()
@@ -106,3 +106,4 @@ signed main()
     }
     return 0;
 }
+//	parsed : 16-July-2021 13:58:02 IST

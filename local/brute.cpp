@@ -1,8 +1,8 @@
 /*
 	group : local
-	name : c2.cpp
-	srcPath : /home/aryan/Documents/cp/c2.cpp
-	url : /home/aryan/Documents/cp/c2.cpp
+	name : brute.cpp
+	srcPath : /home/aryan/Documents/cp/brute.cpp
+	url : /home/aryan/Documents/cp/brute.cpp
 */
 /*
     author : aryan57
@@ -98,11 +98,25 @@ signed main()
 #endif
     // cout<<fixed<<setprecision(10);
     int _t=1;
+    ofstream outputfile;
+    ifstream inputfile;
     // cin>>_t;
-    for (int i=1;i<=_t;i++)
-    {
-        // cout<<"Case #"<<i<<": ";
-        solve_LOG();
-    }
+    solve_LOG();
+    // for (int i=0;i<=10;i++)
+    // {
+    //     // cout<<"Case #"<<i<<": ";
+    //     string in = "input00.txt";
+    //     string out = "output00.txt";
+    //     in[6] = '0'+i%10;
+    //     in[5] = '0'+i/10;
+    //     out[7] = '0'+i%10;
+    //     out[6] = '0'+i/10;
+    //     inputfile.open(in);
+    //     outputfile.open(out);
+    //     assert(inputfile.is_open() && outputfile.is_open());
+    //     solve_LOG();
+    //     inputfile.close();
+    //     outputfile.close();
+    // }
     return 0;
 }

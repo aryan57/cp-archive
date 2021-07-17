@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : c2.cpp
-	srcPath : /home/aryan/Documents/cp/c2.cpp
-	url : /home/aryan/Documents/cp/c2.cpp
+	group : Codeforces - Educational Codeforces Round 74 (Rated for Div. 2)
+	name : E. Keyboard Purchase.cpp
+	srcPath : /home/aryan/Documents/cp/E_Keyboard_Purchase.cpp
+	url : https://codeforces.com/contest/1238/problem/E
 */
 /*
     author : aryan57
-    created : 15-July-2021 23:56:34 IST
+    created : 17-July-2021 17:18:49 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,46 +36,60 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-int f(int i,int j,vector <int> v)
-{
-    assert(i<=j);
-    if(i==j)return v[i];
-    F(start,i,j-1)
-    {
-        v[start] ^= v[start+1];
-    }
-    return f(i,j-1,v);
-}
-
 void solve_LOG()
 {
-    int n;
-    cin>>n;
+    int n,m;
+    cin>>n>>m;
 
-    vector <int> v(n);
-    F(i,0,n-1)
+    string s;
+    cin>>s;
+
+    int cnt[m][m];
+
+    F(i,1,n-1)
     {
-        cin>>v[i];
+        cnt[s[i]-'a'][s[i-1]-'a']++;
+        cnt[s[i-1]-'a'][s[i]-'a']++;
     }
 
-    int q;
-    cin>>q;
-    while (q--)
+    int tot=(1<<m);
+    vector <int> dp(tot,INF);
+    dp[0]=0;
+
+    vector <int> popcount(tot,0);
+
+    F(i,1,tot-1)
     {
-        int l,r;
-        cin>>l>>r;
-        --l;--r;
-        int mx=-INF;
-        F(i,l,r)
+        popcount[i] = popcount[i&(i-1)] + 1;
+    }
+
+    F(mask,0,tot-1)
+    {
+        
+
+        F(a,0,m-1)
         {
-            F(j,i,r)
+            if((mask>>a)&1)continue;
+            int s1=0;
+        int s2=0;
+            F(b,0,m-1)
             {
-                mx=max(mx,f(i,j,v));
+                if( (mask>>b)&1 )
+                {
+                    s1+=cnt[a][b];
+                }
+                else
+                {
+                    s2+=cnt[a][b];
+                }
             }
+            int newmask = mask | (1<<a);
+
+            dp[newmask] = min(dp[newmask],dp[mask] + popcount[mask]*(s1-s2));
         }
-        cout<<mx<<" ";
     }
-    
+
+    cout<<dp[tot-1];
 }
 
 signed main()
@@ -106,3 +120,4 @@ signed main()
     }
     return 0;
 }
+//	parsed : 17-July-2021 17:18:39 IST

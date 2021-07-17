@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : c2.cpp
-	srcPath : /home/aryan/Documents/cp/c2.cpp
-	url : /home/aryan/Documents/cp/c2.cpp
+	group : AtCoder - AtCoder Beginner Contest 210
+	name : B - Bouzu Mekuri.cpp
+	srcPath : /home/aryan/Documents/cp/B_Bouzu_Mekuri.cpp
+	url : https://atcoder.jp/contests/abc210/tasks/abc210_b
 */
 /*
     author : aryan57
-    created : 15-July-2021 23:56:34 IST
+    created : 17-July-2021 17:36:06 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,46 +36,22 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-int f(int i,int j,vector <int> v)
-{
-    assert(i<=j);
-    if(i==j)return v[i];
-    F(start,i,j-1)
-    {
-        v[start] ^= v[start+1];
-    }
-    return f(i,j-1,v);
-}
-
 void solve_LOG()
 {
     int n;
     cin>>n;
+    string s;
+    cin>>s;
 
-    vector <int> v(n);
-    F(i,0,n-1)
+    F(i,0,sz(s)-1)
     {
-        cin>>v[i];
-    }
-
-    int q;
-    cin>>q;
-    while (q--)
-    {
-        int l,r;
-        cin>>l>>r;
-        --l;--r;
-        int mx=-INF;
-        F(i,l,r)
+        if(s[i]=='1')
         {
-            F(j,i,r)
-            {
-                mx=max(mx,f(i,j,v));
-            }
+            if(i%2)cout<<"Aoki";
+            else cout<<"Takahashi";
+            break;
         }
-        cout<<mx<<" ";
     }
-    
 }
 
 signed main()
@@ -106,3 +82,4 @@ signed main()
     }
     return 0;
 }
+//	parsed : 17-July-2021 17:31:37 IST

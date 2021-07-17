@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : c2.cpp
-	srcPath : /home/aryan/Documents/cp/c2.cpp
-	url : /home/aryan/Documents/cp/c2.cpp
+	group : HackerRank - Testing 1622293244
+	name : Bob visits the country.cpp
+	srcPath : /home/aryan/Documents/cp/Bob_visits_the_country.cpp
+	url : https://www.hackerrank.com/contests/testing-1622293244/challenges/bob-visits-the-country
 */
 /*
     author : aryan57
-    created : 15-July-2021 23:56:34 IST
+    created : 16-July-2021 12:04:28 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,45 +36,48 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-int f(int i,int j,vector <int> v)
+void solve_LOL()
 {
-    assert(i<=j);
-    if(i==j)return v[i];
-    F(start,i,j-1)
+    int n,m;
+    cin>>n>>m;
+    vector <int> adj[n+1];
+    vector <int> parent(n+1,-1);
+    set<int> s;
+    F(i,1,n)
     {
-        v[start] ^= v[start+1];
+        s.insert(i);
     }
-    return f(i,j-1,v);
-}
-
-void solve_LOG()
-{
-    int n;
-    cin>>n;
-
-    vector <int> v(n);
-    F(i,0,n-1)
+    F(i,1,m)
     {
-        cin>>v[i];
+        int u,v;
+        cin>>u>>v;
+        adj[u].push_back(v);
+        parent[v]=u;
     }
-
-    int q;
-    cin>>q;
-    while (q--)
+    vector <int> a(n+2),b(n+2);
+    int mn=INF;
+    F(i,1,n+1)
     {
-        int l,r;
-        cin>>l>>r;
-        --l;--r;
-        int mx=-INF;
-        F(i,l,r)
+        cin>>a[i]>>b[i];
+        mn=min(mn,a[i]);
+    }
+    int ans=0;
+
+    F(i,1,n)
+    {
+        if(parent[i]==-1)
         {
-            F(j,i,r)
-            {
-                mx=max(mx,f(i,j,v));
-            }
+            ans+=b[i];
+            ans+=mn;
         }
-        cout<<mx<<" ";
     }
+
+    ans-=mn;
+    ans+=a[n+1];
+
+
+    cout<<ans;
+    cout<<"\n";
     
 }
 
@@ -98,11 +101,12 @@ signed main()
 #endif
     // cout<<fixed<<setprecision(10);
     int _t=1;
-    // cin>>_t;
+    cin>>_t;
     for (int i=1;i<=_t;i++)
     {
         // cout<<"Case #"<<i<<": ";
-        solve_LOG();
+        solve_LOL();
     }
     return 0;
 }
+//	parsed : 16-July-2021 12:04:05 IST

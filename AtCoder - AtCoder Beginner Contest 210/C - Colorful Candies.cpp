@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : c2.cpp
-	srcPath : /home/aryan/Documents/cp/c2.cpp
-	url : /home/aryan/Documents/cp/c2.cpp
+	group : AtCoder - AtCoder Beginner Contest 210
+	name : C - Colorful Candies.cpp
+	srcPath : /home/aryan/Documents/cp/C_Colorful_Candies.cpp
+	url : https://atcoder.jp/contests/abc210/tasks/abc210_c
 */
 /*
     author : aryan57
-    created : 15-July-2021 23:56:34 IST
+    created : 17-July-2021 17:38:12 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,46 +36,40 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-int f(int i,int j,vector <int> v)
-{
-    assert(i<=j);
-    if(i==j)return v[i];
-    F(start,i,j-1)
-    {
-        v[start] ^= v[start+1];
-    }
-    return f(i,j-1,v);
-}
-
 void solve_LOG()
 {
-    int n;
-    cin>>n;
+    int n,k;
+    cin>>n>>k;
+
+    int ans=0;
+
+    multiset<int> s;
+    set<int> ss;
 
     vector <int> v(n);
     F(i,0,n-1)
     {
         cin>>v[i];
+
+        if(i<k)
+        {
+            s.insert(v[i]);
+            ss.insert(v[i]);
+        }
+        else
+        {
+            ss.insert(v[i]);
+            s.insert(v[i]);
+            if(s.count(v[i-k])==1)ss.erase(v[i-k]);
+            s.erase(s.find(v[i-k]));
+        }
+
+        
+
+        ans=max(ans,sz(ss));
     }
 
-    int q;
-    cin>>q;
-    while (q--)
-    {
-        int l,r;
-        cin>>l>>r;
-        --l;--r;
-        int mx=-INF;
-        F(i,l,r)
-        {
-            F(j,i,r)
-            {
-                mx=max(mx,f(i,j,v));
-            }
-        }
-        cout<<mx<<" ";
-    }
-    
+    cout<<ans;
 }
 
 signed main()
@@ -106,3 +100,4 @@ signed main()
     }
     return 0;
 }
+//	parsed : 17-July-2021 17:37:32 IST
