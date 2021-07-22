@@ -11,10 +11,24 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
-template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
+template <typename A, typename B>
+ostream &operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
+template <typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type>
+ostream &operator<<(ostream &os, const T_container &v)
+{
+    os << '{';
+    string sep;
+    for (const T &x : v)
+        os << sep << x, sep = ", ";
+    return os << '}';
+}
 void dbg_out() { cerr << endl; }
-template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
+template <typename Head, typename... Tail>
+void dbg_out(Head H, Tail... T)
+{
+    cerr << ' ' << H;
+    dbg_out(T...);
+}
 #ifndef ONLINE_JUDGE
 #define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
 #else
@@ -36,36 +50,90 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-void solve_LOL()
+// returns true if array p can be converted into array a by atmost m swaps
+bool f(vector <int> &p,vector <int> &a,int m)
 {
-    int n,m;
-    cin>>n>>m;
-
-    vector <int> a(n);
-
-    vector <int> cnt(n);
+    int n=sz(p);
+    vector< vector<int> > adj(n);
+    vector <int> pos(n);
 
     F(i,0,n-1)
     {
-        cin>>a[i];
+        pos[a[i]]=i;
+    }
+
+    F(i,0,n-1)
+    {
+        adj[i].push_back(pos[p[i]]);
+    }
+
+    int cycles=0;
+    vector <bool> vis(n,false);
+
+    F(i,0,n-1)
+    {
+        if(!vis[i])
+        {
+            cycles++;
+            int cur=i;
+
+            while (!vis[cur])
+            {
+                vis[cur]=true;
+                cur=adj[cur][0];
+            }
+            
+        }
+    }
+
+    return n-cycles<=m;
+
+}
+
+void solve_LOL()
+{
+    int n, m;
+    cin >> n >> m;
+
+    vector<int> a(n);
+
+    vector<int> cnt(n);
+
+    F(i, 0, n - 1)
+    {
+        cin >> a[i];
         --a[i];
 
-        int k=(n+i-a[i])%n;
+        int k = (n + i - a[i]) % n;
         cnt[k]++;
-        
     }
-    vector <int> ans;
-    F(k,0,n-1)
+    vector<int> ans;
+    F(k, 0, n - 1)
     {
-        int tot=n;
-        tot-=cnt[k];
+        /*
+            atleast n/3 characters must match
+            so that the remaining 2n/3 characters can be matched in atmost n/3 swaps
+        */
 
-        if((tot+1)/2<=m)ans.push_back(k);
+        if (cnt[k] >= n / 3)
+        {
+            vector<int> p(n);
+            iota(all(p), 0);
+            if (k)
+                rotate(p.begin(), p.begin() + n - k, p.end()); // [....n,1,2,...]
+
+            if(f(p,a,m))
+            {
+                ans.push_back(k);
+            }
+        }
+
     }
 
-    cout<<sz(ans)<<" ";
-    for(int x : ans)cout<<x<<" ";
-    cout<<"\n";
+    cout << sz(ans) << " ";
+    for (int x : ans)
+        cout << x << " ";
+    cout << "\n";
 }
 
 signed main()
@@ -87,9 +155,9 @@ signed main()
     fact_init();
 #endif
     // cout<<fixed<<setprecision(10);
-    int _t=1;
-    cin>>_t;
-    for (int i=1;i<=_t;i++)
+    int _t = 1;
+    cin >> _t;
+    for (int i = 1; i <= _t; i++)
     {
         // cout<<"Case #"<<i<<": ";
         solve_LOL();
