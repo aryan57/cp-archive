@@ -94,25 +94,6 @@ void solve_LOL()
                 used[i]=true;
             }
         }
-        F(i,0,n-1)
-        {
-            if(used[i])continue;
-            int c=0;
-            int t=0;
-            for(char x : vec[i])
-            {
-                t++;
-                if(x-'a'==j)c++;
-            }
- 
-            if(2*(cnt+c)>t+tot)
-            {
-                cnt+=c;
-                tot+=t;
-                temp++;
-                used[i]=true;
-            }
-        }
  
         ans=max(ans,temp);
     }

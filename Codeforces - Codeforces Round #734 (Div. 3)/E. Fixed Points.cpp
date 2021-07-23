@@ -6,15 +6,29 @@
 */
 /*
     author : aryan57
-    created : 23-July-2021 22:50:30 IST
+    created : 23-July-2021 23:26:41 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
 
-template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
-template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
+template <typename A, typename B>
+ostream &operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
+template <typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type>
+ostream &operator<<(ostream &os, const T_container &v)
+{
+    os << '{';
+    string sep;
+    for (const T &x : v)
+        os << sep << x, sep = ", ";
+    return os << '}';
+}
 void dbg_out() { cerr << endl; }
-template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
+template <typename Head, typename... Tail>
+void dbg_out(Head H, Tail... T)
+{
+    cerr << ' ' << H;
+    dbg_out(T...);
+}
 #ifndef ONLINE_JUDGE
 #define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
 #else
@@ -35,43 +49,47 @@ const long long INF = 2e18;
 const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
-int n,k;
-vector <int> a(2000);
-
-int dp(int start,int req,int moves,int add)
-{
-    if(req<=0)return moves;
-    if(start>=n)return INF;
-
-    int cnt=0;
-    int ans=INF;
-    F(i,start,n-1)
-    {
-        ans=min(ans,dp(i+1,req-cnt,moves+1,add+1));
-        if(a[i]+add==0)cnt++;
-    }
-
-    if(req<=cnt)ans=min(ans,moves);
-
-    return ans;
-}
 
 void solve_LOL()
 {
-    cin>>n>>k;
+    int n, k;
+    cin >> n >> k;
 
-    F(i,0,n-1)
+    vector<int> a(n);
+
+    F(i, 0, n - 1)
     {
-        cin>>a[i];
+        cin >> a[i];
         a[i]--;
-        a[i]-=i;
+        a[i] -= i;
     }
 
-    int ans=dp(0,k,0,0);
-    if(ans==INF)ans=-1;
+    int ans = INF;
 
-    cout<<ans;
-    cout<<"\n";
+    vector<vector<int>> dp(n, vector<int>(n, 0));
+
+    F(i, 0, n - 1)
+    {
+        F(j, 0, i)
+        {
+            int t1=0;
+            if(i>0 && j>0)t1+=dp[i-1][j-1];
+
+            int t2=0;
+            if(i>0)t2+=dp[i-1][j];
+            if(a[i]+j==0)t2++;
+
+            dp[i][j] = max(t1, t2);
+
+            if (dp[i][j] >= k)ans = min(ans, j);
+            
+        }
+    }
+
+    if (ans == INF)ans = -1;
+
+    cout << ans;
+    cout << "\n";
 }
 
 signed main()
@@ -93,13 +111,12 @@ signed main()
     fact_init();
 #endif
     // cout<<fixed<<setprecision(10);
-    int _t=1;
-    cin>>_t;
-    for (int i=1;i<=_t;i++)
+    int _t = 1;
+    cin >> _t;
+    for (int i = 1; i <= _t; i++)
     {
         // cout<<"Case #"<<i<<": ";
         solve_LOL();
     }
     return 0;
 }
-//	parsed : 23-July-2021 22:50:27 IST
