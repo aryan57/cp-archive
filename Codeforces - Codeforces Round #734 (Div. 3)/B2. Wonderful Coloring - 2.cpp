@@ -1,12 +1,12 @@
 /*
-	group : Codeforces - Harbour.Space Scholarship Contest 2021-2022 (open for everyone, rated, Div. 1 + Div. 2)
-	name : E. Permutation Shift.cpp
-	srcPath : /home/aryan/Documents/cp/E_Permutation_Shift.cpp
-	url : https://codeforces.com/contest/1553/problem/E
+	group : Codeforces - Codeforces Round #734 (Div. 3)
+	name : B2. Wonderful Coloring - 2.cpp
+	srcPath : /home/aryan/Documents/cp/B2_Wonderful_Coloring_2.cpp
+	url : https://codeforces.com/contest/1551/problem/B2
 */
 /*
     author : aryan57
-    created : 22-July-2021 21:54:30 IST
+    created : 23-July-2021 20:30:22 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -50,86 +50,74 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-// returns true if array p can be converted into array a by atmost m swaps
-bool f(vector<int> &p, vector<int> &a, int m)
-{
-    int n = sz(p);
-    vector<vector<int>> adj(n);
-    vector<int> pos(n);
-
-    F(i, 0, n - 1)
-    {
-        pos[a[i]] = i;
-    }
-
-    F(i, 0, n - 1)
-    {
-        adj[i].push_back(pos[p[i]]);
-    }
-
-    int cycles = 0;
-    vector<bool> vis(n, false);
-
-    F(i, 0, n - 1)
-    {
-        if (!vis[i])
-        {
-            cycles++;
-            int cur = i;
-
-            while (!vis[cur])
-            {
-                vis[cur] = true;
-                cur = adj[cur][0];
-            }
-        }
-    }
-
-    return n - cycles <= m;
-}
-
 void solve_LOL()
 {
-    int n, m;
-    cin >> n >> m;
+    int n, k;
+    cin >> n >> k;
 
-    vector<int> a(n);
+    vector<int> pos[n + 1];
+    vector<int> a(n + 1);
 
-    vector<int> cnt(n);
-
-    F(i, 0, n - 1)
+    F(i, 1, n)
     {
         cin >> a[i];
-        --a[i];
-
-        int k = (n + i - a[i]) % n;
-        cnt[k]++;
+        pos[a[i]].push_back(i);
     }
-    vector<int> ans;
-    F(k, 0, n - 1)
+
+    int ans = 0;
+    vector<int> vec(n + 1);
+
+    int l = 1;
+    int r = n;
+
+    while (l <= r)
     {
-        /*
-            atleast n/3 characters must match
-            so that the remaining 2n/3 characters can be matched in atmost n/3 swaps
-        */
+        int m = (l + r) / 2;
 
-        if (cnt[k] >= n - 2*m)
+        int len = (m + k - 1) / (k);
+
+        dbg(len,m);
+
+        int cnt=0;
+        vector <int> temp(n+1);
+        int ind=1;
+        F(i,1,n)
         {
-            vector<int> p(n);
-            iota(all(p), 0);
-            if (k)
-                rotate(p.begin(), p.begin() + n - k, p.end()); // [....n,1,2,...]
-
-            if (f(p, a, m))
+            F(j,0,sz(pos[i])-1)
             {
-                ans.push_back(k);
+                temp[pos[i][j]]=ind;
+                ind++;
+                cnt++;
+                if(cnt==k*len)break;
+                if(ind==k+1)
+                {
+                    ind=1;
+                }
+
+                if(j==k-1)break;
             }
+            if(cnt==k*len)break;
+        }
+
+
+
+        if (cnt == k * len)
+        {
+            F(i, 1, n)
+            {
+                vec[i] = temp[i];
+            }
+
+            l = m + 1;
+        }
+        else
+        {
+            r = m - 1;
         }
     }
 
-    cout << sz(ans) << " ";
-    for (int x : ans)
-        cout << x << " ";
+    F(i, 1, n)
+    cout << vec[i] << " ";
     cout << "\n";
 }
 
@@ -161,4 +149,4 @@ signed main()
     }
     return 0;
 }
-//	parsed : 22-July-2021 21:21:03 IST
+//	parsed : 23-July-2021 20:11:59 IST
