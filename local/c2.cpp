@@ -6,7 +6,7 @@
 */
 /*
     author : aryan57
-    created : 15-July-2021 23:56:34 IST
+    created : 24-July-2021 15:55:34 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,46 +36,50 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-int f(int i,int j,vector <int> v)
-{
-    assert(i<=j);
-    if(i==j)return v[i];
-    F(start,i,j-1)
-    {
-        v[start] ^= v[start+1];
-    }
-    return f(i,j-1,v);
-}
-
 void solve_LOG()
 {
-    int n;
-    cin>>n;
+    int n,m;
+    cin>>n>>m;
 
-    vector <int> v(n);
-    F(i,0,n-1)
-    {
-        cin>>v[i];
-    }
+    int g[n+1][m+1]={};
+    int len[n+1][m+1]={};
+    int c[n+1][m+1]={};
 
-    int q;
-    cin>>q;
-    while (q--)
+    int ans=0;
+
+    F(i,1,n)
     {
-        int l,r;
-        cin>>l>>r;
-        --l;--r;
-        int mx=-INF;
-        F(i,l,r)
+        int pre[m+1];
+        int suf[m+1];
+        int last=0;
+        F(j,1,m)
         {
-            F(j,i,r)
-            {
-                mx=max(mx,f(i,j,v));
-            }
+            cin>>g[i][j];
+            if(g[i][j]==0)ans--;
+            if(g[i][j])last=j;
+            pre[j]=last;
         }
-        cout<<mx<<" ";
+        last=m+1;
+        RF(j,m,1)
+        {
+            if(g[i][j])last=j;
+
+            len[i][j]=max({0ll,min(last-j,j-pre[j])});
+
+            int cc=1+i-len[i][j];
+            if(cc<=0)cc=1;
+            if(i>1)cc=max(cc,c[i-1][j]);
+
+            c[i][j]=cc;
+
+            int z=i-c[i][j]+1;
+            z=max(z,0ll);
+            ans+=z;
+        }
     }
-    
+
+    cout<<ans;
+    cout<<"\n";
 }
 
 signed main()
