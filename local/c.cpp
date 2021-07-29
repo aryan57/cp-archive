@@ -1,39 +1,43 @@
 /*
 	group : local
 	name : c.cpp
-	srcPath : /home/aryan/cp-workspace/c.cpp
-	url : /home/aryan/cp-workspace/c.cpp
+	srcPath : /home/aryan/Desktop/cp-workspace/c.cpp
+	url : /home/aryan/Desktop/cp-workspace/c.cpp
 */
 /**
  *    author:  Aryan Agarwal
- *    created: 25.07.2021 16:51:18 IST
+ *    created: 29.07.2021 22:37:06 IST
 **/
 #include <bits/stdc++.h>
 using namespace std;
 
 #define int long long
 
-const int M = 1e9 + 7;
-vector<int> primes = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97};
-
-
-
-int dp(int u,int A){
-    return 0;
-}
-
 void solve()
 {
-    
+    int n,m;
+    cin>>n>>m;
+
+    m++;
+
+    int ans=0;
+    for(int bit=32;bit>=0;bit--)
+    {
+        int a=((n>>bit)&1);
+        int b=((m>>bit)&1);
+        if(a==b)continue;
+        if(a)break;
+        ans+=(int)pow(2,bit);
+    }
+    cout<<ans<<"\n";
 }
 
 signed main()
 {
-    cout<<(int)primes.size()<<"\n";
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     int _t = 1;
-    // cin>>_t;
+    cin>>_t;
     while(_t--)solve();
     return 0;
 }
