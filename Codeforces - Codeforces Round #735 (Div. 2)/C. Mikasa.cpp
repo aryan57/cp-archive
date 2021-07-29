@@ -6,38 +6,30 @@
 */
 /**
  *    author:  Aryan Agarwal
- *    created: 29.07.2021 20:59:12 IST
+ *    created: 29.07.2021 22:37:06 IST
 **/
 #include <bits/stdc++.h>
 using namespace std;
 
-int f(int n,int m)
-{
-    assert(n>=0 && m>=0);
-
-    if(m<n)return 0;
-    if(n==0)return m+1;
-
-    int l = (int)floor(log2(n));
-
-    int lem = 2 * ((int)(pow(2, l)));
-
-    int k=m/lem;
-
-    if(k==0)return f(n-lem/2,m-lem/2);
-
-    int rem = m % lem;
-
-    return f(n,rem) + k*lem;
-}
+#define int long long
 
 void solve()
 {
-    int n, m;
-    cin >> n >> m;
+    int n,m;
+    cin>>n>>m;
 
-    cout<<f(n,m);
-    cout<<"\n";
+    m++;
+
+    int ans=0;
+    for(int bit=32;bit>=0;bit--)
+    {
+        int a=((n>>bit)&1);
+        int b=((m>>bit)&1);
+        if(a==b)continue;
+        if(a)break;
+        ans+=(int)pow(2,bit);
+    }
+    cout<<ans<<"\n";
 }
 
 signed main()
@@ -45,9 +37,7 @@ signed main()
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     int _t = 1;
-    cin >> _t;
-    while (_t--)
-        solve();
+    cin>>_t;
+    while(_t--)solve();
     return 0;
 }
-//	parsed : 29-July-2021 20:59:04 IST
