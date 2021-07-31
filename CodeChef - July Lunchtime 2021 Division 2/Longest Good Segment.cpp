@@ -1,15 +1,17 @@
 /*
-	group : local
-	name : c.cpp
-	srcPath : /home/aryan/Desktop/cp-workspace/c.cpp
-	url : /home/aryan/Desktop/cp-workspace/c.cpp
+	group : CodeChef - July Lunchtime 2021 Division 2
+	name : Longest Good Segment.cpp
+	srcPath : /home/aryan/Desktop/cp-workspace/Longest_Good_Segment.cpp
+	url : https://www.codechef.com/LTIME98B/problems/LGSEG
 */
-/*
-    author : aryan57
-    created : 31-July-2021 20:32:52 IST
-*/
+/**
+ *    author:  Aryan Agarwal
+ *    created: 31.07.2021 18:45:18 IST
+**/
 #include <bits/stdc++.h>
 using namespace std;
+
+#define int long long
 
 template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
 template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
@@ -20,21 +22,6 @@ template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr
 #else
 #define dbg(...)
 #endif
-
-#define int long long
-#define X first
-#define Y second
-#define pb push_back
-#define sz(a) ((int)(a).size())
-#define all(a) (a).begin(), (a).end()
-#define F(i, a, b) for (int i = a; i <= b; i++)
-#define RF(i, a, b) for (int i = a; i >= b; i--)
-
-const int mxn = 1e5;
-const long long INF = 2e18;
-const int32_t M = 1000000007;
-// const int32_t M = 998244353;
-const long double pie = acos(-1);
 
 int f(vector<int> &a, int k,int s)
 {
@@ -54,13 +41,13 @@ int f(vector<int> &a, int k,int s)
     for(int i=1;i<=n;i++){
         if(a[i]>s)continue;
         auto it=upper_bound(pre.begin(),pre.end(),pre[i-1]+s)-pre.begin();
-        assert(it>i);
+        assert(it>i && it<n+2);
         to[i] = {it,it-i};
         ans=max(ans,it-i);
 
     }
 
-
+    int maxiter=1e7;
     
     vector<bool> vis(n+2);
 
@@ -69,7 +56,13 @@ int f(vector<int> &a, int k,int s)
         int cur=i;
         int sum=0;
         vector<int> temp;
+
+        int bad=0;
+
         while(cur>=1 && cur<=n){
+
+            if(vis[cur]){bad++; if(bad>k/2 && maxiter--<0)break;}
+
             vis[cur]=true;
             temp.push_back(to[cur].second);
             int zz=temp.size();
@@ -110,7 +103,7 @@ void solve()
     }
     temp.push_back(s+1);
     ans=max(ans,f(temp,k,s));
-
+    ans=min(ans,n);
     cout<<ans<<"\n";
 
 
@@ -120,27 +113,9 @@ signed main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
-    cout.tie(nullptr);
-#ifndef ONLINE_JUDGE
-// freopen("input.txt","r",stdin);
-// freopen("output.txt","w",stdout);
-#endif
-#ifdef ARYAN_SIEVE
-    sieve();
-#endif
-#ifdef ARYAN_SEG_SIEVE
-    segmented_sieve();
-#endif
-#ifdef ARYAN_FACT
-    fact_init();
-#endif
-    // cout<<fixed<<setprecision(10);
-    int _t=1;
+    int _t = 1;
     cin>>_t;
-    for (int i=1;i<=_t;i++)
-    {
-        // cout<<"Case #"<<i<<": ";
-        solve();
-    }
+    while(_t--)solve();
     return 0;
 }
+//	parsed : 31-July-2021 18:17:32 IST
