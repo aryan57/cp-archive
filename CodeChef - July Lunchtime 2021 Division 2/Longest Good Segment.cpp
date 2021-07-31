@@ -6,107 +6,67 @@
 */
 /**
  *    author:  Aryan Agarwal
- *    created: 31.07.2021 18:45:18 IST
+ *    created: 31.07.2021 21:21:03 IST
 **/
 #include <bits/stdc++.h>
 using namespace std;
 
 #define int long long
 
-template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
-template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
-void dbg_out() { cerr << endl; }
-template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
-#ifndef ONLINE_JUDGE
-#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
-#else
-#define dbg(...)
-#endif
-
-int f(vector<int> &a, int k,int s)
-{
-
-    int n=a.size();
-    n-=2;
-    if(n<=0)return 0;
-    // dbg(a);
-    vector<int> pre(n+2);
-
-    for(int i=1;i<=n+1;i++){
-        pre[i]+=pre[i-1]+a[i];
-    }
-
-    vector<pair<int,int>> to(n+2);
-    int ans=0;
-    for(int i=1;i<=n;i++){
-        if(a[i]>s)continue;
-        auto it=upper_bound(pre.begin(),pre.end(),pre[i-1]+s)-pre.begin();
-        assert(it>i && it<n+2);
-        to[i] = {it,it-i};
-        ans=max(ans,it-i);
-
-    }
-
-    int maxiter=1e7;
-    
-    vector<bool> vis(n+2);
-
-    for(int i=1;i<=n;i++){
-        if(vis[i])continue;
-        int cur=i;
-        int sum=0;
-        vector<int> temp;
-
-        int bad=0;
-
-        while(cur>=1 && cur<=n){
-
-            if(vis[cur]){bad++; if(bad>k/2 && maxiter--<0)break;}
-
-            vis[cur]=true;
-            temp.push_back(to[cur].second);
-            int zz=temp.size();
-            sum+=temp[zz-1];
-            if(zz>k)sum-=temp[zz-k-1];
-            ans=max(ans,sum);
-            cur=to[cur].first;
-        }
-    }
-
-    // if(maxiter<=0)ans++;
-
-    return ans;
-}
-
 void solve()
 {
     int n,k,s;
     cin>>n>>k>>s;
 
-    vector<int> a(n+2);
-
-    for(int i=1;i<=n;i++){
+    vector<int> a(n+1);
+    for(int i=0;i<n;i++){
         cin>>a[i];
     }
+    a[n]=s+1;
 
-    vector<int> temp;
-    temp.push_back(0);
-    int ans=0;
-    for(int i=1;i<=n;i++){
-        if(a[i]>s){
-            temp.push_back(s+1);
-            ans=max(ans,f(temp,k,s));
-            temp.clear();
-            temp.push_back(0);
+    int mxbit=20;
+    vector<vector<int>> child(n+1,vector<int>(mxbit,n));
+
+    int i=0;int j=0;
+    int sum=a[0];
+    
+    for(int i=0;i<n;i++){
+        
+        while(true){
+            
+            if(sum>s){
+                child[i][0]=j;
+                break;
+            }
+            j++;
+            sum+=a[j];
         }
-        else temp.push_back(a[i]);
+        sum-=a[i];
     }
-    temp.push_back(s+1);
-    ans=max(ans,f(temp,k,s));
-    ans=min(ans,n);
+
+    for(int bit=1;bit<mxbit;bit++){
+        for(int i=0;i<n;i++){
+            if(child[i][bit-1]>=0 && child[i][bit-1]<=n){
+                child[i][bit]=child[child[i][bit-1]][bit-1];
+            }
+        }
+    }
+
+    int ans=0;
+    for(int i=0;i<n;i++){
+        /*
+            we want to travel next
+            'k' nodes from node 'i'
+        */
+       int cur=i;
+       for(int bit=mxbit-1;bit>=0 && cur<n;bit--){
+           if((k>>bit)&1)cur=child[cur][bit];
+       }
+
+       ans=max(ans,cur-i);
+    }
+
     cout<<ans<<"\n";
-
-
 }
 
 signed main()
@@ -118,4 +78,4 @@ signed main()
     while(_t--)solve();
     return 0;
 }
-//	parsed : 31-July-2021 18:17:32 IST
+//	parsed : 31-July-2021 21:20:55 IST
