@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : c.cpp
-	srcPath : /home/aryan/Desktop/cp-workspace/c.cpp
-	url : /home/aryan/Desktop/cp-workspace/c.cpp
+	group : CSES - CSES Problem Set
+	name : Range Update Queries.cpp
+	srcPath : /home/aryan/Desktop/cp-workspace/Range_Update_Queries.cpp
+	url : https://cses.fi/problemset/task/1651
 */
 /**
  *    author:  Aryan Agarwal
- *    created: 02.08.2021 21:23:31 IST
+ *    created: 02.08.2021 21:31:18 IST
 **/
 #include <bits/stdc++.h>
 using namespace std;
@@ -228,9 +228,30 @@ F id()
 
 void solve()
 {
-	int n=9;
-	lazy_segtree<S,op,e,F,mapping,composition,id> tree(n);
-	cout<<tree.get(0);
+	int n,q;
+	cin>>n>>q;
+	vector<int> v(n);
+	for(int &x : v)cin>>x;
+
+	lazy_segtree<S,op,e,F,mapping,composition,id> tree(v);
+
+	while(q--)
+	{
+		int id;
+		cin>>id;
+		if(id==1){
+			int a,b,u;
+			cin>>a>>b>>u;
+			--a;--b;
+			tree.apply(a,b+1,u);
+		}else{
+			int k;
+			cin>>k;
+			--k;
+			cout<<tree.get(k)<<"\n";
+		}
+	}
+
 }
 
 signed main()
@@ -238,7 +259,8 @@ signed main()
 	ios_base::sync_with_stdio(false);
 	cin.tie(nullptr);
 	int _t = 1;
-	cin>>_t;
+	// cin>>_t;
 	while(_t--)solve();
 	return 0;
 }
+//	parsed : 02-August-2021 21:30:23 IST
