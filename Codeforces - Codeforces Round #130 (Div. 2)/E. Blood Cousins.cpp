@@ -11,7 +11,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// #define int long long
 const int mxbit=17;
 const int mxn = 1e5;
 
@@ -40,27 +39,6 @@ void preprocess(int n){
 	}
 }
 
-bool is_ancestor(int a,int b){
-	return tin[a]<=tin[b] && tout[b]<=tout[a];
-}
-
-int lca(int a,int b){
-	if(is_ancestor(a,b))return a;
-	if(is_ancestor(b,a))return b;
-
-	for(int bit=0;bit<=mxbit;bit++){
-		if(is_ancestor(par[a][bit],b)){
-			assert(is_ancestor(par[a][bit],a));
-			if(bit==0){
-				return par[a][0];
-			}
-			return lca(par[a][bit-1],b);
-		}
-	}
-
-	assert(false);
-	return -1;
-}
 
 int kth_parent(int v,int k){
 	int cur=v;
@@ -75,13 +53,6 @@ int kth_parent(int v,int k){
 
 int children_at_d_depth(int v,int d){
 
-	// for(int x : depth[d])cout<<x<<" ";cout<<"\n";
-	// for(int x : depth[d])cout<<tin[x]<<" ";cout<<"\n";
-	// cout<<v<<" "<<d<<"^\n";
-	// cout<<tin[v]<<" "<<tout[v]<<"\n";
-	// for(int x : depth_copy[d])cout<<x<<" ";cout<<"\n";
-	// for(int x : depth_copy[d])cout<<tout[x]<<" ";cout<<"\n";
-
 	int ind=lower_bound(depth[d].begin(),depth[d].end(),tin[v],
 	[](const int& node,int time){
 		return tin[node]<time;
@@ -91,8 +62,6 @@ int children_at_d_depth(int v,int d){
 	[](int time,const int& node){
 		return time<tout[node];
 	}) -depth_copy[d].begin();
-
-	// cout<<ind<<" "<<ind2<<"&\n";
 
 	assert(ind<=ind2);
 
@@ -137,7 +106,6 @@ void solve()
 			cout<<0<<" ";
 			continue;
 		}
-		// cout<<p<<"^\n";
 		// i want to calculate no. of childern of node 'p' at depth same as of 'v'
 		int tot=children_at_d_depth(p,depth_of[v]);
 		cout<<tot-1<<" ";
