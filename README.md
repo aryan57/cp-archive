@@ -1,7 +1,6 @@
 - This is my Competitive Programming Archive.
 - I use a modified version of [CPH VS Code Extension](https://github.com/agrawal-d/cph) available at https://github.com/aryan57/cph
-- You can directly download the VSIX file of the modified extension from [here](https://github.com/aryan57/cp-archive/blob/master/competitive-programming-helper-custom-0.0.1.vsix)
-- The [settings.json](https://github.com/aryan57/cp-archive/blob/master/.vscode/settings.json) contains a minor setting which hides the unnecessary folders (.cph and .vscode) from the vs code file explorer
+- You can directly download the VSIX file of the modified extension from [here](https://github.com/aryan57/cp-tips/blob/main/competitive-programming-helper-custom-0.0.1.vsix)
 - There are two simple scripts, for uploading the codes from a desired folder to github :
   - Windows: [script.bat](https://github.com/aryan57/cp-archive/blob/master/script.bat)
   - Linux: [script.sh](https://github.com/aryan57/cp-archive/blob/master/script.sh)
