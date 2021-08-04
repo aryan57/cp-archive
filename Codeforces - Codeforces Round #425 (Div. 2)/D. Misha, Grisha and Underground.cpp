@@ -22,21 +22,17 @@ void dfs(int u,int p,int d){
 	tin[u]=++T;
 	depth[u]=d;
 	par[u][0]=p;
+	for(int bit=1;bit<=mxbit;bit++){
+		if(par[u][bit-1]!=0){
+			par[u][bit]=par[par[u][bit-1]][bit-1];
+		}
+	}
 	for(int to : adj[u]){
 		if(to!=p)dfs(to,u,d+1);
 	}
 	tout[u]=++T;
 }
 
-void preprocess(int n){
-	for(int bit=1;bit<=mxbit;bit++){
-		for(int i=1;i<=n;i++){
-			if(par[i][bit-1]!=0){
-				par[i][bit]=par[par[i][bit-1]][bit-1];
-			}
-		}
-	}
-}
 
 bool is_ancestor(int a,int b){
 	return tin[a]<=tin[b] && tout[b]<=tout[a];
@@ -99,7 +95,6 @@ void solve()
 	}
 	adj[0].push_back(1);
 	dfs(0,0,0);
-	preprocess(n);
 	while(q--){
 		int a,b,c;
 		cin>>a>>b>>c;
