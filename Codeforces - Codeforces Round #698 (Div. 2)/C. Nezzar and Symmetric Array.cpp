@@ -28,9 +28,8 @@ void solve()
 	sort(v.begin(),v.end());
 
 	vector<int> s(n),p(n);
-	p[0]=1;
-	int ind=0;
-	for(int i=1;i<=2*n-1;i+=2){
+
+	for(int i=1,ind=0;i<=2*n-1;i+=2,ind++){
 		if(v[i]!=v[i-1]){
 			ok=false;
 			break;
@@ -49,14 +48,9 @@ void solve()
 				break;
 			}
 		}
-		ind++;
+		
 	}
-
-	if(!ok){
-		cout<<"NO\n";
-		return;
-	}
-
+	
 	int sum=0,pre=0;
 
 	for(int i=1;i<n;i++){
