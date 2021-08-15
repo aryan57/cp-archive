@@ -6,7 +6,7 @@
 */
 /**
  *    author:  Aryan Agarwal
- *    created: 14.08.2021 20:44:31 IST
+ *    created: 15.08.2021 09:02:18 IST
 **/
 #include <bits/stdc++.h>
 using namespace std;
@@ -19,48 +19,43 @@ void solve()
 	cin>>n;
 
 	vector<pair<int,int>> v(n);
+	map<int,vector<int>> mp;
 	for(int i=0;i<n;i++){
 		int l,r;
 		cin>>l>>r;
 		v[i]={l,r};
+		mp[l].push_back(r);
 	}
 
-	sort(v.begin(),v.end());
-
-	int last=-1;
-	int ind=0;
 	
-	priority_queue<int,vector<int>,greater<int>> q;
-	int lastuse=0;
-	while(ind<n){
+	auto it=mp.begin();
+	priority_queue<int,vector<int>,greater<int>> pq;
+	while(it!=mp.end()){
 
-		int next=-1;
-		for(int j=ind;j<n && v[j].first==last;j++){
-			q.push(v[j].second);
-			next=j+1;
+		int l=it->first;
+
+		for(auto r : it->second){
+			pq.push(r);
 		}
+		it++;
 
-		if(next==-1){
-			q.push(v[ind].second);
-			next=ind+1;
-			for(int j=ind+1;j<n && v[j].first==v[ind].first;j++){
-				q.push(v[j].second);
-				next=j+1;
+		while(!pq.empty()){
+			if(l>pq.top()){
+				cout<<"No\n";
+				return;
 			}
+			pq.pop();
+			l++;
 
+			if(it!=mp.end() && l==it->first){
+				for(auto r : it->second){
+					pq.push(r);
+				}
+				it++;
+			}
 		}
-		assert(!q.empty() && next>ind);
-		if(q.top()<=lastuse){
-			cout<<"No\n";
-			return;
-		}
-		lastuse=q.top();
-		q.pop();
-		last=v[ind].first+1;
-		ind=next;
 
 	}
-
 	cout<<"Yes\n";
 }
 
@@ -73,3 +68,4 @@ signed main()
 	while(_t--)solve();
 	return 0;
 }
+//	parsed : 15-August-2021 09:02:10 IST
