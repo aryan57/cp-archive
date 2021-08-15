@@ -30,22 +30,6 @@ void solve()
 		adj[v].push_back(u);
 	}
 
-	if(n==2){
-		cout<<"YES\n";
-		return;
-	}
-
-	int leaves=0;
-
-	for(int x : deg){
-		if(x==1)leaves++;
-	}
-
-	if(leaves==2){
-		cout<<"NO\n";
-		return;
-	}
-
 	for(int i=0;i<n;i++){
 		if(adj[i].size()==2 && deg[i]!=1){
 			cout<<"NO\n";
