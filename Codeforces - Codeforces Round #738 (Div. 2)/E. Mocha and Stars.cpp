@@ -6,7 +6,7 @@
 */
 /**
  *    author:  Aryan Agarwal
- *    created: 15.08.2021 21:05:34 IST
+ *    created: 16.08.2021 18:23:27 IST
 **/
 #include <bits/stdc++.h>
 using namespace std;
@@ -564,91 +564,93 @@ using namespace atcoder;
 using mint = modint998244353;
 // using mint = modint1000000007;
 
-#define int long long
+// #define int long long
 
-mint f(vector<vector<int>> &v,int m){
+const int mxn = 1e5;
+int spf[mxn+1];
+int mobius[mxn+1];
 
-	
-	int n=v.size();
-
-	// for(int i=0;i<n;i++){
-	// 	for(int j : v[i]){
-	// 		cerr<<j<<" ";
-	// 	}cerr<<"^\n";
-	// }
-	// cerr<<"^$$$$$\n";
-
-	// cerr<<m<<" "<<n<<"\n";
-
-	vector<vector<mint>> dp(n+1,vector<mint> (m+1));
-	dp[0][0]=1;
-	for(int i=1;i<=n;i++){
-		for(int p : v[i-1]){
-			for(int s=p;s<=m;s++){
-				dp[i][s]+=dp[i-1][s-p];
-			}
+void sieve()
+{
+	spf[1]=1;
+	for(int i=1;i<=mxn;i++){
+		if(spf[i])continue;
+		for(int j=i;j<=mxn;j+=i){
+			if(spf[j]==0)spf[j]=i;
 		}
+
+	}
+}
+
+void Mobius(){
+
+	mobius[1]=1;
+    for(int i=2;i<=mxn;++i)
+    {
+        if(spf[i/spf[i]]==spf[i])
+            mobius[i]=0;
+        else
+            mobius[i]=-1*mobius[i/spf[i]];
+    }
+}
+
+mint calc(vector<array<int,2>> &a,int m){
+
+	int n=a.size();
+	vector<mint> dp(m+1);
+	vector<mint> pre(m+1);
+
+	dp[0]=1;
+	for(auto p : a){
+		if(p[0]>p[1])return 0;
+		pre[0]=dp[0];
+		for(int s=1;s<=m;s++){
+			pre[s]=pre[s-1]+dp[s];
+		}
+
+		for(int s=0;s<=m;s++){
+			dp[s]=0;
+			if(s-p[0]>=0)dp[s]+=pre[s-p[0]];
+			if(s-p[1]-1>=0)dp[s]-=pre[s-p[1]-1];
+		}
+
 	}
 
 	mint ans=0;
-	for(int i=1;i<=m;i++){
-		ans+=dp[n][i];
-	}
-
+	for(int s=1;s<=m;s++)ans+=dp[s];
 	return ans;
 
 }
 
 void solve()
 {
+	sieve();
+	Mobius();
+
 	int n,m;
 	cin>>n>>m;
 
-	vector<vector<int>> v(n);
+	vector<array<int,2>> v(n),a(n);
 
 	for(int i=0;i<n;i++){
-		int l,r;
-		cin>>l>>r;
-		for(int k=l;k<=r;k++){
-			v[i].push_back(k);
-		}
+		cin>>v[i][0]>>v[i][1];
 	}
 
 	mint ans=0;
-	ans+=f(v,m);
 
-	// cout<<ans.val()<<"%\n";
+	for(int i=1;i<=m;i++){
+		if(mobius[i]==0)continue;
 
-	vector<bool> vis(m+1);
+		for(int j=0;j<n;j++){
 
-	for(int z=2;z<=m;z++){
-		if(vis[z])continue;
-
-		vector<vector<int>> v2(n);
-		for(int j=z;j<=m;j+=z){
-			if(!vis[j]){
-				vis[j]=true;
-				for(int i=0;i<n;i++){
-					if(j>=v[i][0] && j<=v[i].back())v2[i].push_back(j);
-				}
-			}
+			int l=(v[j][0]+i-1)/i;
+			int r=(v[j][1])/i;
+			a[j]={l,r};
 		}
-		
-		bool ok = true;
-		for(int i=0;i<n;i++){
-			if(v2[i].empty()){
-				ok=false;
-				break;
-			}
-		}
-
-
-		if(ok)ans-=f(v2,m);
-
+		ans+=calc(a,m/i)*mobius[i];
 	}
 
 	cout<<ans.val();
-
 }
 
 signed main()
@@ -660,4 +662,4 @@ signed main()
 	while(_t--)solve();
 	return 0;
 }
-//	parsed : 15-August-2021 20:50:29 IST
+//	parsed : 16-August-2021 18:23:19 IST
