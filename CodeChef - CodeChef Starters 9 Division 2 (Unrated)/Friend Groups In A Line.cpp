@@ -4,6 +4,12 @@
 	srcPath : /home/aryan/Desktop/cp-workspace/Friend_Groups_In_A_Line.cpp
 	url : https://www.codechef.com/START9B/problems/FRIENDGR
 */
+/*
+	group : CodeChef - CodeChef Starters 9 Division 2 (Unrated)
+	name : Friend Groups In A Line.cpp
+	srcPath : /home/aryan/Desktop/cp-workspace/Friend_Groups_In_A_Line.cpp
+	url : https://www.codechef.com/START9B/problems/FRIENDGR
+*/
 /**
  *    author:  Aryan Agarwal
  *    created: 17.08.2021 20:19:21 IST
@@ -43,7 +49,6 @@ void solve()
 		}
 		if(*s.begin() + k == i-1){
 			s.insert(i-1);
-			s.clear();
 			continue;
 		}
 
