@@ -566,6 +566,7 @@ using mint = modint998244353;
 
 // #define int long long
 
+
 const int mxn = 1e5;
 int spf[mxn+1];
 int mobius[mxn+1];
@@ -582,16 +583,17 @@ void sieve()
 	}
 }
 
+// very important when solving inclusion-exclusion number theory problems
 void Mobius(){
 
 	mobius[1]=1;
-    for(int i=2;i<=mxn;++i)
-    {
-        if(spf[i/spf[i]]==spf[i])
-            mobius[i]=0;
-        else
-            mobius[i]=-1*mobius[i/spf[i]];
-    }
+	for(int i=2;i<=mxn;++i)
+	{
+		if(spf[i/spf[i]]==spf[i])
+			mobius[i]=0;
+		else
+			mobius[i]=-1*mobius[i/spf[i]];
+	}
 }
 
 mint calc(vector<array<int,2>> &a,int m){
