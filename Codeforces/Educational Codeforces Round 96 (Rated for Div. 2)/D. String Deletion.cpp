@@ -2,7 +2,7 @@
 	group : Codeforces - Educational Codeforces Round 96 (Rated for Div. 2)
 	name : D. String Deletion.cpp
 	srcPath : /home/aryan/Desktop/cp-workspace/D_String_Deletion.cpp
-	url : https://codeforces.com/problemset/problem/1430/D
+	url : https://codeforces.com/contest/1430/problem/D
 */
 /**
  *    author:  Aryan Agarwal
