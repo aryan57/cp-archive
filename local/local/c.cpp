@@ -4,31 +4,33 @@
 	srcPath : /home/aryan/Desktop/cp-workspace/c.cpp
 	url : /home/aryan/Desktop/cp-workspace/c.cpp
 */
+/**
+ *    author:  Aryan Agarwal
+ *    created: 22.08.2021 21:27:46 IST
+**/
 #include <bits/stdc++.h>
+#include <sys/resource.h>
 using namespace std;
 
-class State{
-public:
-	int i, j, k;
+#define int long long
 
-	State(int _i, int _j, int _k){
-		i = _i; j = _j; k = _k;
-	}
-
-	bool operator < (const State &y) const { return this->k < y.k; }
-};
-
-int main()
+void solve()
 {
-	map<State, bool> visited;
+	
+}
 
-	cout << visited[State (0, 1, 1)] << "\n";
-	cout << visited[State (0, 0, 1)] << "\n";
+signed main()
+{
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
 
-	visited[State (0, 0, 1)] = true;
+	rlimit R;
+	getrlimit(RLIMIT_STACK, &R);
+	R.rlim_cur = R.rlim_max;
+	setrlimit(RLIMIT_STACK, &R);
 
-	cout << visited[State (0, 1, 1)] << "\n";
-	cout << visited[State (0, 0, 1)] << "\n";
-
+	int _t = 1;
+	// cin>>_t;
+	while(_t--)solve();
 	return 0;
 }
