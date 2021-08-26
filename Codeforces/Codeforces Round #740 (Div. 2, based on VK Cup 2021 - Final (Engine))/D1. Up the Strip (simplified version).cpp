@@ -561,27 +561,6 @@ using is_dynamic_modint_t = std::enable_if_t<is_dynamic_modint<T>::value>;
 */
 using namespace atcoder;
 using mint = modint;
-unsigned int l1;
-unsigned int r1;
-int get(int i, int z){
-
-	l1 = (unsigned int)1U*i*z;
-	r1 = (unsigned int)1U*(i+i)*z;
-
-	unsigned int ans=l1;
-
-	while(l1<=r1){
-		unsigned int m=(l1+r1)/2;
-		if(m/z > i){
-			r1=m-1;
-		}else{
-			ans=max(ans,m);
-			l1=m+1;
-		}
-	}
-
-	return ans;
-}
 
 void solve()
 {
@@ -601,7 +580,7 @@ void solve()
 
 		for(int z=2;1U*z*i<=n;z++){
 
-			int r=get(i,z)+1;
+			int r=i*z+z;
 			int l=1U*z*i;
 			dp[i]+=p[l];
 			if(r<=n)dp[i]-=p[r];
