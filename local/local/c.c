@@ -1,15 +1,14 @@
 /*
 	group : local
-	name : c.cpp
-	srcPath : /home/aryan/Desktop/cp-workspace/c.cpp
-	url : /home/aryan/Desktop/cp-workspace/c.cpp
+	name : c.c
+	srcPath : /home/aryan/Desktop/cp-workspace/c.c
+	url : /home/aryan/Desktop/cp-workspace/c.c
 */
 /**
  *    author:  Aryan Agarwal
  *    created: 06.09.2021 13:20:07 IST
 **/
-#include <bits/stdc++.h>
-using namespace std;
+#include <stdio.h>
 
 // #define int long long
 
@@ -24,12 +23,12 @@ int func(int x,int y,int z)
 	return f;
 }
 
-signed main()
+int main()
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(nullptr);
 
-	cout<<func(0,10,11);
+	int z = func(0,10,11);
+
+	printf("%d",z);
 
 	return 0;
 }
