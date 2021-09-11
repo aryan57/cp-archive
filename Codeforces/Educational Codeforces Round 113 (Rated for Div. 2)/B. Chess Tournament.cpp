@@ -52,24 +52,11 @@ void solve()
 	{
 		assert(p.size()>=3);
 
-		for(int i=3;i<p.size();i++)
+		for(int i=0;i<p.size();i++)
 		{
-			for(int j=0;j<p.size();j++)
-			{
-				if(i==j)continue;
-				g[p[i]][p[j]]='+';
-				g[p[j]][p[i]]='-';
-			}
+			g[p[i]][p[(i+1)%(p.size())]]='+';
+			g[p[(i+1)%(p.size())]][p[i]]='-';
 		}
-
-		g[p[0]][p[1]]='+';
-		g[p[1]][p[0]]='-';
-
-		g[p[0]][p[2]]='-';
-		g[p[2]][p[0]]='+';
-
-		g[p[1]][p[2]]='+';
-		g[p[2]][p[1]]='-';
 	}
 	cout<<"YES\n";
 	for(int i=1;i<=n;i++)
