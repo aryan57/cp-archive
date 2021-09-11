@@ -107,8 +107,6 @@ void solve()
 		cur=parent[cur];
 	}
 
-	// dbg(mp);
-
 	for(int i=0;i<m;i++)
 	{
 		if(distance[n-1]==INF){
@@ -120,8 +118,6 @@ void solve()
 			cout<<"\n";
 			continue;
 		}
-
-		// dbg(i,e[i]);
 
 		int z=f(e[i]);
 		if(z==INF){

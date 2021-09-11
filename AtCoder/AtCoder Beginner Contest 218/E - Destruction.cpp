@@ -111,8 +111,6 @@ void solve()
 
 	vector<pair<int,pair <int,int> > > e;
 	int ans=0;
-	int t=0;
-	int tot=0;
 	for(int i=0;i<m;i++)
 	{
 		int u,v,w;
@@ -121,10 +119,8 @@ void solve()
 		if(u==v){
 			if(w>0)ans+=w;
 		}
-		else{
-			e.push_back({w,{u,v}});
-			tot+=w;
-		}
+		else e.push_back({w,{u,v}});
+		
 	} 
 
 	dsu d(n);
@@ -136,12 +132,9 @@ void solve()
 		if(!d.same(p.second.first,p.second.second))
 		{
 			d.merge(p.second.first,p.second.second);
-			t+=  p.first;
-		}else{
-			if(p.first>0)ans+=p.first;
-		}
+		}else if(p.first>0)ans+=p.first;
+		
 	}
-
 	cout<<ans;
 
 }
