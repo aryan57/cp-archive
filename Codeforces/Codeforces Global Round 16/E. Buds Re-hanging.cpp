@@ -13,16 +13,6 @@ using namespace std;
 
 #define int long long
 
-template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
-template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
-void dbg_out() { cerr << endl; }
-template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
-#ifndef ONLINE_JUDGE
-#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
-#else
-#define dbg(...)
-#endif
-
 void dfs(int u,int p, vector <int> &par,vector <set<int> > &adj)
 {
 	par[u]=p;
@@ -31,6 +21,30 @@ void dfs(int u,int p, vector <int> &par,vector <set<int> > &adj)
 		if(to==p)continue;
 		dfs(to,u,par,adj);
 	}
+}
+
+bool is_bud(int i,vector <set<int> > &adj,vector <int> &par,vector <int> &deg)
+{
+	if(i==1)return false;
+
+	bool ok = true;
+	int zz=-1;
+
+	for(int to : adj[i])
+	{
+		if(to==par[i])continue;
+		zz=1;
+		if(deg[to]!=1){
+			ok=false;
+			break;
+		}
+	}
+
+	if(zz==-1){ // leaf node
+		ok=false;
+	}
+
+	return ok;
 }
 
 void solve()
@@ -54,93 +68,41 @@ void solve()
 
 	dfs(1,-1,par,adj);
 
-	vector<pair<int,int> > temp;
-	set<int> b;
-	for(int i=2;i<=n;i++)
+	int dena=0;
+	int lena=0;
+
+	set<int> buds;
+
+	for(int i=1;i<=n;i++)if(is_bud(i,adj,par,deg))buds.insert(i);
+	
+	while (!buds.empty())
 	{
-		bool ok = true;
-		int zz=-1;
-		for(int to : adj[i])
-		{
-			if(to==par[i])continue;
-			zz=1;
-			if(deg[to]!=1){
-				ok=false;
-				break;
-			}
-		}
+		set<int> candidate_buds;
 
-		// dbg(i,adj[i],ok);
-
-		if(zz==1 && ok)
-		{
-			b.insert(i);
-		}
-	}
-
-	// dbg(b);
-
-	while (!b.empty())
-	{
-		set<int> c;
-
-		for(int z : b)
+		for(int z : buds)
 		{
 			assert(z!=1);
 			adj[par[z]].erase(z);
 			adj[z].erase(par[z]);
-			temp.push_back({1,adj[z].size()});
+
+			dena+=1;
+			lena+=adj[z].size();
+			
 			deg[z]--;
 			deg[par[z]]--;
-			c.insert(par[z]);
-			if(par[par[z]]!=-1)c.insert(par[par[z]]);
+			candidate_buds.insert(par[z]);
+			if(par[par[z]]!=-1)candidate_buds.insert(par[par[z]]);
 		}
 
-		b.clear();
+		buds.clear();
 
-		for(int i : c)
-		{
-			if(i==1)continue;
-
-			bool ok = true;
-			int zz=-1;
-			for(int to : adj[i])
-			{
-				if(to==par[i])continue;
-				zz=1;
-				if(deg[to]!=1){
-					ok=false;
-					break;
-				}
-			}
-
-			if(zz==1 && ok)
-			{
-				b.insert(i);
-			}
-		}
+		for(int i : candidate_buds)if(is_bud(i,adj,par,deg))buds.insert(i);
 
 	}
 
-	// dbg(temp);
-	// dbg(adj[1]);
+	lena+=max(1ll,(int)adj[1].size());
 
-	int d=0;
-	int l=0;
-
-	for(auto p : temp)
-	{
-		d+=p.first;
-		l+=p.second;
-	}
-	int tt=adj[1].size();
-	l+=max(1ll,tt);
-
-	int ans=0;
-
-	ans=max(ans,l-d);
-
-	cout<<ans;
+	cout<<lena-dena;
 	cout<<"\n";
 	
 }
