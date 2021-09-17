@@ -6,30 +6,43 @@
 */
 /**
  *    author:  Aryan Agarwal
- *    created: 06.09.2021 13:20:07 IST
+ *    created: 13.09.2021 13:50:07 IST
 **/
 #include <bits/stdc++.h>
 using namespace std;
 
-// #define int long long
+struct node{
+    int val;
+    node* next;
 
-int func(int x,int y,int z)
+    node(int _v){
+        val = _v;
+        next=NULL;
+    }
+};
+
+int main()
 {
-	int f , mask1,mask2;
-	mask1 = ((!x)^(0x01)<<31)>>31;
-	mask2 = ((!x)<<31)>>31;
+    float f = 123.87e-03;
+    int n = 2021;
+    double d = 123.456;
+    char _ch = 'ascii';
+    char c = 'x';
+    char str1[] = "I am a string\n";
+    char arr2[] = ""; // empty string
 
-	f = (y&mask1) + (z&mask2);
+    node* head = new node(1);
+    head->next = new node(2);
+    head->next->next = new node(3);
 
-	return f;
-}
+    // printing the linked list
+    node* temp = head;
+    while (temp!=NULL)
+    {
+        printf("%d ",temp->val);
+        temp=temp->next;
+    }
+    printf("\n");
 
-signed main()
-{
-	ios_base::sync_with_stdio(false);
-	cin.tie(nullptr);
-
-	cout<<func(0,10,11);
-
-	return 0;
+    return 0;
 }
