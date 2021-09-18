@@ -6,43 +6,28 @@
 */
 /**
  *    author:  Aryan Agarwal
- *    created: 13.09.2021 13:50:07 IST
+ *    created: 18.09.2021 17:14:08 IST
 **/
 #include <bits/stdc++.h>
 using namespace std;
 
-struct node{
-    int val;
-    node* next;
+#define int long long
 
-    node(int _v){
-        val = _v;
-        next=NULL;
-    }
-};
-
-int main()
+void solve()
 {
-    float f = 123.87e-03;
-    int n = 2021;
-    double d = 123.456;
-    char _ch = 'ascii';
-    char c = 'x';
-    char str1[] = "I am a string\n";
-    char arr2[] = ""; // empty string
+	int n;
+	cin>>n;
 
-    node* head = new node(1);
-    head->next = new node(2);
-    head->next->next = new node(3);
+	cout<<n;
+	cout<<"\n";
+}
 
-    // printing the linked list
-    node* temp = head;
-    while (temp!=NULL)
-    {
-        printf("%d ",temp->val);
-        temp=temp->next;
-    }
-    printf("\n");
-
-    return 0;
+signed main()
+{
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+	int _t = 1;
+	// cin>>_t;
+	while(_t--)solve();
+	return 0;
 }
