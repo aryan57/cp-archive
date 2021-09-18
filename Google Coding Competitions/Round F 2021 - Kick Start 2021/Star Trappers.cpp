@@ -105,8 +105,6 @@ void solve_GOOGLE()
 	long double ans=2e18;
 	bool ok = false;
 
-	set<long double> ss;
-
 	F(i,0,n-1)
 	{
 		F(j,i+1,n-1)
@@ -116,26 +114,76 @@ void solve_GOOGLE()
 				if(f(v[i],v[j],v[k]))
 				{
 					ok=true;
-					long double zz= cal(v[i],v[j],v[k]);
-					ans=min(ans,zz);
-					ss.insert(zz);
+					ans=min(ans,cal(v[i],v[j],v[k]));
 				}
 			}
 		}
 	}
 
-	if(!ok){
-		if(ss.size()>=2)
-		{
-			long double zz= 0;
-			zz+=*ss.begin();
-			ss.erase(ss.begin());
-			zz+=*ss.begin();
+	vector<pair<int,int> > z[2];
+	F(i,0,n-1)
+	{
+		int j=0;
 
-			cout<<zz;
-			cout<<"\n";
-			return;
+		if(v[i].Y<0 || (v[i].Y==0 && v[i].X<0))j=1;
+		bool ins=true;
+		for(auto p : z[j])
+		{
+			if(v[i].Y*p.X==p.Y*v[i].X){
+				ins=false;
+				break;
+			}
 		}
+
+		dbg(i,j,ins);
+
+		if(ins)z[j].push_back(v[i]);
+		for(auto &p : z[j])
+		{
+			if(v[i].Y*p.X==p.Y*v[i].X){
+				if(p.X*p.X + p.Y*p.Y > v[i].X*v[i].X + v[i].Y*v[i].Y){
+					p=v[i];
+				}
+				break;
+			}
+		}
+
+	}
+
+	// dbg(z[0]);
+	// dbg(z[1]);
+
+	vector<pair<pair <int,int> ,pair <int,int> > > lines;
+
+	for(auto p1 : z[0])
+	{
+		for(auto p2 : z[1])
+		{
+			if(p1.X*p2.Y==p1.Y*p2.X)
+			{
+				lines.push_back({p1,p2});
+				break;
+			}
+		}
+	}
+	
+	int sl=sz(lines);
+
+	F(i,0,sl-1)
+	{
+		F(j,i+1,sl-1)
+		{
+			ok=true;
+			long double zz=0;
+			zz+=sqrt((lines[i].X.X-lines[j].X.X)*(lines[i].X.X-lines[j].X.X) + (lines[i].X.Y-lines[j].X.Y)*(lines[i].X.Y-lines[j].X.Y));
+			zz+=sqrt((lines[i].X.X-lines[j].Y.X)*(lines[i].X.X-lines[j].Y.X) + (lines[i].X.Y-lines[j].Y.Y)*(lines[i].X.Y-lines[j].Y.Y));
+			zz+=sqrt((lines[i].Y.X-lines[j].X.X)*(lines[i].Y.X-lines[j].X.X) + (lines[i].Y.Y-lines[j].X.Y)*(lines[i].Y.Y-lines[j].X.Y));
+			zz+=sqrt((lines[i].Y.X-lines[j].Y.X)*(lines[i].Y.X-lines[j].Y.X) + (lines[i].Y.Y-lines[j].Y.Y)*(lines[i].Y.Y-lines[j].Y.Y));
+			ans=min(ans,zz);
+		}
+	}
+
+	if(!ok){
 		cout<<"IMPOSSIBLE";
 		cout<<"\n";
 		return;
