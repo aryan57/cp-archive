@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : c.cpp
-	srcPath : /home/aryan/Desktop/cp-workspace/c.cpp
-	url : /home/aryan/Desktop/cp-workspace/c.cpp
+	group : CodeChef - September Cook-Off 2021 Division 1
+	name : Fake Swaps.cpp
+	srcPath : /home/aryan/Desktop/cp-workspace/Fake_Swaps.cpp
+	url : https://www.codechef.com/COOK133A/problems/FAKESWAP
 */
 /*
 	author : aryan57
-	created : 19-September-2021 21:24:04 IST
+	created : 19-September-2021 21:48:38 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,10 +36,25 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
-void solve_LOG()
+void solve_LOL()
 {
 	int n;
-	
+	cin>>n;
+	string s,p;
+	cin>>s>>p;
+
+
+	F(i,0,n-2)
+	{
+		if(p[i]!=p[i+1])
+		{
+			cout<<"YES\n";
+			return;
+		}
+	}
+
+	if(s==p)cout<<"YES\n";
+	else cout<<"NO\n";
 }
 
 signed main()
@@ -62,11 +77,11 @@ signed main()
 #endif
 	// cout<<fixed<<setprecision(10);
 	int _t=1;
-	// cin>>_t;
+	cin>>_t;
 	for (int i=1;i<=_t;i++)
 	{
 		// cout<<"Case #"<<i<<": ";
-		solve_LOG();
+		solve_LOL();
 	}
 	return 0;
 }
