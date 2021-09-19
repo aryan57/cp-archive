@@ -4,42 +4,50 @@
 	srcPath : /home/aryan/Desktop/cp-workspace/c2.cpp
 	url : /home/aryan/Desktop/cp-workspace/c2.cpp
 */
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
 
-class State{
-public:
-	int i, j, k;
+#define int long long
 
-	State(int _i, int _j, int _k){
-		i = _i; j = _j; k = _k;
-	}
+const int mx = 1e5;
 
-	bool operator < (const State &y) const {
-		if(this->k != y.k)return this->k < y.k;
-		if(this->i != y.i)return this->i < y.i;
-		return this->j < y.j;
-	}
-};
-
-int main()
+signed main()
 {
-	set<State> visited;
+	int n;
+	cin>>n;
+	
+	int v[n];
+	int cnt[mx+1]={};
 
-	cout << (visited.find(State (0, 1, 1))==visited.end() ? "absent" : "present")<< "\n";
-	cout << (visited.find(State (0, 0, 1))==visited.end() ? "absent" : "present")<< "\n";
 
-	visited.insert(State (0, 0, 1));
-
-	cout << (visited.find(State (0, 1, 1))==visited.end() ? "absent" : "present")<< "\n";
-	cout << (visited.find(State (0, 0, 1))==visited.end() ? "absent" : "present")<< "\n";
-	cout << (visited.find(State (123, 456, 1))==visited.end() ? "absent" : "present")<< "\n";
-	cout << (visited.find(State (123, 456, 789))==visited.end() ? "absent" : "present")<< "\n";
-
-	cout<<"\nvisited states are :\n";
-	for(State s : visited){
-		cout<<s.i<<" "<<s.j<<" "<<s.k<<"\n";
+	for(int i=0;i<n;i++)
+	{
+		cin>>v[i];
+		cnt[v[i]]++;
 	}
+
+	int ans=1;
+	for(int i=1;i<=n;i++){
+		ans*=i;
+	}
+
+	for(int i=1;i<=mx;i++)
+	{
+		
+		int z=1;
+		int id=1;
+		while (cnt[i]>0)
+		{
+			cnt[i]--;
+			z*=id;
+			id++;
+		}
+
+		ans/=z;
+		
+	}
+
+	cout<<ans-1;
 
 	return 0;
 }
