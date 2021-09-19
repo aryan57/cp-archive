@@ -7,47 +7,32 @@
 #include <iostream>
 using namespace std;
 
-#define int long long
-
-const int mx = 1e5;
-
-signed main()
+int main()
 {
-	int n;
-	cin>>n;
-	
-	int v[n];
-	int cnt[mx+1]={};
+	string a,b;
+	cin>>a;cin>>b;
 
+	int cnt1[200]={};
+	int cnt2[200]={};
 
-	for(int i=0;i<n;i++)
+	for(char x : a)
 	{
-		cin>>v[i];
-		cnt[v[i]]++;
+		cnt1[x-'A']++;
+	}
+	for(char x : b)
+	{
+		cnt2[x-'A']++;
 	}
 
-	int ans=1;
-	for(int i=1;i<=n;i++){
-		ans*=i;
-	}
-
-	for(int i=1;i<=mx;i++)
+	for(int i=0;i<200;i++)
 	{
-		
-		int z=1;
-		int id=1;
-		while (cnt[i]>0)
+		if(cnt1[i]!=cnt2[i])
 		{
-			cnt[i]--;
-			z*=id;
-			id++;
+			char ans='A'+i;
+			cout<<ans<<"\n";
+			return 0;
 		}
-
-		ans/=z;
-		
 	}
-
-	cout<<ans-1;
 
 	return 0;
 }
