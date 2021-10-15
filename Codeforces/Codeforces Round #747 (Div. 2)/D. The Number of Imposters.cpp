@@ -6,103 +6,78 @@
 */
 /**
  *    author:  Aryan Agarwal
- *    created: 08.10.2021 21:15:35 IST
+ *    created: 15.10.2021 13:40:39 IST
 **/
 #include <bits/stdc++.h>
 using namespace std;
 
-// #define int long long
-
-const int mxn = 2e5;
-vector<pair<int,int> > adj[mxn+1];
-vector< vector<int> >  val(2,vector <int> (mxn+1));
-
-bool ok[2];
-
-int dfs(int u,int juth,int id)
+const int mxn = 7e5;
+vector <int> adj[mxn+1];
+vector <int> col(mxn+1,-1);
+int cnt[2];
+int n,m;
+bool dfs(int u,int parity)
 {
-	if(val[id][u]!=-1){
-		if(!adj[u].empty() && val[id][u]!=juth){
-			ok[id]=false;
-		}
-		return 0;
-	}
 
-	int ans=0;
-	if(juth)ans++;
-	val[id][u]=juth;
-	for(auto to : adj[u])
+	for(int to : adj[u])
 	{
-		if(juth){
-			ans+=dfs(to.first,1-to.second,id);
-		}else{
-			ans+=dfs(to.first,to.second,id);
-		}
+		if(col[to]==-1){
+			col[to]=1^parity;
+			if(to<=n)cnt[1^parity]++;
+			if(!dfs(to,parity^1)) return false;
+		}else if(col[to]==parity)return false;
 	}
-
-	return ans;
+	return true;
 }
+
 
 void solve()
 {
-	int n,m;
+	
 	cin>>n>>m;
-	ok[0]=ok[1]=true;
-	for(int i=0;i<=n;i++)
-	{
-		val[0][i]=val[1][i]=-1;
+
+	for(int i=0;i<=n+m+1;i++){
 		adj[i].clear();
+		col[i]=-1;
 	}
 
-	for(int i=1;i<=m;i++)
-	{
+	int fake=n+1;
+
+	for(int i=1;i<=m;i++){
 		int u,v;
 		cin>>u>>v;
 		string s;
 		cin>>s;
+		if(s[0]=='i'){
+			adj[u].push_back(v);
+			adj[v].push_back(u);
+		}else{
+			adj[u].push_back(fake);
+			adj[fake].push_back(u);
 
-		if(s[0]=='i')adj[u].push_back({v,1});
-		else adj[u].push_back({v,0});
+			adj[fake].push_back(v);
+			adj[v].push_back(fake);
+
+			fake++;
+		}
 	}
 
 	int ans=0;
 
 	for(int i=1;i<=n;i++)
 	{
-		if(val[0][i]!=-1){
-			assert(val[1][i]!=-1);
-			continue;
-		}
-		
-		int t1=0;
-		int t2=0;
-
-		if(ok[0]){
-			t1=dfs(i,0,0);
-		}
-		if(ok[1]){
-			t2=dfs(i,1,1);
-		}
-
-		int z=0;
-
-		if(ok[0]){
-			z=max(z,t1);
-		}
-		if(ok[1]){
-			z=max(z,t2);
-		}
-
-		ans+=z;
-
-		if(!ok[0] && !ok[1]){
+		if(col[i]!=-1)continue;
+		cnt[0]=cnt[1]=0;
+		col[i]=0;
+		cnt[0]=1;
+		if(dfs(i,0)==false){
 			cout<<"-1\n";
 			return;
 		}
+		ans+=max(cnt[0],cnt[1]);
 	}
 
-	cout<<ans;
-	cout<<"\n";
+	cout<<ans<<"\n";
 }
 
 signed main()
@@ -114,4 +89,4 @@ signed main()
 	while(_t--)solve();
 	return 0;
 }
-//	parsed : 08-October-2021 21:04:58 IST
+//	parsed : 15-October-2021 13:39:25 IST
