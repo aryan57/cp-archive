@@ -6,178 +6,80 @@
 */
 /**
  *    author:  Aryan Agarwal
- *    created: 14.10.2021 21:33:16 IST
+ *    created: 16.10.2021 09:41:04 IST
 **/
-
-
-
 #include <bits/stdc++.h>
 using namespace std;
 
-int n,a,b;
-string z;
+const int mxn = 64;
 
-template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
-template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
-void dbg_out() { cerr << endl; }
-template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
-#ifndef ONLINE_JUDGE
-#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
-#else
-#define dbg(...)
-#endif
-
-string encode(int cx,int cy,int p1,int p2)
-{
-	string temp="";
-
-	if(cx<10)temp+='0';
-	temp+=to_string(cx);
-	if(cy<10)temp+='0';
-	temp+=to_string(cy);
-	if(p1<10)temp+='0';
-	temp+=to_string(p1);
-	if(p2<10)temp+='0';
-	temp+=to_string(p2);
-
-	return temp;
-}
-
-string f(int x,int y)
-{
-	int k=n/2;
-
-	unordered_map<string,bool> mp;
-	unordered_map<string,int> mp2;
-
-	for(int num=0;num<(1<<k);num++)
-	{
-		int p1=0;
-		int p2=0;
-
-		int cx=0;
-		int cy=0;
-
-		for(int bit=k-1;bit>=0;bit--)
-		{
-			if((num>>bit)&1)
-			{
-				p1*=10;
-				p1%=a;
-				p1+= (z[n-1-bit]-'0');
-				p1%=a;
-				cx++;
-			}else{
-				p2*=10;
-				p2%=b;
-				p2+= (z[n-1-bit]-'0');
-				p2%=b;
-				cy++;
-			}
-		}
-
-		if(x-cx<0 || y-cy<0)continue;
-		
-		mp[encode(cx,cy,p1,p2)]=true;
-		mp2[encode(cx,cy,p1,p2)]=num;
-	}
-
-	k=n-n/2;
-	for(int num=0;num<(1<<k);num++)
-	{
-		int p1=0;
-		int p2=0;
-
-		int cx=0;
-		int cy=0;
-
-		for(int bit=0;bit<k;bit++)
-		{
-			if((num>>bit)&1)
-			{
-				p1*=10;
-				p1%=a;
-				p1+= (z[bit]-'0');
-				p1%=a;
-				cx++;
-			}else{
-				p2*=10;
-				p2%=b;
-				p2+= (z[bit]-'0');
-				p2%=b;
-				cy++;
-			}
-		}
-
-		if(x-cx<0 || y-cy<0)continue;
-
-		for(int temp=x-cx;temp>0;temp--){
-			p1*=10;
-			p1%=a;
-		}
-		for(int temp=y-cy;temp>0;temp--){
-			p2*=10;
-			p2%=b;
-		}
-
-		if(mp[encode(x-cx,y-cy,(a-p1)%a,(b-p2)%b)])
-		{
-			string ans="";
-			for(int bit=0;bit<n-n/2;bit++)
-			{
-				if((num>>bit)&1)
-				{
-					ans+='R';
-				}else{
-					ans+='B';
-				}
-			}
-
-
-			int val = mp2[encode(x-cx,y-cy,(a-p1)%a,(b-p2)%b)];
-
-			for(int bit=n/2-1;bit>=0;bit--)
-			{
-				if((val>>bit)&1)
-				{
-					ans+='R';
-				}else{
-					ans+='B';
-				}
-			}
-
-			return ans;
-		}
-	}
-
-	return "-1";
-}
+bool dp[mxn][mxn][mxn][mxn]={};
+pair <bool,int> parent [mxn][mxn][mxn][mxn];
 
 void solve()
 {
-	
+	int n,a,b;
 	cin>>n>>a>>b;
-	cin>>z;
 
-	// reverse(z.begin(),z.end());
+	string x;
+	cin>>x;
+
+	for(int i=0;i<=n;i++)
+		for(int j=0;j<=n;j++)
+			for(int ra=0;ra<a;ra++)
+				for(int rb=0;rb<b;rb++)
+					dp[i][j][ra][rb] = false;
+
+	dp[0][0][0][0] = true;
+
+	for(int taken = 0; taken<n; taken++)
+		for(int red=0;red<=taken;red++)
+			for(int remA=0;remA<a;remA++)
+				for(int remB=0;remB<b;remB++){
+					if(!dp[taken][red][remA][remB])continue;
+					//red
+					dp[taken+1][red+1][(remA*10 + (x[taken]-'0'))%a][remB] = true;
+					parent[taken+1][red+1][(remA*10 + (x[taken]-'0'))%a][remB] = {true,remA};
+					//black
+					dp[taken+1][red][remA][(remB*10 + (x[taken]-'0'))%b] = true;
+					parent[taken+1][red][remA][(remB*10 + (x[taken]-'0'))%b] = {false,remB};
+				}
+			
+	int bestRed = 0;
+
+	for(int red=1;red<n;red++)
+		if(dp[n][red][0][0] && abs(red-(n-red)) < abs(bestRed-(n-bestRed)))bestRed=red;
+
+	if(bestRed==0){
+		cout<<"-1\n";
+		return;
+	}
+
+	int taken=n;
+	int remA=0;
+	int remB=0;
+	int red=bestRed;
 
 	string ans="";
 
-	ans=f((n+1)/2,n-(n+1)/2);
-	if(ans!="-1"){
-		cout<<ans;
-		cout<<"\n";
-		return;
+	while (taken>0)
+	{
+		assert(dp[taken][red][remA][remB]);
+		auto way = parent[taken][red][remA][remB];
+
+		if(way.first){
+			ans+='R';
+			red--;
+			remA=way.second;
+		}else{
+			ans+='B';
+			remB=way.second;
+		}
+		taken--;
 	}
 
-	ans=f((n)/2,n-(n)/2);
-	if(ans!="-1"){
-		cout<<ans;
-		cout<<"\n";
-		return;
-	}
-
-	cout<<"-1\n";
+	reverse(ans.begin(),ans.end());
+	cout<<ans<<"\n";			
 }
 
 signed main()
@@ -189,4 +91,4 @@ signed main()
 	while(_t--)solve();
 	return 0;
 }
-//	parsed : 14-October-2021 21:32:46 IST
+//	parsed : 16-October-2021 09:40:57 IST
