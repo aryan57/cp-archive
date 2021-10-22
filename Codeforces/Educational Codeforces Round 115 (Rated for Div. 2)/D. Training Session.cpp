@@ -56,10 +56,7 @@ void solve()
 		int z=x[i].size();
 		for(int y : x[i]){
 
-			int p1 = lower_bound(x[i].begin(),x[i].end(),y)-x[i].begin();
-			int p2 = upper_bound(x[i].begin(),x[i].end(),y)-x[i].begin();
-
-			int cnty=p2-p1;
+			int cnty=mp[{i,y}];
 
 			int remy=cy[y]-cnty;
 
