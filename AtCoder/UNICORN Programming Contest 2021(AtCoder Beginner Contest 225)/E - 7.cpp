@@ -23,6 +23,12 @@ template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr
 #define dbg(...)
 #endif
 
+const int inf = 2e9;
+
+bool comp(const vector<int> &a,const vector <int> &b){
+	return a.size() < b.size();
+}
+
 void solve()
 {
 	int n;
@@ -31,14 +37,38 @@ void solve()
 	for(int i=0;i<n;i++){
 		cin>>v[i].first>>v[i].second;
 	}
-	for(int i=0;i<n;i++){
-		for(int j=0;j<n;j++){
-			if(i==j)continue;
-			if(v[i].first>v[j].first || v[i].second>v[j].second)continue;
-			dbg(i,j,v[i],v[j]);
+	sort(v.begin(),v.end());
+	vector <int> cur;
+	vector <vector <int> > all;
+	cur.push_back(v[0].second);
+	for(int i=1;i<n;i++){
+		if(v[i].first!=v[i-1].first){
+			all.push_back(cur);
+			cur.clear();
+		}
+		cur.push_back(v[i].second);
+	}
+
+	all.push_back(cur);
+	sort(all.begin(),all.end(),comp);
+
+	dbg(all);
+
+	int m=all.size();
+
+	map<int,bool> use;
+	int cnt=0;
+	for(int i=0;i<m;i++){
+		for(int x : all[i]){
+			if(!use[x]){
+				cnt++;
+				use[x]=true;
+				break;
+			}
 		}
 	}
 
+	cout<<cnt;
 }
 
 signed main()
