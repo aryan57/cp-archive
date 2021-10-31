@@ -6,7 +6,7 @@
 */
 /**
  *    author:  Aryan Agarwal
- *    created: 30.10.2021 20:43:53 IST
+ *    created: 31.10.2021 09:09:04 IST
 **/
 #include <bits/stdc++.h>
 using namespace std;
@@ -17,53 +17,22 @@ void solve()
 {
 	int n;
 	cin>>n;
-
-	deque<int> d;
-
-	for(int i=0;i<n;i++){
+	bool yes=true;
+	for(int i=1;i<=n;i++){
 		int x;
 		cin>>x;
-		d.push_back(x);
-	}
-
-	
-	int odd=0;
-	while (!d.empty())
-	{
-		while (!d.empty())
-		{
-			if(d.front()%2){
-				odd++;
-				d.pop_front();
-				continue;
-			}
-			break;
-		}
-
-		if(d.empty()){
-			odd=0;
-			break;
-		}
-
-		bool cont=false;
-
-		for(int rem=0;rem<=odd;rem++){
-			if(d.front()%(odd-rem+2)){
-				odd-=rem;
-				d.pop_front();
-				cont=true;
+		bool ok = false;
+		for(int j=i+1;j>=2;j--){
+			if(x%j){
+				ok=true;
 				break;
 			}
 		}
-
-		if(cont)continue;
-
-		cout<<"NO\n";
-		return;
+		yes&=ok;
 	}
 
-	cout<<"YES\n";
-	
+	if(yes)cout<<"YES\n";
+	else cout<<"NO\n";
 }
 
 signed main()
@@ -75,4 +44,4 @@ signed main()
 	while(_t--)solve();
 	return 0;
 }
-//	parsed : 30-October-2021 20:30:38 IST
+//	parsed : 31-October-2021 09:08:57 IST
