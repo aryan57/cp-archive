@@ -4,116 +4,86 @@
 	srcPath : /home/aryan/Desktop/cp-workspace/c.cpp
 	url : /home/aryan/Desktop/cp-workspace/c.cpp
 */
+/**
+ *    author:  Aryan Agarwal
+ *    created: 06.11.2021 10:32:38 IST
+**/
 #include <bits/stdc++.h>
-
 using namespace std;
 
-const int MAX_N = 64;
+#define int long long
 
-bool dp[MAX_N][MAX_N][MAX_N][MAX_N]; // (taken, red, mod A, mod B) -> may be
-pair<bool, int> sert[MAX_N][MAX_N][MAX_N][MAX_N]; // the same -> (true (red) | false(black), prev red/black)
-
-template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
-template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
-void dbg_out() { cerr << endl; }
-template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
-#ifndef ONLINE_JUDGE
-#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
-#else
-#define dbg(...)
-#endif
-
-int main()
+int merge(vector <int> &a,int left,int mid,int right)
 {
-	int t;
-	cin >> t;
+	int i=left;
+	int j=mid+1;
+	int k=0;
+	int inversions=0;
+	vector <int> temp(right-left+1);
 
-	while (t--)
-	{
-		int n, a, b;
-		string x;
-		cin >> n >> a >> b >> x;
-
-		for (int i = 0; i <= n; i++)
-			for (int j = 0; j <= n; j++)
-				for (int k = 0; k < a; k++)
-					for (int l = 0; l < b; l++)
-						dp[i][j][k][l] = false;
-
-		dp[0][0][0][0] = true;
-
-		for(int taken = 0; taken < n; taken++)
-			for(int red = 0; red <= taken; red++)
-				for(int remA = 0; remA < a; remA++)
-					for(int remB = 0; remB < b; remB++)
-						if (dp[taken][red][remA][remB])
-						{
-							// dbg(taken,red,remA,remB);
-
-						
-
-							// red transition
-							dp[taken + 1][red + 1][(remA * 10 + (x[taken] - '0')) % a][remB] = true;
-							sert[taken + 1][red + 1][(remA * 10 + (x[taken] - '0')) % a][remB] = { true, remA };
-
-							// black transition
-							dp[taken + 1][red][remA][(remB * 10 + (x[taken] - '0')) % b] = true;
-							sert[taken + 1][red][remA][(remB * 10 + (x[taken] - '0')) % b] = { false, remB };
-
-							if(taken==4 && red==2 && remA==0 && (remB==6)){
-								dbg(taken,red,remA,remB);
-								dbg((remB*10 + (x[taken]-'0'))%b);
-								dbg(sert[5][2][0][0]);
-								dbg(sert[taken+1][red][remA][(remB*10 + (x[taken]-'0'))%b]);
-
-							}
-						}
-
-		// dbg(n,a,b,x);
-
-		int bestRed = 0;
-
-		for (int red = 1; red < n; red++)
-			if (dp[n][red][0][0] && abs(red - (n - red)) < abs(bestRed - (n - bestRed)))
-				bestRed = red;
-
-		if (bestRed == 0)
-		{
-			cout << "-1\n";
-		}
-		else
-		{
-			int taken = n;
-			int red = bestRed;
-			int remA = 0;
-			int remB = 0;
-			string ans = "";
-			
-			while (taken > 0)
-			{
-				// dbg(taken,red,remA,remB);
-				assert(dp[taken][red][remA][remB]);
-				auto way = sert[taken][red][remA][remB];
-				// dbg(way);
-
-				if (way.first)
-				{
-					red--;
-					remA = way.second;
-					ans.push_back('R');
-				}
-				else
-				{
-					remB = way.second;
-					ans.push_back('B');
-				}
-				taken--;
-			}
-
-			reverse(ans.begin(), ans.end());
-			cout << ans << '\n';
-		}
+	while (i<=mid && j<=right){
+		if(a[i]<=a[j]) temp[k++]=a[i++];
+		else temp[k++]=a[j++],inversions+=mid-i+1;
 	}
 
+	while (i<=mid) temp[k++]=a[i++];
+	while (j<=right) temp[k++]=a[j++];
+	for(int i=left;i<=right;i++) a[i]=temp[i-left];
+	
+	return inversions;
+}
+
+int merge_sort(vector <int> &a,int left,int right)
+{
+	if(left>=right)return 0;
+
+	int mid=(left+right)/2;
+	int inversions = 0;
+
+	inversions+=merge_sort(a,left,mid);
+	inversions+=merge_sort(a,mid+1,right);
+	inversions+=merge(a,left,mid,right);
+
+	return inversions;
+}
+/*
+	counting inversions from fenwick tree/segment tree :-
+		(a) by making indices as array values, will have to do co-ordinate shifting if some values are negative
+
+			time complexity : O(MAX*log(MAX))
+			auxiliary space complexity : BigTheta(MAX)
+
+		(b) by first sorting the array and make their values as permutation of n elements,
+			keeping the relative order of smaller and greater elements same
+
+			time complexity : O(nlogn)
+			auxiliary space complexity : O(n)
+
+		https://codeforces.com/edu/course/2/lesson/4/3
+		https://www.geeksforgeeks.org/count-inversions-array-set-3-using-bit/
+
+	counting inversions from merge sort :-
+		time complexity : O(nlogn)
+		auxiliary space complexity : O(n)
+		https://www.geeksforgeeks.org/counting-inversions/
+
+		// merge_sort(arr,0,n-1) will sort the vector in O(nlogn) and return the inversions in the old vector
+
+*/
+
+void solve()
+{
+	vector<int> v = {5,4,3,2,1};
+	int n=v.size();
+	cout<<merge_sort(v,0,n-1);
+}
+
+signed main()
+{
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+	int _t = 1;
+	// cin>>_t;
+	while(_t--)solve();
 	return 0;
 }
