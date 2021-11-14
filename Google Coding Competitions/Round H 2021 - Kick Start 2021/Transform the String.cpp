@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : c2.cpp
-	srcPath : /home/aryan/Desktop/cp-workspace/c2.cpp
-	url : /home/aryan/Desktop/cp-workspace/c2.cpp
+	group : Google Coding Competitions - Round H 2021 - Kick Start 2021
+	name : Transform the String.cpp
+	srcPath : /home/aryan/Desktop/cp-workspace/Transform_the_String.cpp
+	url : https://codingcompetitions.withgoogle.com/kickstart/round/0000000000435914/00000000008da461
 */
 /*
 	author : aryan57
-	created : 14-November-2021 09:34:28 IST
+	created : 14-November-2021 08:31:57 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -38,17 +38,32 @@ const long double pie = acos(-1);
 
 void solve_GOOGLE()
 {
-	int n=rand()%100;
-	n++;
+	string s,t;
+	cin>>s>>t;
 
-	cout<<n;
-	cout<<"\n";
-	while (n--)
-	{
-		cout<<rand()%10;
+	vector <bool> pre(26);
+
+	for(char x : t){
+		pre[x-'a']=true;
 	}
+
+	int cnt=0;
+
+	for(char x : s){
+		int z=10000;
+
+		F(i,0,25)
+		{
+			if(pre[i]){
+				z=min({z,(i-(x-'a')+26)%26,(-i+(x-'a')+26)%26});
+			}
+		}
+
+		cnt+=z;
+	}
+
+	cout<<cnt;
 	cout<<"\n";
-	
 }
 
 signed main()
@@ -70,12 +85,13 @@ signed main()
 	fact_init();
 #endif
 	// cout<<fixed<<setprecision(10);
-	int _t=50;
-	cout<<_t<<"\n";
+	int _t=1;
+	cin>>_t;
 	for (int i=1;i<=_t;i++)
 	{
-		// cout<<"Case #"<<i<<": ";
+		cout<<"Case #"<<i<<": ";
 		solve_GOOGLE();
 	}
 	return 0;
 }
+//	parsed : 14-November-2021 08:30:12 IST

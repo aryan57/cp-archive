@@ -4,86 +4,113 @@
 	srcPath : /home/aryan/Desktop/cp-workspace/c.cpp
 	url : /home/aryan/Desktop/cp-workspace/c.cpp
 */
-/**
- *    author:  Aryan Agarwal
- *    created: 06.11.2021 10:32:38 IST
-**/
+/*
+	author : aryan57
+	created : 14-November-2021 09:29:26 IST
+*/
 #include <bits/stdc++.h>
 using namespace std;
 
+template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
+template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
+void dbg_out() { cerr << endl; }
+template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
+#ifndef ONLINE_JUDGE
+#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
+#else
+#define dbg(...)
+#endif
+
 #define int long long
+#define X first
+#define Y second
+#define pb push_back
+#define sz(a) ((int)(a).size())
+#define all(a) (a).begin(), (a).end()
+#define F(i, a, b) for (int i = a; i <= b; i++)
+#define RF(i, a, b) for (int i = a; i >= b; i--)
 
-int merge(vector <int> &a,int left,int mid,int right)
+const int mxn = 1e5;
+const long long INF = 2e18;
+const int32_t M = 1000000007;
+// const int32_t M = 998244353;
+const long double pie = acos(-1);
+
+void solve_GOOGLE()
 {
-	int i=left;
-	int j=mid+1;
-	int k=0;
-	int inversions=0;
-	vector <int> temp(right-left+1);
+	int n;
+	cin>>n;
 
-	while (i<=mid && j<=right){
-		if(a[i]<=a[j]) temp[k++]=a[i++];
-		else temp[k++]=a[j++],inversions+=mid-i+1;
+	string s;
+	cin>>s;
+
+	while (true)
+	{
+		bool ok = false;
+
+		F(j,0,9)
+		{
+			int n=s.size();
+			vector <bool> use(n);
+			
+			F(i,0,n-2){
+				if(s[i]-'0'==j && s[i+1]-'0'==(j+1)%10){
+					use[i]=true;
+					use[i+1]=true;
+					ok=true;
+				}
+			}
+
+			string t="";
+
+			F(i,0,n-1){
+				if(!use[i])t+=s[i];
+				else if(s[i]-'0'==j){
+					t += '0' + (j+2)%10;
+				}
+			}
+			// dbg(s);
+			// dbg(t);
+			s=t;
+			// cout<<s<<"\n";
+
+		}
+
+
+		if(!ok)break;
 	}
 
-	while (i<=mid) temp[k++]=a[i++];
-	while (j<=right) temp[k++]=a[j++];
-	for(int i=left;i<=right;i++) a[i]=temp[i-left];
-	
-	return inversions;
-}
+	cout<<s;
+	cout<<"\n";
 
-int merge_sort(vector <int> &a,int left,int right)
-{
-	if(left>=right)return 0;
 
-	int mid=(left+right)/2;
-	int inversions = 0;
-
-	inversions+=merge_sort(a,left,mid);
-	inversions+=merge_sort(a,mid+1,right);
-	inversions+=merge(a,left,mid,right);
-
-	return inversions;
-}
-/*
-	counting inversions from fenwick tree/segment tree :-
-		(a) by making indices as array values, will have to do co-ordinate shifting if some values are negative
-
-			time complexity : O(MAX*log(MAX))
-			auxiliary space complexity : BigTheta(MAX)
-
-		(b) by first sorting the array and make their values as permutation of n elements,
-			keeping the relative order of smaller and greater elements same
-
-			time complexity : O(nlogn)
-			auxiliary space complexity : O(n)
-
-		https://codeforces.com/edu/course/2/lesson/4/3
-		https://www.geeksforgeeks.org/count-inversions-array-set-3-using-bit/
-
-	counting inversions from merge sort :-
-		time complexity : O(nlogn)
-		auxiliary space complexity : O(n)
-		https://www.geeksforgeeks.org/counting-inversions/
-
-		// merge_sort(arr,0,n-1) will sort the vector in O(nlogn) and return the inversions in the old vector
-
-*/
-
-void solve()
-{
-	vector<int> v = {5,4,3,2,1};
-	int n=v.size();
-	cout<<merge_sort(v,0,n-1);
 }
 
 signed main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(nullptr);
-	int _t = 1;
-	// cin>>_t;
-	while(_t--)solve();
+	cout.tie(nullptr);
+#ifndef ONLINE_JUDGE
+// freopen("input.txt","r",stdin);
+// freopen("output.txt","w",stdout);
+#endif
+#ifdef ARYAN_SIEVE
+	sieve();
+#endif
+#ifdef ARYAN_SEG_SIEVE
+	segmented_sieve();
+#endif
+#ifdef ARYAN_FACT
+	fact_init();
+#endif
+	// cout<<fixed<<setprecision(10);
+	int _t=1;
+	cin>>_t;
+	for (int i=1;i<=_t;i++)
+	{
+		cout<<"Case #"<<i<<": ";
+		solve_GOOGLE();
+	}
 	return 0;
 }

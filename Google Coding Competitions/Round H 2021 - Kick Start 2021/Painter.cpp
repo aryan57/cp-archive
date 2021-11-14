@@ -1,12 +1,12 @@
 /*
-	group : local
-	name : c2.cpp
-	srcPath : /home/aryan/Desktop/cp-workspace/c2.cpp
-	url : /home/aryan/Desktop/cp-workspace/c2.cpp
+	group : Google Coding Competitions - Round H 2021 - Kick Start 2021
+	name : Painter.cpp
+	srcPath : /home/aryan/Desktop/cp-workspace/Painter.cpp
+	url : https://codingcompetitions.withgoogle.com/kickstart/round/0000000000435914/00000000008d9a88
 */
 /*
 	author : aryan57
-	created : 14-November-2021 09:34:28 IST
+	created : 14-November-2021 08:40:27 IST
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -36,19 +36,54 @@ const int32_t M = 1000000007;
 // const int32_t M = 998244353;
 const long double pie = acos(-1);
 
+int f(string s)
+{
+	int n= sz(s);
+
+	vector <bool> r(n+1);
+	vector <bool> b(n+1);
+	vector <bool> y(n+1);
+
+	F(i,0,n-1)
+	{
+		if(s[i]=='R' || s[i]=='O' || s[i]=='P' || s[i]=='A')r[i]=true;
+		if(s[i]=='B' || s[i]=='G' || s[i]=='P' || s[i]=='A')b[i]=true;
+		if(s[i]=='Y' || s[i]=='O' || s[i]=='G' || s[i]=='A')y[i]=true;
+	}
+
+	int cnt=0;
+
+	F(i,1,n)
+	{
+		if(!r[i] && r[i-1])cnt++;
+		if(!b[i] && b[i-1])cnt++;
+		if(!y[i] && y[i-1])cnt++;
+	}
+
+	return cnt;
+}
+
 void solve_GOOGLE()
 {
-	int n=rand()%100;
-	n++;
+	int n;
+	cin>>n;
 
-	cout<<n;
-	cout<<"\n";
-	while (n--)
-	{
-		cout<<rand()%10;
+	string s;
+	cin>>s;
+	s+='U';
+	string cur="";
+	int cnt=0;
+	for(char x : s){
+		if(x=='U'){
+			if(!cur.empty())cnt+=f(cur);
+			cur="";
+		}else{
+			cur+=x;
+		}
 	}
+
+	cout<<cnt;
 	cout<<"\n";
-	
 }
 
 signed main()
@@ -70,12 +105,13 @@ signed main()
 	fact_init();
 #endif
 	// cout<<fixed<<setprecision(10);
-	int _t=50;
-	cout<<_t<<"\n";
+	int _t=1;
+	cin>>_t;
 	for (int i=1;i<=_t;i++)
 	{
-		// cout<<"Case #"<<i<<": ";
+		cout<<"Case #"<<i<<": ";
 		solve_GOOGLE();
 	}
 	return 0;
 }
+//	parsed : 14-November-2021 08:40:23 IST
