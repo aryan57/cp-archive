@@ -1,7 +1,7 @@
 /*
 	group : Google Coding Competitions - Round H 2021 - Kick Start 2021
-	name : Dependent Events.cpp
-	srcPath : /home/aryan/Desktop/cp-workspace/Dependent_Events.cpp
+	name : Task.cpp
+	srcPath : /home/aryan/Desktop/cp-workspace/Task.cpp
 	url : https://codingcompetitions.withgoogle.com/kickstart/round/0000000000435914/00000000008d9970#problem
 */
 /**
