@@ -2,17 +2,16 @@
 	group : Codeforces - Codeforces Round #757 (Div. 2)
 	name : C. Divan and bitwise operations.cpp
 	srcPath : /home/aryan/Desktop/cp-workspace/C_Divan_and_bitwise_operations.cpp
-	url : https://codeforces.com/contest/1614/problem/C
+	url : https://codeforces.com/contest/1614/problem/C#
 */
 /**
  *    author:  Aryan Agarwal
- *    created: 26.11.2021 17:12:45 IST
+ *    created: 27.11.2021 13:07:56 IST
 **/
 #include <bits/stdc++.h>
 using namespace std;
 
 #define int long long
-
 const int M = 1e9 + 7;
 
 /*
@@ -38,33 +37,15 @@ void solve()
 {
 	int n,m;
 	cin>>n>>m;
-	vector <int> v(n);
-	vector<pair<pair <int,int> ,int> > z(m);
-	for(int i=0;i<m;i++){
-		cin>>z[i].first.first>>z[i].first.second>>z[i].second;
-		z[i].first.first--;
-		z[i].first.second--;
-	}
-	sort(z.begin(),z.end());
-	int use=0;
-	for(int i=0;i<m;i++){
-		if(z[i].first.second<use){
-			v[z[i].first.first]|=z[i].second;
-			continue;
-		}
-		assert(use>=z[i].first.first);
-		v[use]|=z[i].second;
-		use=z[i].first.second+1;
+	int bit=0;
+	while (m--)
+	{
+		int l,r,x;
+		cin>>l>>r>>x;
+		bit|=x;
 	}
 
-	int bits = 0;
-    for (int i=0; i < n; ++i)
-        bits |= v[i];
-
-	bits%=M;
-    int ans = bits * binpow(2, n-1);
-    cout<<ans%M<<"\n";
-
+	cout<<((bit%M)*binpow(2,n-1))%M<<"\n";
 }
 
 signed main()
@@ -76,4 +57,4 @@ signed main()
 	while(_t--)solve();
 	return 0;
 }
-//	parsed : 26-November-2021 16:55:26 IST
+//	parsed : 27-November-2021 13:07:49 IST
