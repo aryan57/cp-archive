@@ -6,43 +6,32 @@
 */
 /**
  *    author:  Aryan Agarwal
- *    created: 02.12.2021 22:09:47 IST
- **/
+ *    created: 03.12.2021 20:39:33 IST
+**/
 #include <bits/stdc++.h>
 using namespace std;
 
 #define int long long
 
-vector<int> killProcess(vector<int> &pid, vector<int> &ppid, int kill)
-{
-
-	const int mxn = 5e4;
-	vector<int> adj[mxn + 1];
-
-	int n = pid.size();
-	for (int i = 0; i < n; i++)
-	{
-		adj[ppid[i]].push_back(pid[i]);
-	}
-
-	vector<int> ans;
-
-	function<void(int)> dfs = [&](int u) -> void
-	{
-		ans.push_back(u);
-		for (int to : adj[u])
-		{
-			dfs(to);
-		}
-	};
-
-	dfs(kill);
-
-	return ans;
-}
-
 void solve()
 {
+	string s;
+	cin>>s;
+	int n=s.size();
+	string ans=s;
+	for(int num=0;num<(1ll<<n);num++){
+		string s1="",s2="";
+		
+		for(int bit=0;bit<n;bit++){
+			if((num>>bit)&1){
+				s1+=s[bit];
+			}else{
+				s2+=s[bit];
+			}
+		}
+		ans=min(ans,s1+s2);
+	}
+	cout<<ans<<"\n";
 }
 
 signed main()
@@ -50,8 +39,7 @@ signed main()
 	ios_base::sync_with_stdio(false);
 	cin.tie(nullptr);
 	int _t = 1;
-	// cin>>_t;
-	while (_t--)
-		solve();
+	cin>>_t;
+	while(_t--)solve();
 	return 0;
 }
