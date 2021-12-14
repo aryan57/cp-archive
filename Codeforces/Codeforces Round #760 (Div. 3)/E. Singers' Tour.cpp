@@ -44,13 +44,20 @@ void solve()
 		cout<<"NO\n";
 		return;
 	}
-	int lem = (mx-r+n-1)/n;
-	int s=lem*n+r;
+	int sb=accumulate(b.begin(),b.end(),0ll);
+	int zz=n*(n+1)/2;
+	if(sb%zz){
+		cout<<"NO\n";
+		return;
+	}
+	int s=sb/zz;
 	int sum=0;
 	vector <int> a(n);
 	for(int i=0;i<n;i++){
-		assert(s-c[i]>0);
-		assert((s-c[i])%n==0);
+		if(s-c[i]<=0 || (s-c[i])%n){
+			cout<<"NO\n";
+			return;
+		}
 		a[i]=(s-c[i])/n;
 		sum+=a[i];
 	}
