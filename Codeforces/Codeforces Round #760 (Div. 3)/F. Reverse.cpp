@@ -31,10 +31,11 @@ bool c(string x,string y){
 	int n=x.size();
 	int m=y.size();
 	if(n>m)return false;
+	// if((m-n)%2)reverse(x.begin(),x.end());
 
 	for(int i=0;i<m && i+n-1<=m-1;i++){
 		bool zz=true;
-		for(int j=0;j<i-1;j++){
+		for(int j=0;j<=i-1;j++){
 			if(y[j]=='0'){
 				zz=false;
 				break;
@@ -48,6 +49,7 @@ bool c(string x,string y){
 		}
 		if(!zz)continue;
 		reverse(x.begin(),x.end());
+
 		if(y.substr(i,n)==x)return true;
 		reverse(x.begin(),x.end());
 		if(y.substr(i,n)==x)return true;
@@ -74,6 +76,9 @@ void solve()
 			break;
 		}
 	}
+
+	// dbg(t1,t2);
+
 
 	assert(*t1.begin()=='1' && t1.back()=='1');
 	assert(*t2.begin()=='1' && t2.back()=='1');

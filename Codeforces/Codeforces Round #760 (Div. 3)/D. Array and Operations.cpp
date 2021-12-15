@@ -18,43 +18,18 @@ void solve()
 	int n,k;
 	cin>>n>>k;
 	int s=0;
-	const int mx = 2e5;
-	int cnt[mx+1]={};
 	vector <int> v(n);
 	for(int &x : v){
 		cin>>x;
 	}
 	sort(v.begin(),v.end(),greater<>());
 
-	for(int i=0;i<2*k;i++){
-		cnt[v[i]]++;
+	for(int i=0;i<k;i++){
+		s+=v[i+k]/v[i];
 	}
 	for(int i=2*k;i<n;i++){
-		// cnt[v[i]]++;
 		s+=v[i];
 	}
-
-	priority_queue<int> pq;
-	for(int i=1;i<=mx;i++){
-		if(cnt[i])pq.push(cnt[i]);
-	}
-
-	while (!pq.empty())
-	{
-		
-		if(pq.size()==1){
-			int x=pq.top();
-			pq.pop();
-			s+=x/2;
-		}else{
-			int x1=pq.top();
-			pq.pop();
-			int x2=pq.top();
-			pq.pop();
-			if(x1-x2)pq.push(x1-x2);
-		}
-	}
-	
 	cout<<s<<"\n";
 }
 
