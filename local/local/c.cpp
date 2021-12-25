@@ -6,7 +6,7 @@
 */
 /**
  *    author:  Aryan Agarwal
- *    created: 06.12.2021 19:51:10 IST
+ *    created: 25.12.2021 17:22:43 IST
 **/
 #include <bits/stdc++.h>
 using namespace std;
@@ -15,8 +15,9 @@ using namespace std;
 
 void solve()
 {
-	const int n=4;
-	const int *p = &n;
+	int x;
+	cin>>x;
+	cout<<x;
 }
 
 signed main()
