@@ -1,6 +1,6 @@
 /*
 	group : Codeforces - Good Bye 2021: 2022 is NEAR
-	name : D_Keep_the_Average_High.cpp
+	name : D. Keep the Average High.cpp
 	srcPath : /home/aryan/Desktop/cp-workspace/D_Keep_the_Average_High.cpp
 	url : https://codeforces.com/contest/1616/problem/D
 */
