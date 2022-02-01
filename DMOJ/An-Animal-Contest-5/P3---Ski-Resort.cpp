@@ -1,7 +1,7 @@
 /*
 	group : DMOJ - An Animal Contest 5
 	name : P3 - Ski Resort.cpp
-	srcPath : /home/aryan/Dropbox/Documents from PC/Kaccha Badam/darwin/P3_Ski_Resort.cpp
+	srcPath : /home/aryan/Desktop/P3_Ski_Resort.cpp
 	url : https://dmoj.ca/problem/aac5p3
 */
 #include <bits/stdc++.h>
