@@ -4,100 +4,90 @@
 	srcPath : /home/aryan/cp-workspace/c2.cpp
 	url : /home/aryan/cp-workspace/c2.cpp
 */
+/**
+ *    author:  Aryan Agarwal
+ *    created: 20.03.2022 10:47:33 IST
+ **/
 #include <bits/stdc++.h>
 using namespace std;
 
+#define int long long
 
-
-int main()
+bool check5(string s)
 {
-	
-	int n,m;
-
-	// cout<<"Please enter number of rows : ";
-	cin>>n;
-	// cout<<"Please enter number of columns : ";
-	cin>>m;
-
-	vector< vector<bool> > grid(n,vector <bool> (m,true));
-
-	pair <int,int> start={0,0};
-
-	// cout<<"The start cell is currently (1,1). Do you want to change it?.\n";
-	// cout<<"Press 1 for yes and 0 nor no : ";
-	// int is_change=0;
-	// cin>>is_change;
-	// if(is_change==1){
-		// cout<<"Please enter the row of the start cell : ";
-		cin>>start.first;
-		start.first--;
-		// cout<<"Please enter the column of the start cell : ";
-		cin>>start.second;
-		start.second--;
-	// }
-	assert(start.first>=0 && start.first<n);
-	assert(start.second>=0 && start.second<m);
-	int b;
-	cin>>b;
-	while (b--)
+	int n = s.size();
+	for (int i = 2; i <= n - 3; i++)
 	{
 
-		pair <int,int> block;
-		cin>>block.first;
-		block.first--;
-		cin>>block.second;
-		block.second--;
-		assert(block.first>=0 && block.first<n);
-		assert(block.second>=0 && block.second<m);
-		assert(block!=start); // start cell cant be blocked
-
-		grid[block.first][block.second]=false;
+		if (s[i + 2] != s[i - 2])
+			continue;
+		if (s[i + 1] != s[i - 1])
+			continue;
+		return false;
 	}
-	
-	queue<pair <int,int> > q;
-	vector< vector<bool> > visited(n,vector <bool> (m));
-	vector< vector<pair <int,int> > > parent(n,vector <pair <int,int> > (m,{-1,-1}));
-	
-	q.push(start);
-	visited[start.first][start.second] = true;
-	parent[start.first][start.second] = {-1,-1};
+	return true;
+}
+bool check6(string s)
+{
+	int n = s.size();
+	for (int i = 2; i <= n - 4; i++)
+	{
 
-	vector<int> hx = {-1,0,1,0};
-	vector<int> hy = {0,1,0,-1};
-	pair <int,int> last_visited=start;
-	while (!q.empty()) {
-	
-		auto parent_node = q.front();
-		last_visited=parent_node;
-		q.pop();
-	
-		for(int k=0;k<4;k++){
-			int r=parent_node.first+hx[k];
-			int c=parent_node.second+hy[k];
+		if (s[i] != s[i + 1])
+			continue;
+		if (s[i - 1] != s[i + 2])
+			continue;
+		if (s[i - 2] != s[i + 3])
+			continue;
+		return false;
+	}
+	return true;
+}
 
-			if( r>=0 && r<n && c>=0 && c<m && grid[r][c] && !visited[r][c]){
-				q.push({r,c});
-				parent[r][c]=parent_node;
-				visited[r][c]=true;
+void solve()
+{
+	int n;
+	cin >> n;
+
+	string s;
+	cin >> s;
+	for (int num = 0; num < (1 << 15); num++)
+	{
+
+		bool ok = true;
+		string t = s;
+
+		for (int bit = 0; bit < n; bit++)
+		{
+			if (s[bit] != '?' && s[bit] - '0' != ((num >> bit) & 1))
+			{
+				ok = false;
+				break;
 			}
+			t[bit] = '0';
+			if ((num >> bit) & 1)
+				t[bit] = '1';
+		}
+		if (ok && check5(t) && check6(t))
+		{
+			cout << "POSSIBLE\n";
+			return;
 		}
 	}
+	cout << "IMPOSSIBLE\n";
+	return;
+}
 
-	vector<pair<int,int> > path;
-	while (true)
+signed main()
+{
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+	int _t = 1;
+	cin >> _t;
+	for (int i = 1; i <= _t; i++)
 	{
-		path.push_back(last_visited);
-		last_visited=parent[last_visited.first][last_visited.second];
-		if(last_visited.first==-1)break;
+		cout << "Case #" << i << ": ";
+		solve();
 	}
-	reverse(path.begin(),path.end());
-	assert(*path.begin()==start); // must start from start cell
-	
-	cout<<"Path : \n";
-	for(auto p : path){
-		cout<<"("<<p.first+1<<","<<p.second+1<<"), ";
-	}
-	cout<<"\n";
-
 	return 0;
 }
