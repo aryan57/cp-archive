@@ -4,6 +4,7 @@
 	srcPath : /home/aryan/Dropbox/Documents from PC/free/darwin/15-feb/switch.cpp
 	url : /home/aryan/Dropbox/Documents from PC/free/darwin/15-feb/switch.cpp
 */
+/*
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -86,9 +87,9 @@ int main() {
 
 
 }
+*/
 
 
-/*
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -101,40 +102,53 @@ typedef pair<int, int> pi;
 #define PB push_back
 const int inf = 1e6 + 5;
 
-int k; string lights; unordered_map<string, int> steps;
 
-int work(string s) {
-    for (int i =0; i <k; i++) {
-        if (s[i] == '1') return false;
-    }
-    return true;
+
+int k; 
+const int mx = 25;
+const int mxnum = 1<<25;
+
+int steps[mxnum];
+bool visited[mxnum];
+
+int work(int s) {
+    return s==0;
 }
 
 int main() {
     cin >> k;
+    int lights=0;
+    int pw=1;
     for (int i =0; i <k; i++) {
         char a; cin >> a;
-        lights.push_back(a);
+        if(a=='1'){
+            lights+=pw;
+        }
+        pw*=2;
     }
-    queue<string> q; q.push(lights); steps[lights] =0;
+    queue<int> q;
+    q.push(lights);
+    steps[lights] =0;
+    visited[lights]=true;
     while (!q.empty()) {
-        string c = q.front(); q.pop();
+        int c = q.front();
+        q.pop();
         if (work(c)) {
             printf("%d\n", steps[c]);
             return 0;
         }
         for (int i=0; i <k; i++) {
-            if(c[i] == '0') {
-                string newlights = c;
-                newlights[i] = '1';
+            if(!((c>>i)&1)) {
+                int newlights = c;
+                newlights |= (1<<i) ;
                 int cnt = 0;
-                if (steps.count(newlights) == 0) {
+                if (!visited[newlights]) {
                     for (int j=0; j <k; j++) {
-                        if (newlights[j] == '1') cnt ++;
+                        if ((newlights>>j)&1) cnt ++;
                         else {
                             if (cnt >= 4) {
                                 for (int a = j-cnt; a <j; a++) {
-                                    newlights[a] = '0';
+                                    newlights &= ~(1<<a);
                                 }
                             }
                             cnt = 0;
@@ -142,11 +156,14 @@ int main() {
                     }
                     if (cnt >= 4) {
                         for (int a = k-cnt; a <k; a++) {
-                            newlights[a] = '0';
+                            newlights &= ~(1<<a);
                         }
                     }
-                    steps[newlights] = steps[c] + 1;
-                    q.push(newlights);
+                    if(!visited[newlights]){
+                        steps[newlights] = steps[c] + 1;
+                        q.push(newlights);
+                        visited[newlights]=true;
+                    }
                 }
 
             }
@@ -156,5 +173,3 @@ int main() {
 
 
 }
-
-*/

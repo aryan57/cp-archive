@@ -1,70 +1,103 @@
 /*
 	group : local
 	name : c2.cpp
-	srcPath : /home/aryan/Desktop/cp-workspace/c2.cpp
-	url : /home/aryan/Desktop/cp-workspace/c2.cpp
+	srcPath : /home/aryan/cp-workspace/c2.cpp
+	url : /home/aryan/cp-workspace/c2.cpp
 */
-#include <iostream>
-#include <vector>
-#include <random>
-#include <functional> //for std::function
-#include <algorithm>  //for std::generate_n
+#include <bits/stdc++.h>
+using namespace std;
 
-typedef std::vector<char> char_array;
 
-char_array charset()
-{
-	// 	'0','1','2','3','4',
-    // '5','6','7','8','9',
-    // 'A','B','C','D','E','F',
-    // 'G','H','I','J','K',
-    // 'L','M','N','O','P',
-    // 'Q','R','S','T','U',
-    // 'V','W','X','Y','Z',
-
-    //Change this to suit
-    return char_array( 
-    {
-    'a','b','c'
-    });
-};    
-
-// given a function that generates a random character,
-// return a string of the requested length
-std::string random_string( size_t length, std::function<char(void)> rand_char )
-{
-    std::string str(length,0);
-    std::generate_n( str.begin(), length, rand_char );
-    return str;
-}
 
 int main()
 {
-    //0) create the character set.
-    //   yes, you can use an array here, 
-    //   but a function is cleaner and more flexible
-    const auto ch_set = charset();
+	
+	int n,m;
 
-    //1) create a non-deterministic random number generator      
-    std::default_random_engine rng(std::random_device{}());
+	// cout<<"Please enter number of rows : ";
+	cin>>n;
+	// cout<<"Please enter number of columns : ";
+	cin>>m;
 
-    //2) create a random number "shaper" that will give
-    //   us uniformly distributed indices into the character set
-    std::uniform_int_distribution<> dist(0, ch_set.size()-1);
+	vector< vector<bool> > grid(n,vector <bool> (m,true));
 
-    //3) create a function that ties them together, to get:
-    //   a non-deterministic uniform distribution from the 
-    //   character set of your choice.
-    auto randchar = [ ch_set,&dist,&rng ](){return ch_set[ dist(rng) ];};
+	pair <int,int> start={0,0};
 
-    //4) set the length of the string you want and profit!        
-    auto length = 10;
-    int t=1000;
-    std::cout<<t<<"\n";
-    while (t--)
-    {
-        std::cout<<random_string(length,randchar)<<std::endl; 
-    }
-    
-    return 0;
+	// cout<<"The start cell is currently (1,1). Do you want to change it?.\n";
+	// cout<<"Press 1 for yes and 0 nor no : ";
+	// int is_change=0;
+	// cin>>is_change;
+	// if(is_change==1){
+		// cout<<"Please enter the row of the start cell : ";
+		cin>>start.first;
+		start.first--;
+		// cout<<"Please enter the column of the start cell : ";
+		cin>>start.second;
+		start.second--;
+	// }
+	assert(start.first>=0 && start.first<n);
+	assert(start.second>=0 && start.second<m);
+	int b;
+	cin>>b;
+	while (b--)
+	{
+
+		pair <int,int> block;
+		cin>>block.first;
+		block.first--;
+		cin>>block.second;
+		block.second--;
+		assert(block.first>=0 && block.first<n);
+		assert(block.second>=0 && block.second<m);
+		assert(block!=start); // start cell cant be blocked
+
+		grid[block.first][block.second]=false;
+	}
+	
+	queue<pair <int,int> > q;
+	vector< vector<bool> > visited(n,vector <bool> (m));
+	vector< vector<pair <int,int> > > parent(n,vector <pair <int,int> > (m,{-1,-1}));
+	
+	q.push(start);
+	visited[start.first][start.second] = true;
+	parent[start.first][start.second] = {-1,-1};
+
+	vector<int> hx = {-1,0,1,0};
+	vector<int> hy = {0,1,0,-1};
+	pair <int,int> last_visited=start;
+	while (!q.empty()) {
+	
+		auto parent_node = q.front();
+		last_visited=parent_node;
+		q.pop();
+	
+		for(int k=0;k<4;k++){
+			int r=parent_node.first+hx[k];
+			int c=parent_node.second+hy[k];
+
+			if( r>=0 && r<n && c>=0 && c<m && grid[r][c] && !visited[r][c]){
+				q.push({r,c});
+				parent[r][c]=parent_node;
+				visited[r][c]=true;
+			}
+		}
+	}
+
+	vector<pair<int,int> > path;
+	while (true)
+	{
+		path.push_back(last_visited);
+		last_visited=parent[last_visited.first][last_visited.second];
+		if(last_visited.first==-1)break;
+	}
+	reverse(path.begin(),path.end());
+	assert(*path.begin()==start); // must start from start cell
+	
+	cout<<"Path : \n";
+	for(auto p : path){
+		cout<<"("<<p.first+1<<","<<p.second+1<<"), ";
+	}
+	cout<<"\n";
+
+	return 0;
 }
