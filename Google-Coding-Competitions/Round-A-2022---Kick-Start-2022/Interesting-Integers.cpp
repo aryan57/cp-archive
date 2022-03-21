@@ -13,6 +13,16 @@ using namespace std;
 
 #define int long long
 
+template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
+template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
+void dbg_out() { cerr << endl; }
+template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
+#ifndef ONLINE_JUDGE
+#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
+#else
+#define dbg(...)
+#endif
+
 void solve()
 {
 	int a,b;
@@ -29,14 +39,23 @@ void solve()
 		d=k;
 		int p=1;
 		p%=sum;
+		bool ok =true;
+		vector <int> v(10);
 		while (d)
 		{
 			p*=(d%10);
+			if(d%10==0)ok=false;
+			v[d%10]++;
 			p%=sum;
 			d/=10;
 		}
 		
-		if(p==0)cnt++;
+		if(p==0){
+			cnt++;
+			// dbg(v[9],v[8]);
+			// dbg(k);
+		}
+		cout<<cnt<<", ";
 	}
 	cout<<cnt;cout<<"\n";
 }
