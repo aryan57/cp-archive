@@ -6,136 +6,140 @@
 */
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <netinet/ip.h>
+#include <netinet/udp.h>
+#include <netinet/ip_icmp.h>
+#include <netdb.h>
 #include <errno.h>
+#include <time.h>
 
-extern int errno;
+#define IP_BUF 32
+#define DESTINATION_PORT 32164
+#define SOURCE_PORT 6969
+#define UDP_PAYLOAD_SIZE 52
+#define UDP_PACKET_LEN 1024
+#define MAX_TTL 16
+#define MAX_BUFF 100
+#define MAX_SAME_TTL 3
+#define TIMEOUT 1
 
-typedef struct __Node{
-	struct __Node *next;
-	int value;
-} Node;
+struct UDP_pseudo_header
+{
+	uint32_t source_address;	  /* IPv4 address */
+	uint32_t destination_address; /* IPv4 address */
+	u_int8_t zero;				  /* set to 0, for padding purpose */
+	u_int8_t protocol;			  /* 17 for UDP */
+	u_int16_t length;			  /* length of UDP header and data */
+};
 
-typedef struct {
-	Node *last_node;
-} Cl;
-
-int cl_insert(Cl *list,int value){
-
-	Node *node = (Node*)malloc(sizeof(Node));
-	node->value=value;
-	if(list->last_node==NULL){
-		list->last_node=node;
-		node->next=node;
+/**
+ * copies the first IP address from
+ * the hostinfo->h_addr_list and returns 0.
+ * Return -1 for errors
+ */
+int get_ip(char *hostnamebuf, char *ansbuf)
+{
+	struct hostent *hostinfo = gethostbyname(hostnamebuf);
+	if (hostinfo != NULL)
+	{
+		strcat(ansbuf, inet_ntoa(*((struct in_addr *)*(hostinfo->h_addr_list))));
 		return 0;
 	}
-	node->next=list->last_node->next;
-	list->last_node->next=node;
-	list->last_node=node;
-	return 0;
+	return -1;
 }
 
-int cl_remove(Cl *list){
-	if(list->last_node==NULL){
-		return -1;
-	}
-	if(list->last_node->next==NULL){
-		return -1;
-	}
-
-	int ans = list->last_node->next->value;
-
-	if(list->last_node==list->last_node->next){
-		free(list->last_node->next);
-		list->last_node=NULL;
-	}else{
-		Node* temp = list->last_node->next;
-		list->last_node->next=temp->next;
-		free(temp);
-	}
-
-	return ans;
-}
-
-Cl cl_split(Cl *list,Node* new_last){
-	Cl ans;
-	ans.last_node=NULL;
-
-	// if list was empty or
-	// new last is same as old
-	// new Cl will be empty
-	if(list->last_node==NULL || new_last->value==list->last_node->value){
-		return ans;
-	}
-
-
-	Node* here_first;
-	Node* here_last;
-
-	here_first = list->last_node->next;
-	here_last=list->last_node;
-
-	Node *temp=here_first;
-	Node *here_new_last=NULL;
-	while (temp!=here_last)
-	{
-		if(temp->value==new_last->value){
-			here_new_last=temp;
-			break;
-		}
-		temp=temp->next;
-	}
-	
-	// not found
-	if(here_new_last==NULL){
-		return ans;
-	}
-
-	here_last->next=here_new_last->next;
-	here_new_last->next=here_first;
-	list->last_node=here_new_last;
-	ans.last_node=here_last;
-	return ans;
-}
-
-int main()
+void fill_random_bytes(char *buf, int _size)
 {
-	
-	Cl* list = (Cl*)malloc(sizeof(Cl));
-	list->last_node=NULL;
+	for (int i = 0; i < _size; i++)
+		buf[i] = 'a' + rand() % 26;
+}
 
-	cl_insert(list,1);
-	cl_insert(list,2);
-	cl_insert(list,3);
-	cl_insert(list,4);
-
-	int front = cl_remove(list);
-	printf("%d\n",front);
-	Node* new_node = (Node*)malloc(sizeof(Node));
-	new_node->value=3;
-	Cl new_cl = cl_split(list,new_node);
-
-	int tt=4;
-	Node* temp = list->last_node->next;
-	while (tt--)
+void bin(long long n, int numbits)
+{
+	for (int i=numbits-1; i >=0; i--)
 	{
-		printf("%d ",temp->value);
-		temp=temp->next;
+		printf("%lld",(n>>i)&1);
+	}
+}
+
+unsigned short change_end_16(unsigned short num){
+    return ((num&0x00ff)<<8) + ((num&0xff00)>>8);
+}
+
+/* Check sum function  */
+unsigned short csum(unsigned short *buf, int nwords)
+{
+	unsigned long sum;
+	for (sum = 0; nwords > 0; nwords--,buf++)
+	{
+		unsigned short num = change_end_16(*buf);
+		sum += num;
+		sum = (sum >> 16) + (sum & 0xffff);
 	}
 
-	printf("^\n");
+	sum += (sum >> 16);
+	return (unsigned short)(~sum);
+}
 
-	{
 
-	int tt=4;
-	Node* temp = new_cl.last_node->next;
-	while (tt--)
+void fill_ip_header(struct iphdr *ip_header, size_t udp_data_size, const in_addr_t daddr, in_addr_t saddr, char *buffer)
+{
+	// https://tools.ietf.org/html/rfc791#page-11
+	ip_header->version = 4;
+	ip_header->ihl = 5; // we are not adding any options or padding
+	ip_header->tos = 0; // use normal routines
+	ip_header->tot_len = htons(sizeof(struct iphdr) + sizeof(struct udphdr) + udp_data_size);
+	ip_header->id = 0; // will be auto filled
+	ip_header->frag_off = 0;
+	ip_header->protocol = IPPROTO_UDP;
+	ip_header->saddr = saddr;
+	ip_header->daddr = daddr;
+	ip_header->check = 0; // initialised to 0, will be filled after checksum calculation
+}
+
+void fill_udp_header(struct udphdr *udp_header, uint16_t destport, uint16_t srcprt, uint16_t len)
+{
+	// https://datatracker.ietf.org/doc/html/rfc768
+	udp_header->dest = destport;  // destination port
+	udp_header->source = srcprt;  // source port
+	udp_header->len = htons(len); // packet length (including udp payload and udp header) in bytes
+}
+
+int main(int argc, char **argv)
+{
+
+	if (argc != 2)
 	{
-		printf("%d ",temp->value);
-		temp=temp->next;
+		printf("Please write in the format \"mytraceroute <destination domain name>\"\n");
+		exit(EXIT_FAILURE);
+	}
+	/**
+	 * 1. The program first finds out the IP address
+	 * corresponding to the given domain name
+	 * (use gethostbyname())
+	 */
+	char IP[IP_BUF];
+	IP[0] = 0;
+	if (get_ip(argv[1], IP) < 0)
+	{
+		printf("Error in getting ip from the host \"%s\"\n", argv[1]);
+		exit(EXIT_FAILURE);
 	}
 
-	printf("^\n");
-	}
+	printf("%s\n",IP);
+	printf("%d\n",inet_addr(IP));
+
+	// struct sockaddr_in client_addr;
+	// client_addr.sin_addr.s_addr = inet_addr(IP);
+	// client_addr.sin_family = AF_INET;
+	// client_addr.sin_port = htons(DESTINATION_PORT);
 
 	return 0;
+
 }
