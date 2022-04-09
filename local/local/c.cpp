@@ -1,77 +1,80 @@
 /*
 	group : local
 	name : c.cpp
-	srcPath : /home/aryan/Dropbox/Documents from PC/free/marwah/ass/c.cpp
-	url : /home/aryan/Dropbox/Documents from PC/free/marwah/ass/c.cpp
+	srcPath : /home/aryan/cp-workspace/c.cpp
+	url : /home/aryan/cp-workspace/c.cpp
 */
-#include <iostream>
-#include <string>
-#include <vector>
-#include <utility>
+/*
+	author : aryan57
+	created : 09-April-2022 08:35:49 IST
+*/
+#include <bits/stdc++.h>
 using namespace std;
 
-void merge(vector <pair<string,int>> &a,int left,int mid,int right)
+template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
+template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
+void dbg_out() { cerr << endl; }
+template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
+#ifndef ONLINE_JUDGE
+#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
+#else
+#define dbg(...)
+#endif
+
+#define int long long
+#define X first
+#define Y second
+#define pb push_back
+#define sz(a) ((int)(a).size())
+#define all(a) (a).begin(), (a).end()
+#define F(i, a, b) for (int i = a; i <= b; i++)
+#define RF(i, a, b) for (int i = a; i >= b; i--)
+
+const int mxn = 1e5;
+const long long INF = 2e18;
+const int32_t M = 1000000007;
+// const int32_t M = 998244353;
+const long double pie = acos(-1);
+
+void solve_LOG()
 {
-	int i=left;
-	int j=mid+1;
-	int k=0;
-	vector <pair<string,int>> temp(right-left+1);
-
-	while (i<=mid && j<=right){
-
-		// using less-than-equal-to
-		// because if some name has same 
-		// 2nd attribute then, name which comes
-		// first will be putted earlier
-		if(a[i].second<=a[j].second) temp[k++]=a[i++];
-		else temp[k++]=a[j++];
-	}
-
-	while (i<=mid) temp[k++]=a[i++];
-	while (j<=right) temp[k++]=a[j++];
-	for(int i=left;i<=right;i++) a[i]=temp[i-left];
-}
-
-// taking the vector as a refrence, so need of
-// returning the sorted vector, vector will be
-// sorted inplace
-void merge_sort(vector <pair<string,int>> &a,int left,int right)
-{
-	if(left>=right)return;
-	int mid=(left+right)/2;
-	merge_sort(a,left,mid);
-	merge_sort(a,mid+1,right);
-	merge(a,left,mid,right);
-}
-
-int main()
-{
-	string name;
-	int attr1,attr2;
-
-	// making the array as a pair
-	// of string and integer where
-	// the string represents the anme and the integer
-	// represents the 2nd attribute
-	vector<pair<string,int>> names;
-
-	// read every line from std-in
-	while (cin>>name>>attr1>>attr2)
+	int n=100;
+	const int mxn = (int)1e9;
+	cout<<n;
+	cout<<"\n";
+	while (n--)
 	{
-		// add to the array if the first attribute is 0
-		if(attr1==0){
-			names.push_back({name,attr2});
-		}
+		cout<<rand()%mxn+1<<" ";
 	}
-
-	int n=names.size();
-	// call the merge sort function
-	merge_sort(names,0,n-1);
-
-	// now print the sorted names
-	for(int i=0;i<n;i++){
-		cout<<names[i].first<<"\n";
-	}
+	cout<<"\n";
 	
+}
+
+signed main()
+{
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
+#ifndef ONLINE_JUDGE
+// freopen("input.txt","r",stdin);
+// freopen("output.txt","w",stdout);
+#endif
+#ifdef ARYAN_SIEVE
+	sieve();
+#endif
+#ifdef ARYAN_SEG_SIEVE
+	segmented_sieve();
+#endif
+#ifdef ARYAN_FACT
+	fact_init();
+#endif
+	// cout<<fixed<<setprecision(10);
+	int _t=1;
+	// cin>>_t;
+	for (int i=1;i<=_t;i++)
+	{
+		// cout<<"Case #"<<i<<": ";
+		solve_LOG();
+	}
 	return 0;
 }
