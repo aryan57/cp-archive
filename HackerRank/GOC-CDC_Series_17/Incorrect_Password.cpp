@@ -7,6 +7,16 @@ using namespace std;
 
 #define int long long
 
+template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
+template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
+void dbg_out() { cerr << endl; }
+template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
+#ifndef ONLINE_JUDGE
+#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
+#else
+#define dbg(...)
+#endif
+
 void solve()
 {
     int n,k;
@@ -17,45 +27,20 @@ void solve()
     string ok;
     cin>>ok;
 
-	set<string> xx(v.begin(),v.end());
-	v.clear();
-	for(auto s : xx){
-		v.push_back(s);
-	}
-
-
-    auto f = [&]()->int{
-        int time=0;
-        int wrong=0;
-        for(int i=0;i<n;i++){
-            time++;
-            if(v[i]==ok){
-                break;
-            }
-            wrong++;
-            if(wrong==k){
-                time+=5;
-                wrong=0;
-            }
-        }
-        return time;
+    auto f = [&](int bad)->int{
+        return bad + 5*((bad-1)/k);
     };
 
-    sort(v.begin(),v.end(),[&ok](const string &a,const string &b){
-        if(a.size()!=b.size())return a.size()<b.size();
-        if(a==ok)return true;
-        return false;
-    });
+    int less=0;
+    int equal=0;
 
-    int best = f();
+    for(int i=0;i<n;i++){
+        if(v[i].size()<ok.size())less++;
+        else if(v[i].size()==ok.size() && v[i]!=ok)equal++;
+    }
 
-    sort(v.begin(),v.end(),[&ok](const string &a,const string &b){
-        if(a.size()!=b.size())return a.size()<b.size();
-        if(a==ok)return false;
-        return true;
-    });
-
-    int worst=f();
+    int best = f(less+1);
+    int worst=f(less+equal+1);
 
     cout<<best<<" "<<worst<<"\n";
 
