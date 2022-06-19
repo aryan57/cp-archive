@@ -34,13 +34,19 @@ void solve()
     int less=0;
     int equal=0;
 
+    int good=0;
+    for(int i=0;i<n;i++){
+        if(v[i]==ok)good++;
+    }
+    assert(good==1);
+
     for(int i=0;i<n;i++){
         if(v[i].size()<ok.size())less++;
-        else if(v[i].size()==ok.size() && v[i]!=ok)equal++;
+        else if(v[i].size()==ok.size())equal++;
     }
 
     int best = f(less+1);
-    int worst=f(less+equal+1);
+    int worst=f(less+equal);
 
     cout<<best<<" "<<worst<<"\n";
 
