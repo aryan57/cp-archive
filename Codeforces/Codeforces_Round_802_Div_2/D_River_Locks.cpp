@@ -7,12 +7,25 @@ using namespace std;
 
 #define int long long
 
+int cil(int x,int y){
+	return (x+y-1)/y;
+}
+
 void solve()
 {
 	int n;
 	cin>>n;
 	vector <int> v(n);
-	for(int &x : v)cin>>x;
+
+	int mx=0;
+	int pre=0;
+
+	for(int i=0;i<n;i++){
+		cin>>v[i];
+		pre+=v[i];
+		mx=max(mx,cil(pre,i+1));
+	}
+
 
 	int q;
 	cin>>q;
@@ -20,25 +33,8 @@ void solve()
 		int t;
 		cin>>t;
 
-		vector <int> z(n);
-		int cnt=0;
-		bool ok = true;
-		for(int i=0;i<n;i++){
-			if(z[i]<v[i]){
-				cnt++;
-				z[i]+=t;
-			}
-			if(z[i]<v[i]){
-				ok=false;
-				break;
-			}
-			int extra = z[i]-v[i];
-			if(i!=n-1){
-				z[i+1]+=extra;
-			}
-		}
-		if(!ok)cout<<"-1\n";
-		else cout<<cnt<<"\n";
+		if(t<mx)cout<<"-1\n";
+		else cout<<cil(pre,t)<<"\n";
 	}
 	
 }
