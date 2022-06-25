@@ -1,51 +1,58 @@
 /**
  *    author:  Aryan Agarwal
- *    created: 25.06.2022 22:17:47 IST
+ *    created: 25.06.2022 22:34:25 IST
 **/
 #include <bits/stdc++.h>
 using namespace std;
 
 #define int long long
 
-template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
-template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
-void dbg_out() { cerr << endl; }
-template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
-#ifndef ONLINE_JUDGE
-#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
-#else
-#define dbg(...)
-#endif
+const int mxn = 5e5;
+const int M = 1e9 + 7;
+
+int binpow(int a,int b=M-2,int m=M){
+	a%=m;
+	int res=1;
+	while (b)
+	{
+		if(b&1)res=res*a%M;
+		a=a*a%M;
+		b>>=1;
+	}
+	return res;
+}
+vector <int> fact(mxn);
+vector <int> invfact(mxn);
+
+int ncr(int n,int r){
+	if(r>n)return 0;
+	int ans = fact[n];
+	ans*=invfact[r];
+	ans%=M;
+	ans*=invfact[n-r];
+	ans%=M;
+	return ans;
+}
 
 void solve()
 {
+	fact[0]=1;
+	invfact[0]=1;
+	for(int i=1;i<mxn;i++){
+		fact[i]=fact[i-1]*i%M;
+		invfact[i]=invfact[i-1]*binpow(i)%M;
+	}
+
 	int n;
 	cin>>n;
-	vector <int> a(n+1);
-	for(int &x : a)cin>>x;
-
-	int z=12;
-
-	vector <int> temp(z);
-	temp[0]=1;
-
-	int k=11;
-	int ind=0;
-	int sum=0;
-	while (ind<=n)
-	{
-		for(int i=0;i<a[ind];i++){
-			sum+=temp[i];
-		}
-		dbg(temp,sum);
-
-		for(int i=z-1;i>=0;i--){
-			for(int j=i-1;j>=0;j--)temp[i]+=temp[j];
-		}
-		ind++;
+	int ans=0;
+	for(int i=0;i<=n;i++){
+		int a;
+		cin>>a;
+		ans+=ncr(a+i,i+1);
+		ans%=M;
 	}
-	
-
+	cout<<ans;
 }
 
 signed main()
