@@ -1,38 +1,30 @@
-/**
- *    author:  Aryan Agarwal
- *    created: 11.07.2022 14:47:01 IST
-**/
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
-
-#define int long long
-
-class MyInt{
-public :
-	int x;
-	MyInt(int y){
-		cout<<"ctor called\n";
-		x=y;
+class MyClass
+{
+	int y,z;
+	static int x; // Declare static
+public:
+	void get() { 
+		x = 15;
+	}
+	void print()
+	{
+		x = x + 10;
+		cout << "x = " << x << endl;
 	}
 };
-
-void solve()
+// int MyClass::x;
+	int MyClass::x;
+int main()
 {
-	// MyInt a(3);
-	MyInt a = 3;
-	MyInt &b = a;
-	cout<<a.x;
-}
 
-signed main()
-{
-	ios_base::sync_with_stdio(false);
-	cin.tie(nullptr);
-	int _t=1;
-	// cin>>_t;
-	for (int i=1;i<=_t;i++){
-		// cout<<"Case #"<<i<<": ";
-		solve();
-	}
+	MyClass obj1, obj2;
+	obj1.get();
+	obj2.get();
+	obj1.print();
+	obj2.print();
+	cout<<sizeof(MyClass);cout<<"\n";
+	cout<<sizeof(obj1);cout<<"\n";
 	return 0;
 }
