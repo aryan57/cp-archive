@@ -1,30 +1,54 @@
 #include <iostream>
 using namespace std;
-class MyClass
+class Shapes
 {
-	int y,z;
-	static int x; // Declare static
 public:
-	void get() { 
-		x = 15;
-	}
-	void print()
-	{
-		x = x + 10;
-		cout << "x = " << x << endl;
-	}
+	// Abstract Base Class
+	virtual void draw() = 0; // Pure Virtual Function
 };
-// int MyClass::x;
-	int MyClass::x;
+class Polygon : public Shapes
+{
+	// Concrete Class
+	void draw() { cout << "Polygon: Draw by Triangulation" << endl; }
+};
+class ClosedConics : public Shapes
+{
+	// Abstract Base Class
+	// draw() inherited - Pure Virtual
+	virtual void draw(){
+		
+	}
+
+};
+class Triangle : public Polygon
+{
+public:
+	// Concrete Class
+	void draw() { cout << "Triangle: Draw by Lines" << endl; }
+};
+class Quadrilateral : public Polygon
+{
+public:
+	// Concrete Class
+	void draw() { cout << "Quadrilateral: Draw by Lines" << endl; }
+};
+class Circle : public ClosedConics
+{
+public:
+	// Concrete Class
+	void draw() { cout << "Circle: Draw by Breshenham Algorithm" << endl; }
+};
+class Ellipse : public ClosedConics
+{
+public:
+	// Concrete Class
+	void draw() { cout << "Ellipse: Draw by ..." << endl; }
+};
 int main()
 {
-
-	MyClass obj1, obj2;
-	obj1.get();
-	obj2.get();
-	obj1.print();
-	obj2.print();
-	cout<<sizeof(MyClass);cout<<"\n";
-	cout<<sizeof(obj1);cout<<"\n";
+	Shapes *arr[] = {new Triangle, new Quadrilateral, new Circle, new Ellipse};
+	for (int i = 0; i < sizeof(arr) / sizeof(Shapes *); ++i)
+		arr[i]->draw();
+	// ...
 	return 0;
 }
