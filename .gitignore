@@ -1,2 +1,8 @@
+# ignore all files of these extensions
 **/.DS_STORE
 **/*.bin
+**/*.out
+
+# ignore all folders of these names, including if inside sub-directories
+.vscode/
+.cph/
