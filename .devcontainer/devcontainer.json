@@ -1,0 +1,41 @@
+{
+  // replace "aryan" everywhere with your username
+
+  "name": "docker-vm",
+  "image": "docker.io/library/ubuntu:latest", // use latest LTS ubuntu image
+  
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "username": "aryan",
+      "installZsh": true,
+      "installOhMyZsh": true,
+      "installOhMyZshConfig": true,
+      "configureZshAsDefaultShell": true,
+      "upgradePackages": true
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.12"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools",
+        "ms-vscode.cpptools-themes",
+        "ms-python.python",
+        "github.copilot",
+        "github.copilot-chat",
+        "divyanshuagrawal.competitive-programming-helper"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "C_Cpp.default.cppStandard": "c++20",
+        "C_Cpp.default.compilerPath": "/usr/bin/g++"
+      }
+    }
+  },
+
+  "postCreateCommand": "bash .devcontainer/setup.sh aryan",
+  "remoteUser": "aryan"
+}
